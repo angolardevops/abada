@@ -620,6 +620,28 @@
    "target": "/v1/namespaces/default/containers/we%20b"
   },
   {
+   "name": "GetOperation-bad-query-ignored",
+   "method": "GET",
+   "target": "/v1/operations/op?a=%zz;b"
+  },
+  {
+   "name": "GetNodeInfo-bad-query-ignored",
+   "method": "GET",
+   "target": "/v1/node?%zz"
+  },
+  {
+   "name": "CreateContainer-query-ignored",
+   "method": "POST",
+   "target": "/v1/namespaces/default/containers?name=q&%zz",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"name\":\"b\"}"
+  },
+  {
    "name": "CreateContainer-trailing-slash",
    "method": "POST",
    "target": "/v1/namespaces/default/containers/",

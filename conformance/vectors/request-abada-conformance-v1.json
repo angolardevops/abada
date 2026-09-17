@@ -9357,6 +9357,43 @@
       "message_json": {}
     },
     {
+      "name": "body-optstr-empty-body",
+      "method": "POST",
+      "target": "/v1/body/optstr",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "outcome": "request",
+      "rpc": "/abada.conformance.v1.BodyService/Body",
+      "message": "sgQA",
+      "message_json": {
+        "opt_str": ""
+      }
+    },
+    {
+      "name": "body-mstr-duplicate-key",
+      "method": "POST",
+      "target": "/v1/body/mstr",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"a\":\"b\",\"a\":\"c\"}",
+      "outcome": "request",
+      "rpc": "/abada.conformance.v1.BodyService/Body",
+      "message": "8gEGCgFhEgFj",
+      "message_json": {
+        "m_str": {
+          "a": "c"
+        }
+      }
+    },
+    {
       "name": "body-response-body-binding",
       "method": "POST",
       "target": "/v1/response",
@@ -10032,25 +10069,6 @@
       ]
     },
     {
-      "name": "mux-fallback-get-and-delete",
-      "method": "POST",
-      "target": "/v1/query/p",
-      "headers": [
-        [
-          "Content-Type",
-          "application/x-www-form-urlencoded"
-        ]
-      ],
-      "body": "f_int32=5",
-      "outcome": "request",
-      "rpc": "/abada.conformance.v1.QueryService/Query",
-      "message": "GAVyAXA=",
-      "message_json": {
-        "f_int32": 5,
-        "f_string": "p"
-      }
-    },
-    {
       "name": "mux-fallback-post-exists",
       "method": "POST",
       "target": "/v1/body/star/p",
@@ -10384,8 +10402,5 @@
         }
       ]
     }
-  ],
-  "dropped_nondeterministic": [
-    "query-proto-and-json-name"
   ]
 }

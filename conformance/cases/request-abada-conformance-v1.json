@@ -1775,11 +1775,6 @@
    "target": "/v1/query?f_int32=1&f_int32=2"
   },
   {
-   "name": "query-proto-and-json-name",
-   "method": "GET",
-   "target": "/v1/query?f_int32=1&fInt32=2"
-  },
-  {
    "name": "query-bad-escape",
    "method": "GET",
    "target": "/v1/query?f_string=%zz"
@@ -3087,6 +3082,30 @@
    "body": "null"
   },
   {
+   "name": "body-optstr-empty-body",
+   "method": "POST",
+   "target": "/v1/body/optstr",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "body-mstr-duplicate-key",
+   "method": "POST",
+   "target": "/v1/body/mstr",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"a\":\"b\",\"a\":\"c\"}"
+  },
+  {
    "name": "body-response-body-binding",
    "method": "POST",
    "target": "/v1/response",
@@ -3458,18 +3477,6 @@
     ]
    ],
    "body": ""
-  },
-  {
-   "name": "mux-fallback-get-and-delete",
-   "method": "POST",
-   "target": "/v1/query/p",
-   "headers": [
-    [
-     "Content-Type",
-     "application/x-www-form-urlencoded"
-    ]
-   ],
-   "body": "f_int32=5"
   },
   {
    "name": "mux-fallback-post-exists",

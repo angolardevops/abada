@@ -4239,6 +4239,44 @@
       }
     },
     {
+      "name": "GetOperation-bad-query-ignored",
+      "method": "GET",
+      "target": "/v1/operations/op?a=%zz;b",
+      "outcome": "request",
+      "rpc": "/delonix.node.v1.OperationService/GetOperation",
+      "message": "CgJvcA==",
+      "message_json": {
+        "id": "op"
+      }
+    },
+    {
+      "name": "GetNodeInfo-bad-query-ignored",
+      "method": "GET",
+      "target": "/v1/node?%zz",
+      "outcome": "request",
+      "rpc": "/delonix.node.v1.NodeService/GetNodeInfo",
+      "message_json": {}
+    },
+    {
+      "name": "CreateContainer-query-ignored",
+      "method": "POST",
+      "target": "/v1/namespaces/default/containers?name=q&%zz",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"name\":\"b\"}",
+      "outcome": "request",
+      "rpc": "/delonix.node.v1.ContainerService/CreateContainer",
+      "message": "CgdkZWZhdWx0EgFi",
+      "message_json": {
+        "name": "b",
+        "namespace": "default"
+      }
+    },
+    {
       "name": "CreateContainer-trailing-slash",
       "method": "POST",
       "target": "/v1/namespaces/default/containers/",
