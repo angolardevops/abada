@@ -1,0 +1,419 @@
+{
+  "templates": [
+    "/",
+    "/v1",
+    "/v1/",
+    "//",
+    "v1",
+    "",
+    "/v1/a/b/c",
+    "/v1/*",
+    "/v1/**",
+    "/v1/**/x",
+    "/v1/**/**",
+    "/v1/*/**",
+    "/v1/{name}",
+    "/v1/{a.b.c}",
+    "/v1/{name=*}",
+    "/v1/{name=**}",
+    "/v1/{name=users/*}",
+    "/v1/{name=users/*/books/**}",
+    "/v1/{parent=projects/*}/items/{id}",
+    "/v1/{name}:get",
+    "/v1/{name}:a:b",
+    "/v1/a:b:c",
+    "/v1/a:",
+    "/v1/:get",
+    "/:get",
+    "/v1/{name=a/{b}}",
+    "/v1/{name",
+    "/v1/name}",
+    "/v1/{}",
+    "/v1/{1a}",
+    "/v1/{a-b}",
+    "/v1/{a..b}",
+    "/v1/{name=}",
+    "/v1/{=a}",
+    "/v1/a b",
+    "/v1/a%2F",
+    "/v1/a%2",
+    "/v1/a%zz",
+    "/v1/~._-!$&'()*+,;=:@",
+    "/v1//a",
+    "/v1/a//",
+    "/v1/{a}/{a}",
+    "/v1/users/{id}:start",
+    "/v1/{name=**}:get",
+    "/v1/*:verb",
+    "/v1/{x}/**/{y}",
+    "/v1/**/{y=a/*}"
+  ],
+  "routes": [
+    {
+      "name": "literal",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/users"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/users"
+    },
+    {
+      "name": "root",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/"
+        }
+      ],
+      "method": "GET",
+      "target": "/"
+    },
+    {
+      "name": "variable",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/abc"
+    },
+    {
+      "name": "nested-variable",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name=users/*}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/users/42"
+    },
+    {
+      "name": "deep",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name=**}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a/b/c"
+    },
+    {
+      "name": "deep-with-tail",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/**/end"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a/b/end"
+    },
+    {
+      "name": "verb",
+      "handlers": [
+        {
+          "method": "POST",
+          "template": "/v1/{name}:start"
+        }
+      ],
+      "method": "POST",
+      "target": "/v1/vm1:start"
+    },
+    {
+      "name": "verb-alone",
+      "handlers": [
+        {
+          "method": "POST",
+          "template": "/v1/{name}:start"
+        }
+      ],
+      "method": "POST",
+      "target": "/v1/:start"
+    },
+    {
+      "name": "verb-missing",
+      "handlers": [
+        {
+          "method": "POST",
+          "template": "/v1/{name}:start"
+        }
+      ],
+      "method": "POST",
+      "target": "/v1/vm1"
+    },
+    {
+      "name": "colon-in-value",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/images/{ref}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/images/alpine:3.20"
+    },
+    {
+      "name": "colon-verb-inside",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}:a:b"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/x:a:b"
+    },
+    {
+      "name": "last-registered-wins",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        },
+        {
+          "method": "GET",
+          "template": "/v1/{id}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/x"
+    },
+    {
+      "name": "method-not-allowed",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "DELETE",
+      "target": "/v1/x"
+    },
+    {
+      "name": "not-found",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v2/x"
+    },
+    {
+      "name": "too-long",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/x/y"
+    },
+    {
+      "name": "query-ignored",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/x?a=b/c"
+    },
+    {
+      "name": "encoded-slash-legacy",
+      "mode": "legacy",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a%2Fb"
+    },
+    {
+      "name": "encoded-slash-reserved",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a%2Fb"
+    },
+    {
+      "name": "encoded-slash-deep-reserved",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name=**}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a%2Fb%3Ac"
+    },
+    {
+      "name": "encoded-slash-deep-except-slash",
+      "mode": "all_except_slash",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name=**}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a%2Fb%3Ac"
+    },
+    {
+      "name": "encoded-slash-all",
+      "mode": "all_characters",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a%2Fb"
+    },
+    {
+      "name": "encoded-slash-all-lower",
+      "mode": "all_characters",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a%2fb"
+    },
+    {
+      "name": "space-default-escape",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a%20b"
+    },
+    {
+      "name": "malformed-escape",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a%zz"
+    },
+    {
+      "name": "encoded-colon-verb",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "POST",
+          "template": "/v1/{name}:start"
+        }
+      ],
+      "method": "POST",
+      "target": "/v1/a%3Astart"
+    },
+    {
+      "name": "no-leading-slash",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1"
+        }
+      ],
+      "method": "GET",
+      "target": "v1"
+    },
+    {
+      "name": "deep-tail-empty",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name=**}/end"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/end"
+    },
+    {
+      "name": "deep-tail-too-short",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/**/end"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1"
+    },
+    {
+      "name": "deep-tail-two",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{a=**}/x/{b}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/p/q/x/r"
+    },
+    {
+      "name": "deep-tail-two-short",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{a=**}/x/{b}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/x"
+    },
+    {
+      "name": "deep-then-verb",
+      "handlers": [
+        {
+          "method": "POST",
+          "template": "/v1/{name=**}:run"
+        }
+      ],
+      "method": "POST",
+      "target": "/v1/a/b:run"
+    },
+    {
+      "name": "root-empty-verb",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/:get"
+    }
+  ],
+  "random_templates": 400,
+  "random_routes": 600
+}
