@@ -70,7 +70,8 @@ four properties together, and each one is a test, not a claim:
 | Request target → `Path`/`RawPath` (`RequestPath`) | done | the bytes `net/url` leaves unescaped are measured from Go, not transcribed |
 | Rule extraction from a descriptor set (`abada_codegen::bindings`) | done | the `delonix.node.v1` contract: same 56 bindings as grpc-gateway, and 728 requests routed identically with all of them registered — see `docs/readiness/delonix-node-v1.md` |
 | POST → GET path-length fallback (`X-HTTP-Method-Override`) | not started | — |
-| Query parameters, body, JSON, errors, metadata, streaming | not started | — |
+| Error responses: code → HTTP status, `google.rpc.Status` body, `WWW-Authenticate`, `Grpc-Metadata-*`/`Grpc-Trailer-*`, routing 404/501/400 (`abada::error`) | done, except details of a registered type | `conformance/vectors/errors.json`: 25 codes, 64 statuses and 29 routing errors answered by grpc-gateway's handlers behind a real `net/http` server, compared on the wire — see "Errors" below |
+| Query parameters, body, JSON, request metadata, streaming | not started | — |
 
 The conformance suite (`crates/abada/tests/conformance.rs`) was checked by
 breaking the code on purpose: dropping the `/` quirk of the parser, the
@@ -82,6 +83,71 @@ Two known limits of the vectors: grpc-gateway walks a Go map for the 405
 fallback, so abada tries other methods in registration order and the oracle
 drops any case whose answer depends on that order; and binding values are
 compared after Go's JSON encoding, which replaces invalid UTF-8.
+
+## Errors
+
+`abada::error::ErrorResponse` is what grpc-gateway's `DefaultHTTPErrorHandler`
+and `DefaultRoutingErrorHandler` put on an HTTP/1.1 connection, read from
+`runtime/errors.go`, `runtime/handler.go` and `runtime/mux.go` and measured by
+`abadaoracle errors`. It depends on `http` (for `StatusCode`, `HeaderMap`,
+`HeaderValue`) and nothing else: the tower service will speak `http` anyway,
+and the header rules below are about what an `http` value can hold. There is
+no `tonic` dependency yet; `Status`/`Any`/`ServerMetadata` are plain structs
+the service layer will fill from a `tonic::Status`.
+
+What the vectors fix, some of it against intuition:
+
+- Body: `{"code":N,"message":"…","details":[…]}`, fields in that order,
+  `details` always present (`[]` when empty), no trailing newline,
+  `Content-Type: application/json`. protojson escapes only `"`, `\` and
+  control characters (`\u001f`, lower-case), not `<>&`, DEL or U+2028.
+- protojson adds a space after each comma or not depending on a hash of the
+  Go binary (`internal/detrand`): grpc-gateway's bytes are not stable across
+  builds. abada writes the compact form and the oracle removes that space.
+- Code 0 has no message and no details (a gRPC client turns OK into a nil
+  error). Codes outside 0–16 are 500 and keep their number in the body.
+- `WWW-Authenticate` carries the message for code 16 only, even when empty.
+- Response metadata becomes `Grpc-Metadata-<key>`. Trailer metadata becomes
+  `Trailer: Grpc-Trailer-<Key>` plus trailers only when the request's first
+  `TE` value, lower-cased the Go way, *contains* `trailers` (`notrailers`
+  counts; `TRAİLERS` counts because Go lower-cases U+0130 to `i`).
+- Header values are written as `net/http` writes them: CR/LF become spaces,
+  surrounding blanks are trimmed. A value with another control byte is
+  written raw by Go over HTTP/1.1; `http::HeaderValue` cannot hold it, so
+  abada drops it — **a written deviation**, the same thing Go's HTTP/2
+  server does. The test lists the two vectors that hit it.
+- Routing: 404 is code 5 `Not Found`; a wrong method is code 12 `Method Not
+  Allowed` with **501**, not 405; a path not starting with `/` is code 3
+  `Bad Request`. A malformed escape is a 400 with code **2** (`Unknown`) and
+  `malformed path escape "<strconv.Quote of the sequence>"` — and routing
+  goes on: grpc-gateway writes one such body per candidate that hit the
+  escape, then the 404/501 body, or the matched handler's output, into the
+  same 400. `RouteOutcome::BadRequest` keeps every sequence and the outcome
+  that followed so abada can write the same bytes. `strconv.IsPrint` is
+  taken from Go as a table for the only runes a 3-byte sequence can hold.
+- If marshalling fails, the body is the constant
+  `{"code": 13, "message": "failed to marshal error message"}` with 500 and
+  no metadata; `WWW-Authenticate` is still set for code 16.
+
+**Known gap: details of a registered type.** protojson renders an `Any` by
+looking its type up in the binary's registry (the host part of the type URL
+is ignored), and fails — hence the fallback above — when it cannot. abada has
+no registry until the JSON transcoding decision below is taken, so it renders
+an empty `Any` as `{}` and treats every other detail as unresolvable. That is
+exact for types the Go binary does not link, and wrong for types it does:
+`google.protobuf.Duration` or `google.rpc.Status` in `details` come out as
+the 500 fallback instead of `{"@type":…,…}`. The four vectors that show it
+are named in `crates/abada/tests/errors.rs`, which checks abada still falls
+back on them so that closing the gap has to update the list. What the Go
+registry contains depends on what the gateway binary links; the oracle's is
+not a user's.
+
+Not validated: streaming errors (`HTTPStreamError`, `{"error": …}` chunks),
+`HTTPStatusError` from a user's routing handler, custom error handlers,
+marshalers other than the default, `X-HTTP-Method-Override` errors, HTTP/2
+framing, request targets `net/http` rejects before the mux (control bytes,
+bad escapes), and invalid UTF-8 in a message (unreachable from a Rust
+`String`; protojson would fall back).
 
 ## Open decision: how JSON is transcoded
 

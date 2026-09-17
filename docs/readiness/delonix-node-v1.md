@@ -6,8 +6,9 @@ contract? Measured on 2026-09-17 against
 descriptor set is committed as `conformance/contracts/delonix-node-v1.binpb`).
 
 **Verdict: not yet.** Reading the contract's HTTP rules and choosing the RPC
-for a request are done and proven equal to grpc-gateway. Everything that turns
-a request into a gRPC call and back is not started.
+for a request are done and proven equal to grpc-gateway, and so is the error
+response (status, body, headers) once a gRPC status is in hand. Everything that
+turns a request into a gRPC call and back is not started.
 
 ## What the contract asks for, and where abada stands
 
@@ -20,7 +21,7 @@ a request into a gRPC call and back is not started.
 | `body: "*"` | 26 `POST` | not started | — |
 | `body: <field>` with a `FieldMask` | 1 `PATCH` (`UpdateContainer`) | not started | — |
 | Canonical proto3 JSON | 64-bit ints ×28, maps ×20, enums ×13, oneofs ×13, bytes ×9, `optional` ×3; `Any`, `Struct`, `FieldMask`, `Timestamp`, `Duration` | not started — the prost-reflect/pbjson decision is still open | — |
-| `google.rpc.Status` errors with grpc-gateway's HTTP codes | every RPC | not started | — |
+| `google.rpc.Status` errors with grpc-gateway's HTTP codes | every RPC | **done, except details of a registered type** (needs the JSON decision); not yet wired to a tonic call | `conformance/vectors/errors.json`: 25 codes, 64 statuses, 29 routing errors, same status, headers, body and trailers as grpc-gateway on the wire; one written deviation for header values with control bytes |
 | Server streaming | `WatchOperation`, `Logs`, `WatchEvents` | not started | — |
 | `Exec`, `Console` (bidirectional, no mapping; WebSocket per ADR-0040 D4) | 2 RPCs | out of v0.1 scope | — |
 | Serve gRPC and HTTP/JSON on one unix socket | the node API's shape | not started | — |
@@ -63,6 +64,8 @@ This is a property of the contract, reported to its owner, not changed here.
 
 ## Not validated
 
+- Error `details` whose type grpc-gateway's registry resolves (abada answers
+  the 500 fallback), and errors in the middle of a server stream.
 - The 405 fallback visits other methods in a Go map order; abada uses
   registration order and the oracle drops any request whose answer depends on
   it (none were dropped for this contract).
