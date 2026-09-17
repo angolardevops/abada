@@ -8,3 +8,11 @@ license.workspace = true
 repository.workspace = true
 keywords.workspace = true
 categories.workspace = true
+
+[dependencies]
+prost.workspace = true
+abada.workspace = true
+
+[dev-dependencies]
+serde.workspace = true
+serde_json.workspace = true
