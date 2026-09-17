@@ -584,7 +584,7 @@
         "hostPath": "/b"
       },
       "accepted": false,
-      "error": "proto: (line 1:17): error parsing \"hostPath\", oneof delonix.node.v1.Mount.source is already set"
+      "error": "proto: (line 1:15): error parsing \"hostPath\", oneof delonix.node.v1.Mount.source is already set"
     },
     {
       "name": "int64_out_of_range",
@@ -593,7 +593,7 @@
         "memoryLimitBytes": "9223372036854775808"
       },
       "accepted": false,
-      "error": "proto: (line 1:22): invalid value for int64 field memoryLimitBytes: \"9223372036854775808\""
+      "error": "proto: (line 1:21): invalid value for int64 field memoryLimitBytes: \"9223372036854775808\""
     },
     {
       "name": "int64_exponent",
@@ -614,7 +614,7 @@
         "hostPort": 80.5
       },
       "accepted": false,
-      "error": "proto: (line 1:14): invalid value for int32 field hostPort: 80.5"
+      "error": "proto: (line 1:13): invalid value for int32 field hostPort: 80.5"
     },
     {
       "name": "bytes_url_safe_unpadded",
@@ -645,7 +645,7 @@
         "lastTransitionTime": "2026-09-17t10:00:00z"
       },
       "accepted": false,
-      "error": "proto: (line 1:24): invalid google.protobuf.Timestamp value \"2026-09-17t10:00:00z\""
+      "error": "proto: (line 1:23): invalid google.protobuf.Timestamp value \"2026-09-17t10:00:00z\""
     },
     {
       "name": "duration_negative_fraction",
@@ -668,7 +668,7 @@
         }
       },
       "accepted": false,
-      "error": "proto: (line 1:22): unable to resolve \"type.googleapis.com/nope.Missing\": \"not found\""
+      "error": "proto: (line 1:20): unable to resolve \"type.googleapis.com/nope.Missing\": \"not found\""
     },
     {
       "name": "field_mask_snake_case_rejected",
@@ -677,7 +677,7 @@
         "updateMask": "spec.read_only_rootfs"
       },
       "accepted": false,
-      "error": "proto: (line 1:16): google.protobuf.FieldMask.paths contains invalid path: \"spec.read_only_rootfs\""
+      "error": "proto: (line 1:15): google.protobuf.FieldMask.paths contains invalid path: \"spec.read_only_rootfs\""
     },
     {
       "name": "duplicate_key",
@@ -687,7 +687,7 @@
         "name": "b"
       },
       "accepted": false,
-      "error": "proto: (line 1:15): duplicate field \"name\""
+      "error": "proto: (line 1:13): duplicate field \"name\""
     },
     {
       "name": "proto_and_json_name_both",
@@ -697,7 +697,7 @@
         "request_id": "b"
       },
       "accepted": false,
-      "error": "proto: (line 1:20): duplicate field \"request_id\""
+      "error": "proto: (line 1:18): duplicate field \"request_id\""
     },
     {
       "name": "not_an_object",
