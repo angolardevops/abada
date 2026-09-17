@@ -35,6 +35,7 @@ dependencies = [
 name = "abada-json-bench"
 version = "0.0.1"
 dependencies = [
+ "abada",
  "base64",
  "pbjson",
  "pbjson-build",

@@ -41,3 +41,31 @@ fn prost_reflect_writes_any_and_field_mask_like_grpc_gateway() {
         }
     }
 }
+
+/// abada's codec answers exactly like grpc-gateway on every body: the same
+/// accept/reject and decoded message, and the same bytes out.
+#[test]
+fn abada_is_grpc_gateway_on_every_body() {
+    use abada_json_bench::Verdict;
+    let mut seen = 0;
+    for f in abada_json_bench::compare() {
+        if f.candidate != "abada" {
+            continue;
+        }
+        seen += 1;
+        assert!(
+            matches!(f.decode, Verdict::Identical | Verdict::BothReject),
+            "{}: decode {:?}",
+            f.case,
+            f.decode
+        );
+        for e in [&f.encode_emit, &f.encode_omit] {
+            assert!(
+                matches!(e, Verdict::SameBytes | Verdict::BothReject),
+                "{}: encode {e:?}",
+                f.case
+            );
+        }
+    }
+    assert_eq!(seen, 28);
+}

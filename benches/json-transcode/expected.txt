@@ -1,56 +1,84 @@
 create_container_request prost-reflect decode=identical emit=identical omit=identical
+create_container_request abada decode=identical emit=same-bytes omit=same-bytes
 create_container_request pbjson decode=identical emit=identical omit=identical
 create_container_request_alternative_spellings prost-reflect decode=identical emit=differs[$.spec.healthCheck.startPeriod: null vs absent; $.spec.healthCheck.timeout: null vs absent; $.spec.security: null vs absent] omit=identical
+create_container_request_alternative_spellings abada decode=identical emit=same-bytes omit=same-bytes
 create_container_request_alternative_spellings pbjson decode=identical emit=differs[$.spec.healthCheck.startPeriod: null vs absent; $.spec.healthCheck.timeout: null vs absent; $.spec.security: null vs absent] omit=identical
 create_virtual_machine_request prost-reflect decode=identical emit=number-spelling omit=number-spelling
+create_virtual_machine_request abada decode=identical emit=same-bytes omit=same-bytes
 create_virtual_machine_request pbjson decode=differs[binary only] emit=number-spelling omit=number-spelling
 container prost-reflect decode=identical emit=differs[$.spec.healthCheck: null vs absent; $.spec.restart: null vs absent; $.spec.security: null vs absent] omit=identical
+container abada decode=identical emit=same-bytes omit=same-bytes
 container pbjson decode=identical emit=differs[$.meta.createTime: "2026-09-17T08:30:00Z" vs "2026-09-17T08:30:00+00:00"; $.meta.updateTime: "2026-09-17T08:31:02.123456789Z" vs "2026-09-17T08:31:02.123456789+00:00"; $.spec.healthCheck: null vs absent; $.spec.restart: null vs absent; $.spec.security: null vs absent; $.status.conditions[*].lastTransitionTime: "2026-09-17T08:31:02Z" vs "2026-09-17T08:31:02+00:00"] omit=differs[$.meta.createTime: "2026-09-17T08:30:00Z" vs "2026-09-17T08:30:00+00:00"; $.meta.updateTime: "2026-09-17T08:31:02.123456789Z" vs "2026-09-17T08:31:02.123456789+00:00"; $.status.conditions[*].lastTransitionTime: "2026-09-17T08:31:02Z" vs "2026-09-17T08:31:02+00:00"]
 list_containers_response prost-reflect decode=identical emit=differs[$.containers[*].spec.healthCheck.startPeriod: null vs absent; $.containers[*].spec.security: null vs absent; $.containers[*].meta.updateTime: null vs absent; $.containers[*].spec.healthCheck: null vs absent; $.containers[*].spec.restart: null vs absent] omit=identical
+list_containers_response abada decode=identical emit=same-bytes omit=same-bytes
 list_containers_response pbjson decode=identical emit=differs[$.containers[*].meta.createTime: "2026-09-17T08:30:00Z" vs "2026-09-17T08:30:00+00:00"; $.containers[*].meta.updateTime: "2026-09-17T08:31:02.123456789Z" vs "2026-09-17T08:31:02.123456789+00:00"; $.containers[*].spec.healthCheck.startPeriod: null vs absent; $.containers[*].spec.security: null vs absent; $.containers[*].status.conditions[*].lastTransitionTime: "2026-09-17T08:31:02Z" vs "2026-09-17T08:31:02+00:00"; $.containers[*].spec.healthCheck: null vs absent; $.containers[*].spec.restart: null vs absent] omit=differs[$.containers[*].meta.createTime: "2026-09-17T08:30:00Z" vs "2026-09-17T08:30:00+00:00"; $.containers[*].meta.updateTime: "2026-09-17T08:31:02.123456789Z" vs "2026-09-17T08:31:02.123456789+00:00"; $.containers[*].status.conditions[*].lastTransitionTime: "2026-09-17T08:31:02Z" vs "2026-09-17T08:31:02+00:00"]
 operation_with_any_result prost-reflect decode=identical emit=differs[$.error: null vs absent; $.result.meta.updateTime: null vs absent; $.result.spec.healthCheck: null vs absent; $.result.spec.restart: null vs absent; $.result.spec.security: null vs absent] omit=identical
+operation_with_any_result abada decode=identical emit=same-bytes omit=same-bytes
 operation_with_any_result pbjson decode=rejects emit=differs[$.createTime: "2026-09-17T08:30:00Z" vs "2026-09-17T08:30:00+00:00"; $.endTime: "2026-09-17T08:30:01.250Z" vs "2026-09-17T08:30:01.250+00:00"; $.error: null vs absent; $.result.@type: "type.googleapis.com/delonix.node.v1.Container" vs absent; $.result.meta: {"annotations":{},"createTime":"2026-09-17T08:30:00Z","etag"… vs absent; $.result.spec: {"command":[],"devices":[],"entrypoint":[],"env":{},"healthC… vs absent; $.result.status: {"conditions":[],"imageDigest":"","ipAddresses":[],"phase":"… vs absent; $.result.typeUrl: absent vs "type.googleapis.com/delonix.node.v1.Container"; $.result.value: absent vs "Ci8KA3dlYhIEc2hvcBoaMDFKOFozSzRNNU42UDdROFI5UzBUMVYyVzMyBgi…] omit=differs[$.createTime: "2026-09-17T08:30:00Z" vs "2026-09-17T08:30:00+00:00"; $.endTime: "2026-09-17T08:30:01.250Z" vs "2026-09-17T08:30:01.250+00:00"; $.result.@type: "type.googleapis.com/delonix.node.v1.Container" vs absent; $.result.meta: {"createTime":"2026-09-17T08:30:00Z","name":"web","namespace… vs absent; $.result.spec: {"image":"nginx","resources":{"memoryLimitBytes":"536870912"… vs absent; $.result.status: {"phase":"CONTAINER_PHASE_RUNNING","pid":48213} vs absent; $.result.typeUrl: absent vs "type.googleapis.com/delonix.node.v1.Container"; $.result.value: absent vs "Ci8KA3dlYhIEc2hvcBoaMDFKOFozSzRNNU42UDdROFI5UzBUMVYyVzMyBgi…]
 operation_failed_with_wkt_any prost-reflect decode=identical emit=differs[$.createTime: null vs absent; $.endTime: null vs absent] omit=identical
+operation_failed_with_wkt_any abada decode=identical emit=same-bytes omit=same-bytes
 operation_failed_with_wkt_any pbjson decode=rejects emit=differs[$.createTime: null vs absent; $.endTime: null vs absent; $.result.@type: "type.googleapis.com/google.protobuf.Duration" vs absent; $.result.typeUrl: absent vs "type.googleapis.com/google.protobuf.Duration"; $.result.value: "3s" vs "CAM="] omit=differs[$.result.@type: "type.googleapis.com/google.protobuf.Duration" vs absent; $.result.typeUrl: absent vs "type.googleapis.com/google.protobuf.Duration"; $.result.value: "3s" vs "CAM="]
 log_chunk prost-reflect decode=identical emit=identical omit=identical
+log_chunk abada decode=identical emit=same-bytes omit=same-bytes
 log_chunk pbjson decode=identical emit=identical omit=identical
 update_container_request_field_mask prost-reflect decode=identical emit=differs[$.container.meta: null vs absent; $.container.spec.healthCheck: null vs absent; $.container.spec.restart: null vs absent; $.container.spec.security: null vs absent; $.container.status: null vs absent] omit=identical
+update_container_request_field_mask abada decode=identical emit=same-bytes omit=same-bytes
 update_container_request_field_mask pbjson decode=rejects emit=differs[$.container.meta: null vs absent; $.container.spec.healthCheck: null vs absent; $.container.spec.restart: null vs absent; $.container.spec.security: null vs absent; $.container.status: null vs absent; $.updateMask: "spec.env,spec.resources.memoryLimitBytes" vs {"paths":["spec.env","spec.resources.memory_limit_bytes"]}] omit=differs[$.updateMask: "spec.env,spec.resources.memoryLimitBytes" vs {"paths":["spec.env","spec.resources.memory_limit_bytes"]}]
 empty_container prost-reflect decode=identical emit=differs[$.meta: null vs absent; $.spec: null vs absent; $.status: null vs absent] omit=identical
+empty_container abada decode=identical emit=same-bytes omit=same-bytes
 empty_container pbjson decode=identical emit=differs[$.meta: null vs absent; $.spec: null vs absent; $.status: null vs absent] omit=identical
 empty_create_virtual_machine_request prost-reflect decode=identical emit=differs[$.spec.cloudInit: null vs absent] omit=identical
+empty_create_virtual_machine_request abada decode=identical emit=same-bytes omit=same-bytes
 empty_create_virtual_machine_request pbjson decode=identical emit=differs[$.spec.cloudInit: null vs absent] omit=identical
 unknown_field_is_discarded prost-reflect decode=identical emit=identical omit=identical
+unknown_field_is_discarded abada decode=identical emit=same-bytes omit=same-bytes
 unknown_field_is_discarded pbjson decode=identical emit=identical omit=identical
 null_fields prost-reflect decode=identical emit=differs[$.spec.healthCheck: null vs absent; $.spec.resources: null vs absent; $.spec.restart: null vs absent; $.spec.security: null vs absent] omit=identical
+null_fields abada decode=identical emit=same-bytes omit=same-bytes
 null_fields pbjson decode=rejects emit=differs[$.spec.healthCheck: null vs absent; $.spec.resources: null vs absent; $.spec.restart: null vs absent; $.spec.security: null vs absent] omit=identical
 unknown_enum_name prost-reflect decode=identical emit=identical omit=identical
+unknown_enum_name abada decode=identical emit=same-bytes omit=same-bytes
 unknown_enum_name pbjson decode=rejects emit=identical omit=identical
 unknown_enum_number prost-reflect decode=identical emit=identical omit=identical
+unknown_enum_number abada decode=identical emit=same-bytes omit=same-bytes
 unknown_enum_number pbjson decode=rejects emit=encode-fails omit=encode-fails
 oneof_twice prost-reflect decode=- emit=- omit=-
+oneof_twice abada decode=- emit=- omit=-
 oneof_twice pbjson decode=- emit=- omit=-
 int64_out_of_range prost-reflect decode=- emit=- omit=-
+int64_out_of_range abada decode=- emit=- omit=-
 int64_out_of_range pbjson decode=- emit=- omit=-
 int64_exponent prost-reflect decode=rejects emit=identical omit=identical
+int64_exponent abada decode=identical emit=same-bytes omit=same-bytes
 int64_exponent pbjson decode=rejects emit=identical omit=identical
 int32_fractional prost-reflect decode=- emit=- omit=-
+int32_fractional abada decode=- emit=- omit=-
 int32_fractional pbjson decode=- emit=- omit=-
 bytes_url_safe_unpadded prost-reflect decode=identical emit=identical omit=identical
+bytes_url_safe_unpadded abada decode=identical emit=same-bytes omit=same-bytes
 bytes_url_safe_unpadded pbjson decode=identical emit=identical omit=identical
 timestamp_with_offset prost-reflect decode=identical emit=identical omit=identical
+timestamp_with_offset abada decode=identical emit=same-bytes omit=same-bytes
 timestamp_with_offset pbjson decode=identical emit=differs[$.lastTransitionTime: "2026-09-17T09:00:00Z" vs "2026-09-17T09:00:00+00:00"] omit=differs[$.lastTransitionTime: "2026-09-17T09:00:00Z" vs "2026-09-17T09:00:00+00:00"]
 timestamp_lowercase prost-reflect decode=- emit=- omit=-
+timestamp_lowercase abada decode=- emit=- omit=-
 timestamp_lowercase pbjson decode=accepts emit=- omit=-
 duration_negative_fraction prost-reflect decode=identical emit=identical omit=identical
+duration_negative_fraction abada decode=identical emit=same-bytes omit=same-bytes
 duration_negative_fraction pbjson decode=identical emit=identical omit=identical
 any_unknown_type prost-reflect decode=- emit=- omit=-
+any_unknown_type abada decode=- emit=- omit=-
 any_unknown_type pbjson decode=- emit=- omit=-
 field_mask_snake_case_rejected prost-reflect decode=- emit=- omit=-
+field_mask_snake_case_rejected abada decode=- emit=- omit=-
 field_mask_snake_case_rejected pbjson decode=- emit=- omit=-
 duplicate_key prost-reflect decode=accepts emit=- omit=-
+duplicate_key abada decode=- emit=- omit=-
 duplicate_key pbjson decode=- emit=- omit=-
 proto_and_json_name_both prost-reflect decode=accepts emit=- omit=-
+proto_and_json_name_both abada decode=- emit=- omit=-
 proto_and_json_name_both pbjson decode=- emit=- omit=-
 not_an_object prost-reflect decode=- emit=- omit=-
+not_an_object abada decode=- emit=- omit=-
 not_an_object pbjson decode=- emit=- omit=-

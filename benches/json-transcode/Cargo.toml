@@ -8,6 +8,7 @@ license.workspace = true
 publish = false
 
 [dependencies]
+abada.workspace = true
 prost.workspace = true
 prost-reflect = { version = "0.16", features = ["serde"] }
 pbjson = "0.9"

@@ -12,7 +12,8 @@ use std::hint::black_box;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Instant;
 
-use abada_json_bench::{Mode, pbjson, reflect, with_type};
+use abada::json::Marshaler;
+use abada_json_bench::{Mode, abada_codec, pbjson, reflect, with_type};
 use prost::Message;
 use prost_reflect::MessageDescriptor;
 use serde::Serialize;
@@ -96,7 +97,7 @@ fn measure(case: &str, bytes: usize, mut ops: Vec<Op<'_>>) {
     }
 }
 
-fn ops_for<'a, M>(desc: &'a MessageDescriptor, body: &'a [u8]) -> Vec<Op<'a>>
+fn ops_for<'a, M>(desc: &'a MessageDescriptor, body: &'a [u8], abada: &'a Marshaler) -> Vec<Op<'a>>
 where
     M: Message + Default + Clone + Serialize + DeserializeOwned + 'a,
 {
@@ -111,7 +112,20 @@ where
     let typed2 = typed.clone();
     let typed3 = typed.clone();
     let dynamic2 = dynamic.clone();
+    let dynamic3 = dynamic.clone();
     let mut ops = vec![
+        Op {
+            name: "(abada) decode JSON->Dynamic",
+            run: Box::new(move || {
+                black_box(abada_codec::decode(abada, desc, black_box(body)).unwrap());
+            }),
+        },
+        Op {
+            name: "(abada) encode Dynamic->JSON",
+            run: Box::new(move || {
+                black_box(abada_codec::encode(abada, black_box(&dynamic3)).unwrap());
+            }),
+        },
         Op {
             name: "(a) decode JSON->Dynamic",
             run: Box::new(move || {
@@ -224,6 +238,7 @@ fn main() {
     let only = std::env::args().nth(1);
 
     let pool = reflect::pool();
+    let abada = abada_codec::marshaler(Mode::Emit);
     if only.as_deref().is_none_or(|o| o == "descriptor") {
         one_time();
     }
@@ -233,7 +248,7 @@ fn main() {
         }
         let body = abada_json_bench::expand(case.input.get(), case.repeat);
         let desc = pool.get_message_by_name(&case.message).unwrap();
-        let ops = with_type!(emit, case.message.as_str(), ops_for(&desc, &body)).unwrap();
+        let ops = with_type!(emit, case.message.as_str(), ops_for(&desc, &body, &abada)).unwrap();
         measure(&case.name, body.len(), ops);
     }
 }
