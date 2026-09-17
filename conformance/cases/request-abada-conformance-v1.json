@@ -1,5 +1,3702 @@
-{"cases": [
- {"name": "top-int32", "method": "GET", "target": "/v1/top/int32/0x1f?f_string=a+b&nested.f_int64=-5"},
- {"name": "top-int32-bad", "method": "GET", "target": "/v1/top/int32/abc"},
- {"name": "form-fallback", "method": "POST", "target": "/v1/top/string/x?f_int32=1", "headers": [["Content-Type", "application/x-www-form-urlencoded"]], "body": "f_int32=2&f_bool=true"}
-]}
+{
+ "cases": [
+  {
+   "name": "path-top-double-0",
+   "method": "GET",
+   "target": "/v1/top/double/1.5"
+  },
+  {
+   "name": "path-top-double-1",
+   "method": "GET",
+   "target": "/v1/top/double/-0"
+  },
+  {
+   "name": "path-top-double-2",
+   "method": "GET",
+   "target": "/v1/top/double/1e308"
+  },
+  {
+   "name": "path-top-double-3",
+   "method": "GET",
+   "target": "/v1/top/double/1e309"
+  },
+  {
+   "name": "path-top-double-4",
+   "method": "GET",
+   "target": "/v1/top/double/inf"
+  },
+  {
+   "name": "path-top-double-5",
+   "method": "GET",
+   "target": "/v1/top/double/-Infinity"
+  },
+  {
+   "name": "path-top-double-6",
+   "method": "GET",
+   "target": "/v1/top/double/NaN"
+  },
+  {
+   "name": "path-top-double-7",
+   "method": "GET",
+   "target": "/v1/top/double/nan"
+  },
+  {
+   "name": "path-top-double-8",
+   "method": "GET",
+   "target": "/v1/top/double/0x1p-2"
+  },
+  {
+   "name": "path-top-double-9",
+   "method": "GET",
+   "target": "/v1/top/double/0x1.8p1"
+  },
+  {
+   "name": "path-top-double-10",
+   "method": "GET",
+   "target": "/v1/top/double/0x1p"
+  },
+  {
+   "name": "path-top-double-11",
+   "method": "GET",
+   "target": "/v1/top/double/1_0"
+  },
+  {
+   "name": "path-top-double-12",
+   "method": "GET",
+   "target": "/v1/top/double/1__0"
+  },
+  {
+   "name": "path-top-double-13",
+   "method": "GET",
+   "target": "/v1/top/double/abc"
+  },
+  {
+   "name": "path-top-double-14",
+   "method": "GET",
+   "target": "/v1/top/double/.5"
+  },
+  {
+   "name": "path-top-double-15",
+   "method": "GET",
+   "target": "/v1/top/double/5."
+  },
+  {
+   "name": "path-top-double-16",
+   "method": "GET",
+   "target": "/v1/top/double/%201"
+  },
+  {
+   "name": "path-top-double-17",
+   "method": "GET",
+   "target": "/v1/top/double/1e-400"
+  },
+  {
+   "name": "path-top-double-18",
+   "method": "GET",
+   "target": "/v1/top/double/0x_1p0"
+  },
+  {
+   "name": "path-top-float-0",
+   "method": "GET",
+   "target": "/v1/top/float/3.4e38"
+  },
+  {
+   "name": "path-top-float-1",
+   "method": "GET",
+   "target": "/v1/top/float/3.5e38"
+  },
+  {
+   "name": "path-top-float-2",
+   "method": "GET",
+   "target": "/v1/top/float/1.1"
+  },
+  {
+   "name": "path-top-float-3",
+   "method": "GET",
+   "target": "/v1/top/float/-1e-50"
+  },
+  {
+   "name": "path-top-float-4",
+   "method": "GET",
+   "target": "/v1/top/float/0x1p-160"
+  },
+  {
+   "name": "path-top-int32-0",
+   "method": "GET",
+   "target": "/v1/top/int32/0x1f"
+  },
+  {
+   "name": "path-top-int32-1",
+   "method": "GET",
+   "target": "/v1/top/int32/0X1F"
+  },
+  {
+   "name": "path-top-int32-2",
+   "method": "GET",
+   "target": "/v1/top/int32/0o17"
+  },
+  {
+   "name": "path-top-int32-3",
+   "method": "GET",
+   "target": "/v1/top/int32/0b101"
+  },
+  {
+   "name": "path-top-int32-4",
+   "method": "GET",
+   "target": "/v1/top/int32/017"
+  },
+  {
+   "name": "path-top-int32-5",
+   "method": "GET",
+   "target": "/v1/top/int32/08"
+  },
+  {
+   "name": "path-top-int32-6",
+   "method": "GET",
+   "target": "/v1/top/int32/1_000"
+  },
+  {
+   "name": "path-top-int32-7",
+   "method": "GET",
+   "target": "/v1/top/int32/_1"
+  },
+  {
+   "name": "path-top-int32-8",
+   "method": "GET",
+   "target": "/v1/top/int32/1_"
+  },
+  {
+   "name": "path-top-int32-9",
+   "method": "GET",
+   "target": "/v1/top/int32/2147483648"
+  },
+  {
+   "name": "path-top-int32-10",
+   "method": "GET",
+   "target": "/v1/top/int32/-2147483648"
+  },
+  {
+   "name": "path-top-int32-11",
+   "method": "GET",
+   "target": "/v1/top/int32/+5"
+  },
+  {
+   "name": "path-top-int32-12",
+   "method": "GET",
+   "target": "/v1/top/int32/-0x80000000"
+  },
+  {
+   "name": "path-top-int32-13",
+   "method": "GET",
+   "target": "/v1/top/int32/abc"
+  },
+  {
+   "name": "path-top-int32-14",
+   "method": "GET",
+   "target": "/v1/top/int32/"
+  },
+  {
+   "name": "path-top-int32-15",
+   "method": "GET",
+   "target": "/v1/top/int32/0x"
+  },
+  {
+   "name": "path-top-int32-16",
+   "method": "GET",
+   "target": "/v1/top/int32/0b2"
+  },
+  {
+   "name": "path-top-int64-0",
+   "method": "GET",
+   "target": "/v1/top/int64/9223372036854775807"
+  },
+  {
+   "name": "path-top-int64-1",
+   "method": "GET",
+   "target": "/v1/top/int64/9223372036854775808"
+  },
+  {
+   "name": "path-top-int64-2",
+   "method": "GET",
+   "target": "/v1/top/int64/-9223372036854775808"
+  },
+  {
+   "name": "path-top-int64-3",
+   "method": "GET",
+   "target": "/v1/top/int64/-0x8000000000000001"
+  },
+  {
+   "name": "path-top-int64-4",
+   "method": "GET",
+   "target": "/v1/top/int64/0_0"
+  },
+  {
+   "name": "path-top-uint32-0",
+   "method": "GET",
+   "target": "/v1/top/uint32/-1"
+  },
+  {
+   "name": "path-top-uint32-1",
+   "method": "GET",
+   "target": "/v1/top/uint32/4294967295"
+  },
+  {
+   "name": "path-top-uint32-2",
+   "method": "GET",
+   "target": "/v1/top/uint32/4294967296"
+  },
+  {
+   "name": "path-top-uint32-3",
+   "method": "GET",
+   "target": "/v1/top/uint32/0x_ff"
+  },
+  {
+   "name": "path-top-uint32-4",
+   "method": "GET",
+   "target": "/v1/top/uint32/+1"
+  },
+  {
+   "name": "path-top-uint64-0",
+   "method": "GET",
+   "target": "/v1/top/uint64/18446744073709551615"
+  },
+  {
+   "name": "path-top-uint64-1",
+   "method": "GET",
+   "target": "/v1/top/uint64/18446744073709551616"
+  },
+  {
+   "name": "path-top-uint64-2",
+   "method": "GET",
+   "target": "/v1/top/uint64/1__0"
+  },
+  {
+   "name": "path-top-uint64-3",
+   "method": "GET",
+   "target": "/v1/top/uint64/0xFFFFFFFFFFFFFFFF"
+  },
+  {
+   "name": "path-top-sint32-0",
+   "method": "GET",
+   "target": "/v1/top/sint32/-7"
+  },
+  {
+   "name": "path-top-sint32-1",
+   "method": "GET",
+   "target": "/v1/top/sint32/x"
+  },
+  {
+   "name": "path-top-sint64-0",
+   "method": "GET",
+   "target": "/v1/top/sint64/-7"
+  },
+  {
+   "name": "path-top-sint64-1",
+   "method": "GET",
+   "target": "/v1/top/sint64/0o777"
+  },
+  {
+   "name": "path-top-fixed32-0",
+   "method": "GET",
+   "target": "/v1/top/fixed32/7"
+  },
+  {
+   "name": "path-top-fixed32-1",
+   "method": "GET",
+   "target": "/v1/top/fixed32/-7"
+  },
+  {
+   "name": "path-top-fixed64-0",
+   "method": "GET",
+   "target": "/v1/top/fixed64/7"
+  },
+  {
+   "name": "path-top-fixed64-1",
+   "method": "GET",
+   "target": "/v1/top/fixed64/0x10"
+  },
+  {
+   "name": "path-top-sfixed32-0",
+   "method": "GET",
+   "target": "/v1/top/sfixed32/-7"
+  },
+  {
+   "name": "path-top-sfixed32-1",
+   "method": "GET",
+   "target": "/v1/top/sfixed32/2147483648"
+  },
+  {
+   "name": "path-top-sfixed64-0",
+   "method": "GET",
+   "target": "/v1/top/sfixed64/-7"
+  },
+  {
+   "name": "path-top-sfixed64-1",
+   "method": "GET",
+   "target": "/v1/top/sfixed64/1.0"
+  },
+  {
+   "name": "path-top-bool-0",
+   "method": "GET",
+   "target": "/v1/top/bool/true"
+  },
+  {
+   "name": "path-top-bool-1",
+   "method": "GET",
+   "target": "/v1/top/bool/1"
+  },
+  {
+   "name": "path-top-bool-2",
+   "method": "GET",
+   "target": "/v1/top/bool/T"
+  },
+  {
+   "name": "path-top-bool-3",
+   "method": "GET",
+   "target": "/v1/top/bool/TRUE"
+  },
+  {
+   "name": "path-top-bool-4",
+   "method": "GET",
+   "target": "/v1/top/bool/True"
+  },
+  {
+   "name": "path-top-bool-5",
+   "method": "GET",
+   "target": "/v1/top/bool/f"
+  },
+  {
+   "name": "path-top-bool-6",
+   "method": "GET",
+   "target": "/v1/top/bool/0"
+  },
+  {
+   "name": "path-top-bool-7",
+   "method": "GET",
+   "target": "/v1/top/bool/False"
+  },
+  {
+   "name": "path-top-bool-8",
+   "method": "GET",
+   "target": "/v1/top/bool/yes"
+  },
+  {
+   "name": "path-top-bool-9",
+   "method": "GET",
+   "target": "/v1/top/bool/tRUE"
+  },
+  {
+   "name": "path-top-bool-10",
+   "method": "GET",
+   "target": "/v1/top/bool/"
+  },
+  {
+   "name": "path-top-string-0",
+   "method": "GET",
+   "target": "/v1/top/string/plain"
+  },
+  {
+   "name": "path-top-string-1",
+   "method": "GET",
+   "target": "/v1/top/string/a%20b"
+  },
+  {
+   "name": "path-top-string-2",
+   "method": "GET",
+   "target": "/v1/top/string/%C3%A9t%C3%A9"
+  },
+  {
+   "name": "path-top-string-3",
+   "method": "GET",
+   "target": "/v1/top/string/a+b"
+  },
+  {
+   "name": "path-top-string-4",
+   "method": "GET",
+   "target": "/v1/top/string/%FF"
+  },
+  {
+   "name": "path-top-bytes-0",
+   "method": "GET",
+   "target": "/v1/top/bytes/aGVsbG8%3D"
+  },
+  {
+   "name": "path-top-bytes-1",
+   "method": "GET",
+   "target": "/v1/top/bytes/aGVsbG8"
+  },
+  {
+   "name": "path-top-bytes-2",
+   "method": "GET",
+   "target": "/v1/top/bytes/_-8%3D"
+  },
+  {
+   "name": "path-top-bytes-3",
+   "method": "GET",
+   "target": "/v1/top/bytes/%2B%2F8%3D"
+  },
+  {
+   "name": "path-top-bytes-4",
+   "method": "GET",
+   "target": "/v1/top/bytes/!!!!"
+  },
+  {
+   "name": "path-top-bytes-5",
+   "method": "GET",
+   "target": "/v1/top/bytes/YQ"
+  },
+  {
+   "name": "path-top-bytes-6",
+   "method": "GET",
+   "target": "/v1/top/bytes/YQ%3D%3D%3D"
+  },
+  {
+   "name": "path-top-bytes-7",
+   "method": "GET",
+   "target": "/v1/top/bytes/Y%0AQ%3D%3D"
+  },
+  {
+   "name": "path-top-enum-0",
+   "method": "GET",
+   "target": "/v1/top/enum/RED"
+  },
+  {
+   "name": "path-top-enum-1",
+   "method": "GET",
+   "target": "/v1/top/enum/1"
+  },
+  {
+   "name": "path-top-enum-2",
+   "method": "GET",
+   "target": "/v1/top/enum/8"
+  },
+  {
+   "name": "path-top-enum-3",
+   "method": "GET",
+   "target": "/v1/top/enum/010"
+  },
+  {
+   "name": "path-top-enum-4",
+   "method": "GET",
+   "target": "/v1/top/enum/0x2"
+  },
+  {
+   "name": "path-top-enum-5",
+   "method": "GET",
+   "target": "/v1/top/enum/BLUE"
+  },
+  {
+   "name": "path-top-enum-6",
+   "method": "GET",
+   "target": "/v1/top/enum/3"
+  },
+  {
+   "name": "path-top-enum-7",
+   "method": "GET",
+   "target": "/v1/top/enum/red"
+  },
+  {
+   "name": "path-top-enum-8",
+   "method": "GET",
+   "target": "/v1/top/enum/-1"
+  },
+  {
+   "name": "path-top-enum-9",
+   "method": "GET",
+   "target": "/v1/top/enum/2147483648"
+  },
+  {
+   "name": "path-top-rstring-0",
+   "method": "GET",
+   "target": "/v1/top/rstring/a,b,,c"
+  },
+  {
+   "name": "path-top-rstring-1",
+   "method": "GET",
+   "target": "/v1/top/rstring/single"
+  },
+  {
+   "name": "path-top-rstring-2",
+   "method": "GET",
+   "target": "/v1/top/rstring/%2C"
+  },
+  {
+   "name": "path-top-rint32-0",
+   "method": "GET",
+   "target": "/v1/top/rint32/1,2,0x3"
+  },
+  {
+   "name": "path-top-rint32-1",
+   "method": "GET",
+   "target": "/v1/top/rint32/1,x"
+  },
+  {
+   "name": "path-top-rint32-2",
+   "method": "GET",
+   "target": "/v1/top/rint32/"
+  },
+  {
+   "name": "path-top-renum-0",
+   "method": "GET",
+   "target": "/v1/top/renum/RED,2"
+  },
+  {
+   "name": "path-top-renum-1",
+   "method": "GET",
+   "target": "/v1/top/renum/RED,NOPE"
+  },
+  {
+   "name": "path-top-renum-2",
+   "method": "GET",
+   "target": "/v1/top/renum/EIGHT,010"
+  },
+  {
+   "name": "path-top-rbytes-0",
+   "method": "GET",
+   "target": "/v1/top/rbytes/YQ%3D%3D,Yg%3D%3D"
+  },
+  {
+   "name": "path-top-rbytes-1",
+   "method": "GET",
+   "target": "/v1/top/rbytes/YQ%3D%3D,%21"
+  },
+  {
+   "name": "path-top-rdouble-0",
+   "method": "GET",
+   "target": "/v1/top/rdouble/1.5,2,inf"
+  },
+  {
+   "name": "path-top-rdouble-1",
+   "method": "GET",
+   "target": "/v1/top/rdouble/1,a"
+  },
+  {
+   "name": "path-top-timestamp-0",
+   "method": "GET",
+   "target": "/v1/top/timestamp/2024-01-02T03:04:05Z"
+  },
+  {
+   "name": "path-top-timestamp-1",
+   "method": "GET",
+   "target": "/v1/top/timestamp/2024-01-02T03:04:05.123456789%2B01:00"
+  },
+  {
+   "name": "path-top-timestamp-2",
+   "method": "GET",
+   "target": "/v1/top/timestamp/2024-01-02T03:04:05.1234567891Z"
+  },
+  {
+   "name": "path-top-timestamp-3",
+   "method": "GET",
+   "target": "/v1/top/timestamp/2024-01-02T03:04:05z"
+  },
+  {
+   "name": "path-top-timestamp-4",
+   "method": "GET",
+   "target": "/v1/top/timestamp/%222024-01-02T03:04:05Z%22"
+  },
+  {
+   "name": "path-top-timestamp-5",
+   "method": "GET",
+   "target": "/v1/top/timestamp/0000-01-01T00:00:00Z"
+  },
+  {
+   "name": "path-top-timestamp-6",
+   "method": "GET",
+   "target": "/v1/top/timestamp/0001-01-01T00:00:00Z"
+  },
+  {
+   "name": "path-top-timestamp-7",
+   "method": "GET",
+   "target": "/v1/top/timestamp/9999-12-31T23:59:59.999999999Z"
+  },
+  {
+   "name": "path-top-timestamp-8",
+   "method": "GET",
+   "target": "/v1/top/timestamp/bad"
+  },
+  {
+   "name": "path-top-timestamp-9",
+   "method": "GET",
+   "target": "/v1/top/timestamp/2024-02-30T00:00:00Z"
+  },
+  {
+   "name": "path-top-timestamp-10",
+   "method": "GET",
+   "target": "/v1/top/timestamp/2024-01-02T03:04:05"
+  },
+  {
+   "name": "path-top-timestamp-11",
+   "method": "GET",
+   "target": "/v1/top/timestamp/2024-01-02T03:04:05-24:00"
+  },
+  {
+   "name": "path-top-timestamp-12",
+   "method": "GET",
+   "target": "/v1/top/timestamp/%07"
+  },
+  {
+   "name": "path-top-duration-0",
+   "method": "GET",
+   "target": "/v1/top/duration/1.5s"
+  },
+  {
+   "name": "path-top-duration-1",
+   "method": "GET",
+   "target": "/v1/top/duration/-0.000000001s"
+  },
+  {
+   "name": "path-top-duration-2",
+   "method": "GET",
+   "target": "/v1/top/duration/3s"
+  },
+  {
+   "name": "path-top-duration-3",
+   "method": "GET",
+   "target": "/v1/top/duration/1h"
+  },
+  {
+   "name": "path-top-duration-4",
+   "method": "GET",
+   "target": "/v1/top/duration/315576000000s"
+  },
+  {
+   "name": "path-top-duration-5",
+   "method": "GET",
+   "target": "/v1/top/duration/315576000001s"
+  },
+  {
+   "name": "path-top-duration-6",
+   "method": "GET",
+   "target": "/v1/top/duration/.5s"
+  },
+  {
+   "name": "path-top-duration-7",
+   "method": "GET",
+   "target": "/v1/top/duration/-s"
+  },
+  {
+   "name": "path-top-duration-8",
+   "method": "GET",
+   "target": "/v1/top/duration/1.1234567891s"
+  },
+  {
+   "name": "path-top-duration-9",
+   "method": "GET",
+   "target": "/v1/top/duration/%2B2s"
+  },
+  {
+   "name": "path-top-duration-10",
+   "method": "GET",
+   "target": "/v1/top/duration/0s"
+  },
+  {
+   "name": "path-top-duration-11",
+   "method": "GET",
+   "target": "/v1/top/duration/s"
+  },
+  {
+   "name": "path-top-wdouble-0",
+   "method": "GET",
+   "target": "/v1/top/wdouble/2.5"
+  },
+  {
+   "name": "path-top-wdouble-1",
+   "method": "GET",
+   "target": "/v1/top/wdouble/x"
+  },
+  {
+   "name": "path-top-wfloat-0",
+   "method": "GET",
+   "target": "/v1/top/wfloat/2.5"
+  },
+  {
+   "name": "path-top-wfloat-1",
+   "method": "GET",
+   "target": "/v1/top/wfloat/x"
+  },
+  {
+   "name": "path-top-wint64-0",
+   "method": "GET",
+   "target": "/v1/top/wint64/0x10"
+  },
+  {
+   "name": "path-top-wint64-1",
+   "method": "GET",
+   "target": "/v1/top/wint64/-1"
+  },
+  {
+   "name": "path-top-wuint64-0",
+   "method": "GET",
+   "target": "/v1/top/wuint64/-1"
+  },
+  {
+   "name": "path-top-wuint64-1",
+   "method": "GET",
+   "target": "/v1/top/wuint64/5"
+  },
+  {
+   "name": "path-top-wint32-0",
+   "method": "GET",
+   "target": "/v1/top/wint32/7"
+  },
+  {
+   "name": "path-top-wint32-1",
+   "method": "GET",
+   "target": "/v1/top/wint32/2147483648"
+  },
+  {
+   "name": "path-top-wuint32-0",
+   "method": "GET",
+   "target": "/v1/top/wuint32/7"
+  },
+  {
+   "name": "path-top-wuint32-1",
+   "method": "GET",
+   "target": "/v1/top/wuint32/-7"
+  },
+  {
+   "name": "path-top-wbool-0",
+   "method": "GET",
+   "target": "/v1/top/wbool/false"
+  },
+  {
+   "name": "path-top-wbool-1",
+   "method": "GET",
+   "target": "/v1/top/wbool/yes"
+  },
+  {
+   "name": "path-top-wstring-0",
+   "method": "GET",
+   "target": "/v1/top/wstring/hi"
+  },
+  {
+   "name": "path-top-wstring-1",
+   "method": "GET",
+   "target": "/v1/top/wstring/"
+  },
+  {
+   "name": "path-top-wbytes-0",
+   "method": "GET",
+   "target": "/v1/top/wbytes/aGk%3D"
+  },
+  {
+   "name": "path-top-wbytes-1",
+   "method": "GET",
+   "target": "/v1/top/wbytes/aGk"
+  },
+  {
+   "name": "path-top-oneof-0",
+   "method": "GET",
+   "target": "/v1/top/oneof/x"
+  },
+  {
+   "name": "path-top-renamed-0",
+   "method": "GET",
+   "target": "/v1/top/renamed/v"
+  },
+  {
+   "name": "path-top-two",
+   "method": "GET",
+   "target": "/v1/top/two/s/12"
+  },
+  {
+   "name": "path-top-two-bad-second",
+   "method": "GET",
+   "target": "/v1/top/two/s/x"
+  },
+  {
+   "name": "path-top-multi",
+   "method": "GET",
+   "target": "/v1/top/projects/p1/locations/l1/l2:list"
+  },
+  {
+   "name": "path-top-multi-legacy-escapes",
+   "method": "GET",
+   "target": "/v1/top/projects/a%20b/locations/x%3Ay:list"
+  },
+  {
+   "name": "path-top-multi-reserved-mode",
+   "method": "GET",
+   "target": "/v1/top/projects/a%2Fb/locations/x%2Fy%20z:list",
+   "mux": "all_except_reserved"
+  },
+  {
+   "name": "path-top-multi-all-characters",
+   "method": "GET",
+   "target": "/v1/top/projects/a%2Fb/locations/x%2Fy:list",
+   "mux": "all_characters"
+  },
+  {
+   "name": "path-top-bytes-reserved-mode",
+   "method": "GET",
+   "target": "/v1/top/bytes/a%2Bb%2F",
+   "mux": "all_except_reserved"
+  },
+  {
+   "name": "path-nested-double-0",
+   "method": "GET",
+   "target": "/v1/nested/double/1.5"
+  },
+  {
+   "name": "path-nested-double-1",
+   "method": "GET",
+   "target": "/v1/nested/double/0x1p-2"
+  },
+  {
+   "name": "path-nested-double-2",
+   "method": "GET",
+   "target": "/v1/nested/double/inf"
+  },
+  {
+   "name": "path-nested-double-3",
+   "method": "GET",
+   "target": "/v1/nested/double/1_0"
+  },
+  {
+   "name": "path-nested-double-4",
+   "method": "GET",
+   "target": "/v1/nested/double/1e309"
+  },
+  {
+   "name": "path-nested-float-0",
+   "method": "GET",
+   "target": "/v1/nested/float/3.5e38"
+  },
+  {
+   "name": "path-nested-float-1",
+   "method": "GET",
+   "target": "/v1/nested/float/1.25"
+  },
+  {
+   "name": "path-nested-int32-0",
+   "method": "GET",
+   "target": "/v1/nested/int32/0x1f"
+  },
+  {
+   "name": "path-nested-int32-1",
+   "method": "GET",
+   "target": "/v1/nested/int32/017"
+  },
+  {
+   "name": "path-nested-int32-2",
+   "method": "GET",
+   "target": "/v1/nested/int32/+5"
+  },
+  {
+   "name": "path-nested-int32-3",
+   "method": "GET",
+   "target": "/v1/nested/int32/-0"
+  },
+  {
+   "name": "path-nested-int32-4",
+   "method": "GET",
+   "target": "/v1/nested/int32/08"
+  },
+  {
+   "name": "path-nested-int32-5",
+   "method": "GET",
+   "target": "/v1/nested/int32/2147483648"
+  },
+  {
+   "name": "path-nested-int32-6",
+   "method": "GET",
+   "target": "/v1/nested/int32/"
+  },
+  {
+   "name": "path-nested-int64-0",
+   "method": "GET",
+   "target": "/v1/nested/int64/9223372036854775808"
+  },
+  {
+   "name": "path-nested-int64-1",
+   "method": "GET",
+   "target": "/v1/nested/int64/-42"
+  },
+  {
+   "name": "path-nested-uint32-0",
+   "method": "GET",
+   "target": "/v1/nested/uint32/-1"
+  },
+  {
+   "name": "path-nested-uint32-1",
+   "method": "GET",
+   "target": "/v1/nested/uint32/42"
+  },
+  {
+   "name": "path-nested-uint64-0",
+   "method": "GET",
+   "target": "/v1/nested/uint64/18446744073709551615"
+  },
+  {
+   "name": "path-nested-uint64-1",
+   "method": "GET",
+   "target": "/v1/nested/uint64/1_0"
+  },
+  {
+   "name": "path-nested-sint64-0",
+   "method": "GET",
+   "target": "/v1/nested/sint64/-9"
+  },
+  {
+   "name": "path-nested-fixed64-0",
+   "method": "GET",
+   "target": "/v1/nested/fixed64/9"
+  },
+  {
+   "name": "path-nested-bool-0",
+   "method": "GET",
+   "target": "/v1/nested/bool/t"
+  },
+  {
+   "name": "path-nested-bool-1",
+   "method": "GET",
+   "target": "/v1/nested/bool/yes"
+  },
+  {
+   "name": "path-nested-bool-2",
+   "method": "GET",
+   "target": "/v1/nested/bool/FALSE"
+  },
+  {
+   "name": "path-nested-string-0",
+   "method": "GET",
+   "target": "/v1/nested/string/%C3%A9"
+  },
+  {
+   "name": "path-nested-string-1",
+   "method": "GET",
+   "target": "/v1/nested/string/x"
+  },
+  {
+   "name": "path-nested-bytes-0",
+   "method": "GET",
+   "target": "/v1/nested/bytes/aGk%3D"
+  },
+  {
+   "name": "path-nested-bytes-1",
+   "method": "GET",
+   "target": "/v1/nested/bytes/_-8%3D"
+  },
+  {
+   "name": "path-nested-bytes-2",
+   "method": "GET",
+   "target": "/v1/nested/bytes/aGk"
+  },
+  {
+   "name": "path-nested-enum-0",
+   "method": "GET",
+   "target": "/v1/nested/enum/RED"
+  },
+  {
+   "name": "path-nested-enum-1",
+   "method": "GET",
+   "target": "/v1/nested/enum/2"
+  },
+  {
+   "name": "path-nested-enum-2",
+   "method": "GET",
+   "target": "/v1/nested/enum/08"
+  },
+  {
+   "name": "path-nested-enum-3",
+   "method": "GET",
+   "target": "/v1/nested/enum/010"
+  },
+  {
+   "name": "path-nested-enum-4",
+   "method": "GET",
+   "target": "/v1/nested/enum/BLUE"
+  },
+  {
+   "name": "path-nested-enum-5",
+   "method": "GET",
+   "target": "/v1/nested/enum/3"
+  },
+  {
+   "name": "path-nested-enum-6",
+   "method": "GET",
+   "target": "/v1/nested/enum/0x1"
+  },
+  {
+   "name": "path-nested-enum-7",
+   "method": "GET",
+   "target": "/v1/nested/enum/+1"
+  },
+  {
+   "name": "path-nested-enum-8",
+   "method": "GET",
+   "target": "/v1/nested/enum/-0"
+  },
+  {
+   "name": "path-nested-rstring-0",
+   "method": "GET",
+   "target": "/v1/nested/rstring/a,b"
+  },
+  {
+   "name": "path-nested-renum-0",
+   "method": "GET",
+   "target": "/v1/nested/renum/1"
+  },
+  {
+   "name": "path-nested-renum-1",
+   "method": "GET",
+   "target": "/v1/nested/renum/RED,GREEN"
+  },
+  {
+   "name": "path-nested-renum-2",
+   "method": "GET",
+   "target": "/v1/nested/renum/08"
+  },
+  {
+   "name": "path-nested-renum-3",
+   "method": "GET",
+   "target": "/v1/nested/renum/010"
+  },
+  {
+   "name": "path-nested-timestamp-0",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T03:04:05Z"
+  },
+  {
+   "name": "path-nested-timestamp-1",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T03:04:05.5%2B01:00"
+  },
+  {
+   "name": "path-nested-timestamp-2",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T03:04:05,5Z"
+  },
+  {
+   "name": "path-nested-timestamp-3",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02t03:04:05z"
+  },
+  {
+   "name": "path-nested-timestamp-4",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T3:04:05Z"
+  },
+  {
+   "name": "path-nested-timestamp-5",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/0000-12-31T00:00:00Z"
+  },
+  {
+   "name": "path-nested-timestamp-6",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/0001-01-01T00:00:00%2B01:00"
+  },
+  {
+   "name": "path-nested-timestamp-7",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/9999-12-31T23:59:59-01:00"
+  },
+  {
+   "name": "path-nested-timestamp-8",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-13-01T00:00:00Z"
+  },
+  {
+   "name": "path-nested-timestamp-9",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-02-30T00:00:00Z"
+  },
+  {
+   "name": "path-nested-timestamp-10",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T24:00:00Z"
+  },
+  {
+   "name": "path-nested-timestamp-11",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T03:60:00Z"
+  },
+  {
+   "name": "path-nested-timestamp-12",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T03:04:60Z"
+  },
+  {
+   "name": "path-nested-timestamp-13",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T03:04:05%2B25:00"
+  },
+  {
+   "name": "path-nested-timestamp-14",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T03:04:05%2B01:61"
+  },
+  {
+   "name": "path-nested-timestamp-15",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T03:04:05Zjunk"
+  },
+  {
+   "name": "path-nested-timestamp-16",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02"
+  },
+  {
+   "name": "path-nested-timestamp-17",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/bad"
+  },
+  {
+   "name": "path-nested-timestamp-18",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2a24-01-02T03:04:05Z"
+  },
+  {
+   "name": "path-nested-timestamp-19",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T03:04:05.Z"
+  },
+  {
+   "name": "path-nested-timestamp-20",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T03:04:05.1234567891Z"
+  },
+  {
+   "name": "path-nested-timestamp-21",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/2024-01-02T03:04:05%2B0100"
+  },
+  {
+   "name": "path-nested-timestamp-22",
+   "method": "GET",
+   "target": "/v1/nested/timestamp/%C3%A9"
+  },
+  {
+   "name": "path-nested-duration-0",
+   "method": "GET",
+   "target": "/v1/nested/duration/1h30m"
+  },
+  {
+   "name": "path-nested-duration-1",
+   "method": "GET",
+   "target": "/v1/nested/duration/1.5s"
+  },
+  {
+   "name": "path-nested-duration-2",
+   "method": "GET",
+   "target": "/v1/nested/duration/-3ms"
+  },
+  {
+   "name": "path-nested-duration-3",
+   "method": "GET",
+   "target": "/v1/nested/duration/1d"
+  },
+  {
+   "name": "path-nested-duration-4",
+   "method": "GET",
+   "target": "/v1/nested/duration/5"
+  },
+  {
+   "name": "path-nested-duration-5",
+   "method": "GET",
+   "target": "/v1/nested/duration/"
+  },
+  {
+   "name": "path-nested-duration-6",
+   "method": "GET",
+   "target": "/v1/nested/duration/9999999h"
+  },
+  {
+   "name": "path-nested-duration-7",
+   "method": "GET",
+   "target": "/v1/nested/duration/%C2%B5s"
+  },
+  {
+   "name": "path-nested-duration-8",
+   "method": "GET",
+   "target": "/v1/nested/duration/.s"
+  },
+  {
+   "name": "path-nested-duration-9",
+   "method": "GET",
+   "target": "/v1/nested/duration/0"
+  },
+  {
+   "name": "path-nested-duration-10",
+   "method": "GET",
+   "target": "/v1/nested/duration/-0"
+  },
+  {
+   "name": "path-nested-duration-11",
+   "method": "GET",
+   "target": "/v1/nested/duration/2562047h47m16.854775807s"
+  },
+  {
+   "name": "path-nested-duration-12",
+   "method": "GET",
+   "target": "/v1/nested/duration/2562047h47m16.854775808s"
+  },
+  {
+   "name": "path-nested-duration-13",
+   "method": "GET",
+   "target": "/v1/nested/duration/1.0000000001h"
+  },
+  {
+   "name": "path-nested-wint64-0",
+   "method": "GET",
+   "target": "/v1/nested/wint64/0x10"
+  },
+  {
+   "name": "path-nested-wint64-1",
+   "method": "GET",
+   "target": "/v1/nested/wint64/10"
+  },
+  {
+   "name": "path-nested-wbool-0",
+   "method": "GET",
+   "target": "/v1/nested/wbool/T"
+  },
+  {
+   "name": "path-nested-wbytes-0",
+   "method": "GET",
+   "target": "/v1/nested/wbytes/aGk%3D"
+  },
+  {
+   "name": "path-nested-wbytes-1",
+   "method": "GET",
+   "target": "/v1/nested/wbytes/%21"
+  },
+  {
+   "name": "path-nested-oneof-0",
+   "method": "GET",
+   "target": "/v1/nested/oneof/x"
+  },
+  {
+   "name": "path-nested-oneofmsg",
+   "method": "GET",
+   "target": "/v1/nested/oneofmsg/abc?o_msg.f_int32=3"
+  },
+  {
+   "name": "path-nested-oneofmsg-query-conflict",
+   "method": "GET",
+   "target": "/v1/nested/oneofmsg/abc?o_str=zzz"
+  },
+  {
+   "name": "path-nested-deep",
+   "method": "GET",
+   "target": "/v1/nested/deep/s/5"
+  },
+  {
+   "name": "path-nested-renamed",
+   "method": "GET",
+   "target": "/v1/nested/renamed/v"
+  },
+  {
+   "name": "path-nested-multi",
+   "method": "GET",
+   "target": "/v1/nested/a/x/b/y/z"
+  },
+  {
+   "name": "path-nested-multi-reserved",
+   "method": "GET",
+   "target": "/v1/nested/a/x%2F/b/y%2Fz",
+   "mux": "all_except_reserved"
+  },
+  {
+   "name": "query-all-scalars",
+   "method": "GET",
+   "target": "/v1/query?f_double=1.5&f_float=-2.25&f_int32=-3&f_int64=-9223372036854775808&f_uint32=4294967295&f_uint64=18446744073709551615&f_sint32=-1&f_sint64=-2&f_fixed32=5&f_fixed64=6&f_sfixed32=-7&f_sfixed64=-8&f_bool=True&f_string=hi&f_bytes=aGk%3D&f_enum=GREEN"
+  },
+  {
+   "name": "query-none",
+   "method": "GET",
+   "target": "/v1/query"
+  },
+  {
+   "name": "query-empty",
+   "method": "GET",
+   "target": "/v1/query?"
+  },
+  {
+   "name": "query-double-range",
+   "method": "GET",
+   "target": "/v1/query?f_double=1e309"
+  },
+  {
+   "name": "query-double-hex",
+   "method": "GET",
+   "target": "/v1/query?f_double=0x1p-2"
+  },
+  {
+   "name": "query-double-underscore",
+   "method": "GET",
+   "target": "/v1/query?f_double=1_5"
+  },
+  {
+   "name": "query-float-range",
+   "method": "GET",
+   "target": "/v1/query?f_float=3.5e38"
+  },
+  {
+   "name": "query-int32-hex",
+   "method": "GET",
+   "target": "/v1/query?f_int32=0x10"
+  },
+  {
+   "name": "query-int32-plus",
+   "method": "GET",
+   "target": "/v1/query?f_int32=%2B7"
+  },
+  {
+   "name": "query-int64-range",
+   "method": "GET",
+   "target": "/v1/query?f_int64=9223372036854775808"
+  },
+  {
+   "name": "query-uint64-range",
+   "method": "GET",
+   "target": "/v1/query?f_uint64=18446744073709551616"
+  },
+  {
+   "name": "query-uint32-negative",
+   "method": "GET",
+   "target": "/v1/query?f_uint32=-1"
+  },
+  {
+   "name": "query-sint32",
+   "method": "GET",
+   "target": "/v1/query?f_sint32=-2147483648"
+  },
+  {
+   "name": "query-bool-empty",
+   "method": "GET",
+   "target": "/v1/query?f_bool="
+  },
+  {
+   "name": "query-bool-no-equals",
+   "method": "GET",
+   "target": "/v1/query?f_bool"
+  },
+  {
+   "name": "query-bool-t",
+   "method": "GET",
+   "target": "/v1/query?f_bool=t"
+  },
+  {
+   "name": "query-string-empty",
+   "method": "GET",
+   "target": "/v1/query?f_string="
+  },
+  {
+   "name": "query-string-plus-and-escapes",
+   "method": "GET",
+   "target": "/v1/query?f_string=a%20b+c%2Bd"
+  },
+  {
+   "name": "query-string-utf8",
+   "method": "GET",
+   "target": "/v1/query?f_string=%C3%A9"
+  },
+  {
+   "name": "query-string-invalid-utf8",
+   "method": "GET",
+   "target": "/v1/query?f_string=%FF"
+  },
+  {
+   "name": "query-bytes-url",
+   "method": "GET",
+   "target": "/v1/query?f_bytes=_-8%3D"
+  },
+  {
+   "name": "query-bytes-raw",
+   "method": "GET",
+   "target": "/v1/query?f_bytes=aGk"
+  },
+  {
+   "name": "query-bytes-plus",
+   "method": "GET",
+   "target": "/v1/query?f_bytes=%2B%2F8%3D"
+  },
+  {
+   "name": "query-bytes-plus-unescaped",
+   "method": "GET",
+   "target": "/v1/query?f_bytes=+/8="
+  },
+  {
+   "name": "query-enum-number",
+   "method": "GET",
+   "target": "/v1/query?f_enum=2"
+  },
+  {
+   "name": "query-enum-hex",
+   "method": "GET",
+   "target": "/v1/query?f_enum=0x2"
+  },
+  {
+   "name": "query-enum-unknown-name",
+   "method": "GET",
+   "target": "/v1/query?f_enum=BLUE"
+  },
+  {
+   "name": "query-enum-unknown-number",
+   "method": "GET",
+   "target": "/v1/query?f_enum=3"
+  },
+  {
+   "name": "query-enum-plus",
+   "method": "GET",
+   "target": "/v1/query?f_enum=%2B1"
+  },
+  {
+   "name": "query-repeated-string",
+   "method": "GET",
+   "target": "/v1/query?r_string=a&r_string=b"
+  },
+  {
+   "name": "query-repeated-string-comma",
+   "method": "GET",
+   "target": "/v1/query?r_string=a,b"
+  },
+  {
+   "name": "query-repeated-int32-bad",
+   "method": "GET",
+   "target": "/v1/query?r_int32=1&r_int32=x"
+  },
+  {
+   "name": "query-repeated-int32",
+   "method": "GET",
+   "target": "/v1/query?r_int32=1&r_int32=-2"
+  },
+  {
+   "name": "query-repeated-enum",
+   "method": "GET",
+   "target": "/v1/query?r_enum=RED&r_enum=1&r_enum=EIGHT"
+  },
+  {
+   "name": "query-repeated-bytes",
+   "method": "GET",
+   "target": "/v1/query?r_bytes=YQ%3D%3D&r_bytes=Yg%3D%3D"
+  },
+  {
+   "name": "query-repeated-double",
+   "method": "GET",
+   "target": "/v1/query?r_double=1.5&r_double=-inf"
+  },
+  {
+   "name": "query-repeated-timestamp",
+   "method": "GET",
+   "target": "/v1/query?r_timestamp=2024-01-02T03:04:05Z&r_timestamp=1970-01-01T00:00:00.5Z"
+  },
+  {
+   "name": "query-repeated-message",
+   "method": "GET",
+   "target": "/v1/query?items=x"
+  },
+  {
+   "name": "query-repeated-message-field",
+   "method": "GET",
+   "target": "/v1/query?items.f_int32=1"
+  },
+  {
+   "name": "query-map-string",
+   "method": "GET",
+   "target": "/v1/query?m_str[k]=v"
+  },
+  {
+   "name": "query-map-string-two-keys",
+   "method": "GET",
+   "target": "/v1/query?m_str[k]=v&m_str[j]=w"
+  },
+  {
+   "name": "query-map-string-twice",
+   "method": "GET",
+   "target": "/v1/query?m_str[k]=v&m_str[k]=w"
+  },
+  {
+   "name": "query-map-string-empty-key",
+   "method": "GET",
+   "target": "/v1/query?m_str[]=v"
+  },
+  {
+   "name": "query-map-no-brackets",
+   "method": "GET",
+   "target": "/v1/query?m_str=v"
+  },
+  {
+   "name": "query-map-escaped-brackets",
+   "method": "GET",
+   "target": "/v1/query?m_str%5Bk%5D=v"
+  },
+  {
+   "name": "query-map-nested-brackets",
+   "method": "GET",
+   "target": "/v1/query?m_str[a][b]=c"
+  },
+  {
+   "name": "query-map-int-hex-key",
+   "method": "GET",
+   "target": "/v1/query?m_int[0x10]=5"
+  },
+  {
+   "name": "query-map-int",
+   "method": "GET",
+   "target": "/v1/query?m_int[16]=-5"
+  },
+  {
+   "name": "query-map-int-bad-value",
+   "method": "GET",
+   "target": "/v1/query?m_int[16]=x"
+  },
+  {
+   "name": "query-map-enum",
+   "method": "GET",
+   "target": "/v1/query?m_enum[true]=RED"
+  },
+  {
+   "name": "query-map-enum-bad-key",
+   "method": "GET",
+   "target": "/v1/query?m_enum[yes]=RED"
+  },
+  {
+   "name": "query-map-message",
+   "method": "GET",
+   "target": "/v1/query?m_msg[a]=x"
+  },
+  {
+   "name": "query-map-json-name",
+   "method": "GET",
+   "target": "/v1/query?mStr[k]=v"
+  },
+  {
+   "name": "query-nested",
+   "method": "GET",
+   "target": "/v1/query?nested.f_int32=5"
+  },
+  {
+   "name": "query-nested-deep",
+   "method": "GET",
+   "target": "/v1/query?nested.nested.f_string=x"
+  },
+  {
+   "name": "query-nested-json-name",
+   "method": "GET",
+   "target": "/v1/query?nested.fInt32=5"
+  },
+  {
+   "name": "query-json-name",
+   "method": "GET",
+   "target": "/v1/query?fInt32=5"
+  },
+  {
+   "name": "query-custom-json-name",
+   "method": "GET",
+   "target": "/v1/query?customName=x"
+  },
+  {
+   "name": "query-custom-json-name-proto-name",
+   "method": "GET",
+   "target": "/v1/query?renamed=x"
+  },
+  {
+   "name": "query-nested-custom-json-name",
+   "method": "GET",
+   "target": "/v1/query?nested.customName=x"
+  },
+  {
+   "name": "query-mixed-names-deep",
+   "method": "GET",
+   "target": "/v1/query?nested.nested.fString=x"
+  },
+  {
+   "name": "query-oneof-two-members",
+   "method": "GET",
+   "target": "/v1/query?o_str=a&o_int=1"
+  },
+  {
+   "name": "query-oneof-message-twice",
+   "method": "GET",
+   "target": "/v1/query?o_msg.f_int32=1&o_msg.f_string=a"
+  },
+  {
+   "name": "query-oneof-scalar-then-message",
+   "method": "GET",
+   "target": "/v1/query?o_str=a&o_msg.f_int32=1"
+  },
+  {
+   "name": "query-oneof-same-member-twice",
+   "method": "GET",
+   "target": "/v1/query?o_str=a&o_str=b"
+  },
+  {
+   "name": "query-optional-zero",
+   "method": "GET",
+   "target": "/v1/query?opt_int=0"
+  },
+  {
+   "name": "query-optional-empty-string",
+   "method": "GET",
+   "target": "/v1/query?opt_str="
+  },
+  {
+   "name": "query-timestamp",
+   "method": "GET",
+   "target": "/v1/query?f_timestamp=2024-01-02T03:04:05Z"
+  },
+  {
+   "name": "query-timestamp-offset",
+   "method": "GET",
+   "target": "/v1/query?f_timestamp=2024-01-02T03:04:05%2B01:00"
+  },
+  {
+   "name": "query-timestamp-plus-unescaped",
+   "method": "GET",
+   "target": "/v1/query?f_timestamp=2024-01-02T03:04:05+01:00"
+  },
+  {
+   "name": "query-timestamp-bad",
+   "method": "GET",
+   "target": "/v1/query?f_timestamp=bad"
+  },
+  {
+   "name": "query-duration",
+   "method": "GET",
+   "target": "/v1/query?f_duration=1h30m"
+  },
+  {
+   "name": "query-duration-seconds",
+   "method": "GET",
+   "target": "/v1/query?f_duration=1.5s"
+  },
+  {
+   "name": "query-duration-bad-unit",
+   "method": "GET",
+   "target": "/v1/query?f_duration=1d"
+  },
+  {
+   "name": "query-duration-negative",
+   "method": "GET",
+   "target": "/v1/query?f_duration=-1.5h"
+  },
+  {
+   "name": "query-wrappers",
+   "method": "GET",
+   "target": "/v1/query?w_double=1.5&w_int64=10&w_int32=5&w_uint32=5&w_uint64=7&w_bool=f&w_bytes=aGk%3D"
+  },
+  {
+   "name": "query-wrapper-float-bad",
+   "method": "GET",
+   "target": "/v1/query?w_float=x"
+  },
+  {
+   "name": "query-wrapper-uint64-negative",
+   "method": "GET",
+   "target": "/v1/query?w_uint64=-1"
+  },
+  {
+   "name": "query-wrapper-string-empty",
+   "method": "GET",
+   "target": "/v1/query?w_string="
+  },
+  {
+   "name": "query-wrapper-int64-hex",
+   "method": "GET",
+   "target": "/v1/query?w_int64=0x10"
+  },
+  {
+   "name": "query-field-mask",
+   "method": "GET",
+   "target": "/v1/query?f_mask=a,b.c,fooBar"
+  },
+  {
+   "name": "query-field-mask-empty",
+   "method": "GET",
+   "target": "/v1/query?f_mask="
+  },
+  {
+   "name": "query-struct",
+   "method": "GET",
+   "target": "/v1/query?f_struct=%7B%22a%22%3A1%2C%22b%22%3A%5Btrue%2Cnull%5D%2C%22c%22%3A%7B%22d%22%3A%22e%22%7D%7D"
+  },
+  {
+   "name": "query-struct-bad",
+   "method": "GET",
+   "target": "/v1/query?f_struct=bad"
+  },
+  {
+   "name": "query-struct-array",
+   "method": "GET",
+   "target": "/v1/query?f_struct=%5B%5D"
+  },
+  {
+   "name": "query-value-string",
+   "method": "GET",
+   "target": "/v1/query?f_value=%22x%22"
+  },
+  {
+   "name": "query-value-number",
+   "method": "GET",
+   "target": "/v1/query?f_value=5"
+  },
+  {
+   "name": "query-value-bad",
+   "method": "GET",
+   "target": "/v1/query?f_value=nul"
+  },
+  {
+   "name": "query-value-list",
+   "method": "GET",
+   "target": "/v1/query?f_value=%5B1%2C%7B%22a%22%3Anull%7D%5D"
+  },
+  {
+   "name": "query-message-kind",
+   "method": "GET",
+   "target": "/v1/query?nested=x"
+  },
+  {
+   "name": "query-through-scalar",
+   "method": "GET",
+   "target": "/v1/query?f_int32.x=1"
+  },
+  {
+   "name": "query-unknown",
+   "method": "GET",
+   "target": "/v1/query?zzz=1"
+  },
+  {
+   "name": "query-unknown-nested",
+   "method": "GET",
+   "target": "/v1/query?nested.zzz=1"
+  },
+  {
+   "name": "query-unknown-then-known",
+   "method": "GET",
+   "target": "/v1/query?zzz.f_int32=1"
+  },
+  {
+   "name": "query-too-many-values",
+   "method": "GET",
+   "target": "/v1/query?f_int32=1&f_int32=2"
+  },
+  {
+   "name": "query-proto-and-json-name",
+   "method": "GET",
+   "target": "/v1/query?f_int32=1&fInt32=2"
+  },
+  {
+   "name": "query-bad-escape",
+   "method": "GET",
+   "target": "/v1/query?f_string=%zz"
+  },
+  {
+   "name": "query-bad-escape-in-key",
+   "method": "GET",
+   "target": "/v1/query?f%zz=1"
+  },
+  {
+   "name": "query-semicolon",
+   "method": "GET",
+   "target": "/v1/query?f_string=a;b"
+  },
+  {
+   "name": "query-empty-pairs",
+   "method": "GET",
+   "target": "/v1/query?&&=x&f_string=y&"
+  },
+  {
+   "name": "query-raw-utf8",
+   "method": "GET",
+   "target": "/v1/query?f_string=é"
+  },
+  {
+   "name": "query-path-field-filtered",
+   "method": "GET",
+   "target": "/v1/query/p?f_string=q"
+  },
+  {
+   "name": "query-path-field-json-name-filtered",
+   "method": "GET",
+   "target": "/v1/query/p?fString=q"
+  },
+  {
+   "name": "query-path-field-prefix-filtered",
+   "method": "GET",
+   "target": "/v1/query/p?f_string.x=1"
+  },
+  {
+   "name": "query-path-field-json-name-unknown-child",
+   "method": "GET",
+   "target": "/v1/query/p?fString.zzz=1"
+  },
+  {
+   "name": "query-nested-path-sibling",
+   "method": "GET",
+   "target": "/v1/query/nested/p?nested.f_int32=5"
+  },
+  {
+   "name": "query-nested-path-filtered",
+   "method": "GET",
+   "target": "/v1/query/nested/p?nested.f_string=q&nested.fString=r"
+  },
+  {
+   "name": "query-nested-path-parent",
+   "method": "GET",
+   "target": "/v1/query/nested/p?nested=x"
+  },
+  {
+   "name": "query-post-nobody",
+   "method": "POST",
+   "target": "/v1/query/nobody?f_int32=1"
+  },
+  {
+   "name": "query-post-nobody-form",
+   "method": "POST",
+   "target": "/v1/query/nobody?",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_int32=5&f_string=a+b"
+  },
+  {
+   "name": "query-post-nobody-form-and-query",
+   "method": "POST",
+   "target": "/v1/query/nobody?f_string=url",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_string=form"
+  },
+  {
+   "name": "query-post-nobody-form-charset",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded; charset=utf-8"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "query-post-nobody-form-upper",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     "Application/X-WWW-Form-URLEncoded"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "query-post-nobody-text",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     "text/plain"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "query-post-nobody-no-media-type",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     ";"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "query-post-nobody-bad-param",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded; x"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "query-post-nobody-no-slash",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     "text"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "query-post-nobody-no-subtype",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     "text/"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "query-post-nobody-after-subtype",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     "text/plain x"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "query-post-nobody-duplicate-param",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     "text/plain; a=1; a=2"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "query-post-nobody-trailing-semicolon",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded;"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "query-post-nobody-form-bad-escape",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_int32=%zz"
+  },
+  {
+   "name": "query-post-nobody-json",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\": 5}"
+  },
+  {
+   "name": "query-delete",
+   "method": "DELETE",
+   "target": "/v1/query/p?f_int32=1&force=true"
+  },
+  {
+   "name": "query-delete-form-body-ignored",
+   "method": "DELETE",
+   "target": "/v1/query/p",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "query-stream",
+   "method": "GET",
+   "target": "/v1/stream/s?f_int32=1&r_string=a"
+  },
+  {
+   "name": "query-stream-error",
+   "method": "GET",
+   "target": "/v1/stream/s?f_int32=x"
+  },
+  {
+   "name": "query-response-body-binding",
+   "method": "GET",
+   "target": "/v1/response/s?nested.f_int32=2"
+  },
+  {
+   "name": "body-star",
+   "method": "POST",
+   "target": "/v1/body/star/p",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fString\":\"b\",\"fInt32\":5,\"nested\":{\"fBool\":true}}"
+  },
+  {
+   "name": "body-star-path-wins",
+   "method": "POST",
+   "target": "/v1/body/star/p",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"f_string\":\"from-body\"}"
+  },
+  {
+   "name": "body-star-query-ignored",
+   "method": "POST",
+   "target": "/v1/body/star/p?f_int32=9&zzz=1",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":5}"
+  },
+  {
+   "name": "body-star-empty",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "body-star-whitespace",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": " \n\t "
+  },
+  {
+   "name": "body-star-empty-object",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{}"
+  },
+  {
+   "name": "body-star-null",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "null"
+  },
+  {
+   "name": "body-star-array",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[]"
+  },
+  {
+   "name": "body-star-trailing-garbage",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":1} trailing"
+  },
+  {
+   "name": "body-star-second-value",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":1}{"
+  },
+  {
+   "name": "body-star-truncated",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{"
+  },
+  {
+   "name": "body-star-not-json",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "x"
+  },
+  {
+   "name": "body-star-number-then-junk",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "123abc"
+  },
+  {
+   "name": "body-star-unknown-field",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"zzz\":1,\"fInt32\":2}"
+  },
+  {
+   "name": "body-star-content-type-ignored",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/xml"
+    ],
+    [
+     "Accept",
+     "text/html"
+    ]
+   ],
+   "body": "{\"fInt32\":1}"
+  },
+  {
+   "name": "body-star-no-content-type",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "body": "{\"fInt32\":1}"
+  },
+  {
+   "name": "body-star-form-content-type",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "body-star-put",
+   "method": "PUT",
+   "target": "/v1/body/star/p",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":5}"
+  },
+  {
+   "name": "body-star-wkts",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fTimestamp\":\"2024-01-02T03:04:05Z\",\"fDuration\":\"1.5s\",\"wInt64\":\"5\",\"fMask\":\"a,bC\",\"fValue\":\"x\",\"mStr\":{\"k\":\"v\"},\"rEnum\":[\"RED\",2],\"oStr\":\"o\",\"optInt\":0}"
+  },
+  {
+   "name": "body-nested",
+   "method": "POST",
+   "target": "/v1/body/nested/p?f_int32=7&nested.f_int32=8&nested.fBool=true",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":5}"
+  },
+  {
+   "name": "body-nested-empty-body",
+   "method": "POST",
+   "target": "/v1/body/nested/p",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "body-nested-empty-object",
+   "method": "POST",
+   "target": "/v1/body/nested/p",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{}"
+  },
+  {
+   "name": "body-nested-null",
+   "method": "POST",
+   "target": "/v1/body/nested/p",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "null"
+  },
+  {
+   "name": "body-nested-number",
+   "method": "POST",
+   "target": "/v1/body/nested/p",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "5"
+  },
+  {
+   "name": "body-nested-query-oneof",
+   "method": "POST",
+   "target": "/v1/body/nested/p?o_str=a&o_int=1",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{}"
+  },
+  {
+   "name": "body-int64",
+   "method": "POST",
+   "target": "/v1/body/int64",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "5"
+  },
+  {
+   "name": "body-int64-string",
+   "method": "POST",
+   "target": "/v1/body/int64",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"5\""
+  },
+  {
+   "name": "body-int64-fraction",
+   "method": "POST",
+   "target": "/v1/body/int64",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "5.5"
+  },
+  {
+   "name": "body-int64-exponent",
+   "method": "POST",
+   "target": "/v1/body/int64",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "1e3"
+  },
+  {
+   "name": "body-int64-range",
+   "method": "POST",
+   "target": "/v1/body/int64",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "-9223372036854775809"
+  },
+  {
+   "name": "body-int64-null",
+   "method": "POST",
+   "target": "/v1/body/int64",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "null"
+  },
+  {
+   "name": "body-int64-empty",
+   "method": "POST",
+   "target": "/v1/body/int64",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "body-int64-query",
+   "method": "POST",
+   "target": "/v1/body/int64?f_int64=7&f_int32=3",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "5"
+  },
+  {
+   "name": "body-string",
+   "method": "POST",
+   "target": "/v1/body/string",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"a\\u00e9\""
+  },
+  {
+   "name": "body-string-number",
+   "method": "POST",
+   "target": "/v1/body/string",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "5"
+  },
+  {
+   "name": "body-string-null",
+   "method": "POST",
+   "target": "/v1/body/string",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "null"
+  },
+  {
+   "name": "body-bool",
+   "method": "POST",
+   "target": "/v1/body/bool",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "true"
+  },
+  {
+   "name": "body-bool-string",
+   "method": "POST",
+   "target": "/v1/body/bool",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"true\""
+  },
+  {
+   "name": "body-double",
+   "method": "POST",
+   "target": "/v1/body/double",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "1.5"
+  },
+  {
+   "name": "body-double-range",
+   "method": "POST",
+   "target": "/v1/body/double",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "1e400"
+  },
+  {
+   "name": "body-double-nan-string",
+   "method": "POST",
+   "target": "/v1/body/double",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"NaN\""
+  },
+  {
+   "name": "body-bytes",
+   "method": "POST",
+   "target": "/v1/body/bytes",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"aGk=\""
+  },
+  {
+   "name": "body-bytes-raw",
+   "method": "POST",
+   "target": "/v1/body/bytes",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"aGk\""
+  },
+  {
+   "name": "body-bytes-url",
+   "method": "POST",
+   "target": "/v1/body/bytes",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"_-8=\""
+  },
+  {
+   "name": "body-bytes-null",
+   "method": "POST",
+   "target": "/v1/body/bytes",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "null"
+  },
+  {
+   "name": "body-enum-number",
+   "method": "POST",
+   "target": "/v1/body/enum",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "2"
+  },
+  {
+   "name": "body-enum-fraction",
+   "method": "POST",
+   "target": "/v1/body/enum",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "1.7"
+  },
+  {
+   "name": "body-enum-negative",
+   "method": "POST",
+   "target": "/v1/body/enum",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "-1"
+  },
+  {
+   "name": "body-enum-name",
+   "method": "POST",
+   "target": "/v1/body/enum",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"RED\""
+  },
+  {
+   "name": "body-enum-bool",
+   "method": "POST",
+   "target": "/v1/body/enum",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "true"
+  },
+  {
+   "name": "body-enum-null",
+   "method": "POST",
+   "target": "/v1/body/enum",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "null"
+  },
+  {
+   "name": "body-rstring",
+   "method": "POST",
+   "target": "/v1/body/rstring",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[\"a\",\"b\"]"
+  },
+  {
+   "name": "body-rstring-empty",
+   "method": "POST",
+   "target": "/v1/body/rstring",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[]"
+  },
+  {
+   "name": "body-rstring-null",
+   "method": "POST",
+   "target": "/v1/body/rstring",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "null"
+  },
+  {
+   "name": "body-rstring-not-array",
+   "method": "POST",
+   "target": "/v1/body/rstring",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"a\""
+  },
+  {
+   "name": "body-rstring-number-item",
+   "method": "POST",
+   "target": "/v1/body/rstring",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[1]"
+  },
+  {
+   "name": "body-rstring-null-item",
+   "method": "POST",
+   "target": "/v1/body/rstring",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[\"a\",null]"
+  },
+  {
+   "name": "body-rint32",
+   "method": "POST",
+   "target": "/v1/body/rint32",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[1,-2]"
+  },
+  {
+   "name": "body-rint32-string-item",
+   "method": "POST",
+   "target": "/v1/body/rint32",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[\"1\"]"
+  },
+  {
+   "name": "body-rint32-fraction-item",
+   "method": "POST",
+   "target": "/v1/body/rint32",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[1.5]"
+  },
+  {
+   "name": "body-renum",
+   "method": "POST",
+   "target": "/v1/body/renum",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[1,8]"
+  },
+  {
+   "name": "body-renum-name",
+   "method": "POST",
+   "target": "/v1/body/renum",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[\"RED\"]"
+  },
+  {
+   "name": "body-items",
+   "method": "POST",
+   "target": "/v1/body/items",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[{\"fInt32\":1},{}]"
+  },
+  {
+   "name": "body-items-null-item",
+   "method": "POST",
+   "target": "/v1/body/items",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[null]"
+  },
+  {
+   "name": "body-mstr",
+   "method": "POST",
+   "target": "/v1/body/mstr",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"a\":\"b\",\"c\":\"d\"}"
+  },
+  {
+   "name": "body-mstr-null-value",
+   "method": "POST",
+   "target": "/v1/body/mstr",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"a\":null}"
+  },
+  {
+   "name": "body-mstr-number-value",
+   "method": "POST",
+   "target": "/v1/body/mstr",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"a\":1}"
+  },
+  {
+   "name": "body-mstr-array",
+   "method": "POST",
+   "target": "/v1/body/mstr",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "[]"
+  },
+  {
+   "name": "body-mstr-null",
+   "method": "POST",
+   "target": "/v1/body/mstr",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "null"
+  },
+  {
+   "name": "body-mint",
+   "method": "POST",
+   "target": "/v1/body/mint",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"16\": 5, \"-1\": -2}"
+  },
+  {
+   "name": "body-mint-hex-key",
+   "method": "POST",
+   "target": "/v1/body/mint",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"0x10\": 5}"
+  },
+  {
+   "name": "body-mint-bad-key",
+   "method": "POST",
+   "target": "/v1/body/mint",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"a\": 1}"
+  },
+  {
+   "name": "body-mint-string-value",
+   "method": "POST",
+   "target": "/v1/body/mint",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"5\": \"6\"}"
+  },
+  {
+   "name": "body-mmsg",
+   "method": "POST",
+   "target": "/v1/body/mmsg",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"a\": {\"fInt32\": 1}, \"b\": {}}"
+  },
+  {
+   "name": "body-mmsg-null-value",
+   "method": "POST",
+   "target": "/v1/body/mmsg",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"a\": null}"
+  },
+  {
+   "name": "body-timestamp",
+   "method": "POST",
+   "target": "/v1/body/timestamp",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"2024-01-02T03:04:05Z\""
+  },
+  {
+   "name": "body-timestamp-number",
+   "method": "POST",
+   "target": "/v1/body/timestamp",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "5"
+  },
+  {
+   "name": "body-timestamp-empty",
+   "method": "POST",
+   "target": "/v1/body/timestamp",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "body-wint64-string",
+   "method": "POST",
+   "target": "/v1/body/wint64",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"5\""
+  },
+  {
+   "name": "body-wint64-number",
+   "method": "POST",
+   "target": "/v1/body/wint64",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "5"
+  },
+  {
+   "name": "body-struct",
+   "method": "POST",
+   "target": "/v1/body/struct",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"a\": \"b\", \"c\": [true, null]}"
+  },
+  {
+   "name": "body-oneofmsg",
+   "method": "POST",
+   "target": "/v1/body/oneofmsg",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fString\":\"x\"}"
+  },
+  {
+   "name": "body-oneofmsg-query-conflict",
+   "method": "POST",
+   "target": "/v1/body/oneofmsg?o_str=y",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fString\":\"x\"}"
+  },
+  {
+   "name": "body-oneofmsg-query-same",
+   "method": "POST",
+   "target": "/v1/body/oneofmsg?o_msg.f_int32=4",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fString\":\"x\"}"
+  },
+  {
+   "name": "body-optstr",
+   "method": "POST",
+   "target": "/v1/body/optstr",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"x\""
+  },
+  {
+   "name": "body-optstr-empty",
+   "method": "POST",
+   "target": "/v1/body/optstr",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "\"\""
+  },
+  {
+   "name": "body-optstr-null",
+   "method": "POST",
+   "target": "/v1/body/optstr",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "null"
+  },
+  {
+   "name": "body-response-body-binding",
+   "method": "POST",
+   "target": "/v1/response",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"rString\":[\"a\"]}"
+  },
+  {
+   "name": "patch-mask-from-body",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":1,\"nested\":{\"fString\":\"a\",\"rString\":[\"x\"]},\"mStr\":{\"k\":\"v\"},\"fTimestamp\":\"2024-01-01T00:00:00Z\",\"items\":[{\"fInt32\":1}]}"
+  },
+  {
+   "name": "patch-mask-struct",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fStruct\":{\"a\":{\"b\":\"c\"},\"d\":\"e\"}}"
+  },
+  {
+   "name": "patch-mask-struct-empty",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fStruct\":{}}"
+  },
+  {
+   "name": "patch-mask-value",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fValue\":5}"
+  },
+  {
+   "name": "patch-mask-empty-object",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{}"
+  },
+  {
+   "name": "patch-mask-empty-body",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "patch-mask-unknown-field",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"unknownField\":1}"
+  },
+  {
+   "name": "patch-mask-nested-empty",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"nested\":{}}"
+  },
+  {
+   "name": "patch-mask-nested-null",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"nested\":null}"
+  },
+  {
+   "name": "patch-mask-oneof-message",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"oMsg\":{\"fInt32\":1}}"
+  },
+  {
+   "name": "patch-mask-json-name",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"customName\":\"x\"}"
+  },
+  {
+   "name": "patch-mask-proto-name",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"f_int32\":1}"
+  },
+  {
+   "name": "patch-mask-null-scalar",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":null}"
+  },
+  {
+   "name": "patch-mask-object-for-scalar-null",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"nested\":{\"fInt32\":null}}"
+  },
+  {
+   "name": "patch-mask-wkt-duration",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fDuration\":\"1s\",\"wBool\":true}"
+  },
+  {
+   "name": "patch-mask-deep",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"nested\":{\"nested\":{\"fBool\":true},\"mInt\":{\"1\":2}}}"
+  },
+  {
+   "name": "patch-mask-query-overrides",
+   "method": "PATCH",
+   "target": "/v1/patch/n?paths_to_update=a,b",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":1}"
+  },
+  {
+   "name": "patch-mask-query-json-name",
+   "method": "PATCH",
+   "target": "/v1/patch/n?pathsToUpdate=x",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":1}"
+  },
+  {
+   "name": "patch-mask-query-note",
+   "method": "PATCH",
+   "target": "/v1/patch/n?note=hi&item.f_int32=9",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":1}"
+  },
+  {
+   "name": "patch-mask-body-error",
+   "method": "PATCH",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":\"x\"}"
+  },
+  {
+   "name": "patch-star-no-mask",
+   "method": "PATCH",
+   "target": "/v1/patch/star/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"name\":\"x\",\"item\":{\"fInt32\":1}}"
+  },
+  {
+   "name": "patch-put-no-mask",
+   "method": "PUT",
+   "target": "/v1/patch/put/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":1}"
+  },
+  {
+   "name": "patch-two-masks",
+   "method": "PATCH",
+   "target": "/v1/patchtwo/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"fInt32\":1}"
+  },
+  {
+   "name": "mux-fallback-get",
+   "method": "POST",
+   "target": "/v1/top/string/x",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "mux-fallback-get-with-query",
+   "method": "POST",
+   "target": "/v1/top/string/x?f_bool=true",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "mux-fallback-form-and-query-same-key",
+   "method": "POST",
+   "target": "/v1/top/string/x?f_int32=1",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_int32=2"
+  },
+  {
+   "name": "mux-fallback-charset-not-exact",
+   "method": "POST",
+   "target": "/v1/top/string/x",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded; charset=utf-8"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "mux-fallback-disabled",
+   "method": "POST",
+   "target": "/v1/top/string/x",
+   "mux": "no_fallback",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "mux-fallback-bad-form",
+   "method": "POST",
+   "target": "/v1/top/string/x",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_int32=%zz"
+  },
+  {
+   "name": "mux-fallback-bad-query",
+   "method": "POST",
+   "target": "/v1/top/string/x?a=%zz",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "mux-fallback-get-and-delete",
+   "method": "POST",
+   "target": "/v1/query/p",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "mux-fallback-post-exists",
+   "method": "POST",
+   "target": "/v1/body/star/p",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "mux-override-get",
+   "method": "POST",
+   "target": "/v1/top/int32/7",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ],
+    [
+     "X-HTTP-Method-Override",
+     "GET"
+    ]
+   ],
+   "body": "f_string=s"
+  },
+  {
+   "name": "mux-override-lowercase-delete",
+   "method": "POST",
+   "target": "/v1/query/p",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ],
+    [
+     "X-HTTP-Method-Override",
+     "delete"
+    ]
+   ],
+   "body": "f_int32=3"
+  },
+  {
+   "name": "mux-override-without-form",
+   "method": "POST",
+   "target": "/v1/top/int32/7",
+   "headers": [
+    [
+     "X-HTTP-Method-Override",
+     "GET"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "mux-override-disabled",
+   "method": "POST",
+   "target": "/v1/top/int32/7",
+   "mux": "no_fallback",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ],
+    [
+     "X-HTTP-Method-Override",
+     "GET"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "mux-override-unknown-path",
+   "method": "POST",
+   "target": "/v1/nowhere",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ],
+    [
+     "X-HTTP-Method-Override",
+     "GET"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "mux-override-bad-form-unknown-path",
+   "method": "POST",
+   "target": "/v1/nowhere",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ],
+    [
+     "X-HTTP-Method-Override",
+     "GET"
+    ]
+   ],
+   "body": "a=%zz"
+  },
+  {
+   "name": "mux-override-get-on-post-only",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ],
+    [
+     "X-HTTP-Method-Override",
+     "GET"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "mux-override-post-body-consumed",
+   "method": "POST",
+   "target": "/v1/body/star",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ],
+    [
+     "X-HTTP-Method-Override",
+     "POST"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "mux-override-patch-mask",
+   "method": "POST",
+   "target": "/v1/patch/n",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ],
+    [
+     "X-HTTP-Method-Override",
+     "PATCH"
+    ]
+   ],
+   "body": "note=hi"
+  },
+  {
+   "name": "mux-override-empty",
+   "method": "POST",
+   "target": "/v1/query/nobody",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ],
+    [
+     "X-HTTP-Method-Override",
+     ""
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "mux-override-two-headers",
+   "method": "POST",
+   "target": "/v1/top/int32/7",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ],
+    [
+     "X-HTTP-Method-Override",
+     "GET"
+    ],
+    [
+     "X-HTTP-Method-Override",
+     "DELETE"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "mux-two-content-types",
+   "method": "POST",
+   "target": "/v1/top/string/x",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ],
+    [
+     "Content-Type",
+     "text/plain"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "mux-get-form-ignored",
+   "method": "GET",
+   "target": "/v1/top/string/x",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "f_int32=5"
+  },
+  {
+   "name": "mux-method-not-allowed",
+   "method": "PUT",
+   "target": "/v1/top/string/x"
+  },
+  {
+   "name": "mux-not-found",
+   "method": "GET",
+   "target": "/v1/nowhere"
+  }
+ ]
+}
