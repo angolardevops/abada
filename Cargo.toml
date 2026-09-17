@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/abada", "crates/abada-codegen", "crates/abada-build", "crates/protoc-gen-abada"]
+members = ["crates/abada", "crates/abada-codegen", "crates/abada-build", "crates/protoc-gen-abada", "benches/json-transcode"]
 
 [workspace.package]
 version = "0.0.1"
