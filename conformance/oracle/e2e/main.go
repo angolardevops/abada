@@ -205,7 +205,7 @@ func main() {
 		}
 		first := run(mux, rec, rc)
 		stable := true
-		for i := 0; i < 16 && stable; i++ {
+		for i := 0; i < 32 && stable; i++ {
 			stable = same(first, run(mux, rec, rc))
 		}
 		if !stable {
