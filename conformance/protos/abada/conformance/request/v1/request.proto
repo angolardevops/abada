@@ -3,7 +3,7 @@
 // them against the code protoc-gen-grpc-gateway generates. Not a real API.
 syntax = "proto3";
 
-package abada.conformance.v1;
+package abada.conformance.request.v1;
 
 import "google/api/annotations.proto";
 import "google/protobuf/duration.proto";
@@ -13,7 +13,7 @@ import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
-option go_package = "github.com/angolardevops/abada/conformance/gen/conformancev1;conformancev1";
+option go_package = "github.com/angolardevops/abada/conformance/gen/conformancerequestv1;conformancerequestv1";
 
 enum Color {
   COLOR_UNSPECIFIED = 0;

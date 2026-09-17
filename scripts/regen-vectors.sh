@@ -27,7 +27,7 @@ cp -r "$ROOT"/conformance/oracle/abadapb "$WORK/internal/abadaoracle/"
 # committed; --check fails if the .proto and the .binpb disagree.
 PROTOC="${PROTOC:-protoc}"
 PROTOC_INCLUDE="${PROTOC_INCLUDE:-$(dirname "$(command -v "$PROTOC")")/../include}"
-for pdir in "$ROOT"/conformance/protos/abada/conformance/v1; do
+for pdir in "$ROOT"/conformance/protos/abada/conformance/request/v1; do
   [ -d "$pdir" ] || continue
   rel="${pdir#"$ROOT"/conformance/protos/}"
   pname="$(echo "$rel" | tr '/' '-')"

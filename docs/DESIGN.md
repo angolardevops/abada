@@ -257,7 +257,7 @@ gRPC server receives. The generated Go code is not committed: it is a few
 thousand lines that `scripts/regen-vectors.sh` rebuilds in the cache on every
 run, and committing it would let it drift from the plugins that made it.
 `conformance/protos` holds a test proto for the kinds the contract lacks; it
-compiles into `conformance/contracts/abada-conformance-v1.binpb` and is routed
+compiles into `conformance/contracts/abada-conformance-request-v1.binpb` and is routed
 like a contract (97 more bindings through the route vectors).
 
 `crates/abada/tests/request.rs` replays 600 vectors (522 over the test proto,
