@@ -14,10 +14,11 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 use abada::error::ErrorResponse;
+use abada::json::{Marshaler, TypeRegistry};
 use abada::path::{Pattern, RequestPath, RouteOutcome, Router, UnescapingMode};
 use abada::request::{
-    BindingOptions, BodyDecoder, DispatchOutcome, ErrorOrigin, HttpRequest, Incoming,
-    InterimSerdeDecoder, MuxOptions, RequestBinding, dispatch, raw_query,
+    BindingOptions, DispatchOutcome, ErrorOrigin, HttpRequest, Incoming, MuxOptions,
+    RequestBinding, dispatch, raw_query,
 };
 use base64::Engine;
 use prost_reflect::{DescriptorPool, DynamicMessage, MapKey, ReflectMessage, Value};
@@ -197,7 +198,9 @@ enum Got {
 }
 
 struct Contract {
-    pool: DescriptorPool,
+    /// The codec over the contract's types, as the Go gateway binary links
+    /// them (`Any` in a body resolves through it).
+    marshaler: Marshaler,
     bindings: Vec<(String, RequestBinding)>,
     routers: BTreeMap<String, Router<usize>>,
 }
@@ -236,7 +239,7 @@ fn load(name: &str) -> Contract {
         routers.insert(mux.to_string(), router);
     }
     Contract {
-        pool,
+        marshaler: Marshaler::new(TypeRegistry::new(pool).expect("registry")),
         bindings,
         routers,
     }
@@ -253,7 +256,7 @@ fn routing_error(outcome: &RouteOutcome<'_, usize>) -> Got {
     }
 }
 
-fn run(c: &Contract, v: &Vector, decoder: &dyn BodyDecoder) -> Got {
+fn run(c: &Contract, v: &Vector) -> Got {
     let router = &c.routers[&v.mux];
     let (_, options) = mode(&v.mux);
     let first = |name: &str| {
@@ -302,7 +305,7 @@ fn run(c: &Contract, v: &Vector, decoder: &dyn BodyDecoder) -> Got {
         body: v.body.as_bytes(),
         form: d.form.as_ref(),
     };
-    match binding.decode(&request, params, decoder) {
+    match binding.decode(&request, params, &c.marshaler) {
         Ok(msg) => Got::Request {
             rpc: rpc.clone(),
             message: canonical(&msg),
@@ -391,12 +394,11 @@ fn requests_become_the_messages_grpc_gateway_sends() {
         )
         .unwrap();
         let c = load(&name);
-        let _ = &c.pool;
         let mut decoder_text = 0;
         let mut requests = 0;
         for vector in &v.vectors {
             let want = expected(&c, vector);
-            let got = run(&c, vector, &InterimSerdeDecoder);
+            let got = run(&c, vector);
             if !agrees(&got, &want) {
                 failures.push(format!(
                     "{name}/{} [{} {}]:\n  abada:        {got:?}\n  grpc-gateway: {want:?}",

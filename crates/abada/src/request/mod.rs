@@ -16,7 +16,6 @@
 //! `conformance/vectors/request-*.json`; see `docs/DESIGN.md`.
 
 mod binding;
-mod body;
 mod field_mask;
 mod fields;
 mod form;
@@ -27,8 +26,6 @@ mod mux;
 mod strconv;
 
 use std::fmt;
-
-use prost_reflect::{DynamicMessage, MessageDescriptor};
 
 pub use binding::{BindingError, BindingOptions, BodySelector, HttpRequest, RequestBinding};
 pub use form::Form;
@@ -46,7 +43,7 @@ pub enum ErrorOrigin {
     /// `net/url`, `mime`); abada reproduces the text, and the conformance
     /// suite compares it.
     Gateway,
-    /// A JSON decoder: the proto3 JSON codec behind [`BodyDecoder`], or
+    /// The JSON codec ([`crate::json::Marshaler`]): protojson, or
     /// `encoding/json` decoding a non-message body field into a Go type (whose
     /// messages name Go types). The code is grpc-gateway's; the text is not
     /// claimed to be.
@@ -78,6 +75,12 @@ impl RequestError {
             message: message.into(),
             origin: ErrorOrigin::Decoder,
         }
+    }
+
+    /// A body or `Struct`/`Value` query value the codec refused: the
+    /// generated handler answers `codes.InvalidArgument` with the error text.
+    fn codec(error: crate::json::JsonError) -> Self {
+        Self::decoder(error.to_string())
     }
 
     fn with_origin(mut self, origin: ErrorOrigin) -> Self {
@@ -121,48 +124,6 @@ impl fmt::Display for RequestError {
 }
 
 impl std::error::Error for RequestError {}
-
-/// The proto3 JSON codec, as grpc-gateway's default marshaler uses it to
-/// decode: `protojson.UnmarshalOptions{DiscardUnknown: true}.Unmarshal`.
-///
-/// This is the seam between request population and JSON transcoding.
-/// `json` is exactly one JSON value — the request layer already did what
-/// `json.Decoder` does before protojson sees the bytes. It is also used for
-/// `google.protobuf.Struct` and `Value` query parameters, which
-/// `runtime.PopulateQueryParameters` hands to protojson.
-pub trait BodyDecoder {
-    fn decode(&self, descriptor: &MessageDescriptor, json: &[u8])
-    -> Result<DynamicMessage, String>;
-}
-
-/// A [`BodyDecoder`] on `prost-reflect`'s own serde support, unknown fields
-/// discarded.
-///
-/// **Interim**: it is here so request population can be measured before
-/// `abada::json` exists, and is replaced by it at integration. ADR 0001 lists
-/// where it and grpc-gateway disagree (duplicate keys, a field given by both
-/// names, 64-bit integers in exponent form); the request vectors avoid those
-/// bodies, and its error text is never compared.
-#[derive(Debug, Clone, Copy, Default)]
-pub struct InterimSerdeDecoder;
-
-impl BodyDecoder for InterimSerdeDecoder {
-    fn decode(
-        &self,
-        descriptor: &MessageDescriptor,
-        json: &[u8],
-    ) -> Result<DynamicMessage, String> {
-        let mut de = serde_json::Deserializer::from_slice(json);
-        let message = DynamicMessage::deserialize_with_options(
-            descriptor.clone(),
-            &mut de,
-            &prost_reflect::DeserializeOptions::new().deny_unknown_fields(false),
-        )
-        .map_err(|e| e.to_string())?;
-        de.end().map_err(|e| e.to_string())?;
-        Ok(message)
-    }
-}
 
 #[doc(hidden)]
 pub fn strconv_not_printable() -> &'static [(u32, u32)] {

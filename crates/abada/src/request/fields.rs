@@ -11,11 +11,14 @@ use prost_reflect::{
 
 use super::gotime::{parse_duration, parse_rfc3339_nano, runtime_duration, runtime_timestamp};
 use super::strconv::{atoi, parse_bool, parse_float, parse_int, parse_uint, quote, runtime_bytes};
-use super::{BodyDecoder, ErrorOrigin, RequestError};
+use super::{ErrorOrigin, RequestError};
+use crate::json::Marshaler;
 
 /// State carried through one request.
 pub(crate) struct Ctx<'d> {
-    pub(crate) decoder: &'d dyn BodyDecoder,
+    /// The proto3 JSON codec: `Struct` and `Value` query values go through
+    /// `protojson.Unmarshal`.
+    pub(crate) marshaler: &'d Marshaler,
     /// A string field received bytes that are not UTF-8.
     pub(crate) invalid_utf8: bool,
 }
@@ -177,13 +180,16 @@ fn parse_message(
                 .collect();
             wkt_message(desc, &[(1, Value::List(paths))])
         }
-        "google.protobuf.Value" | "google.protobuf.Struct" => ctx
-            .decoder
-            .decode(desc, value)
-            .map_err(|message| FieldError {
-                message,
-                origin: ErrorOrigin::Decoder,
-            })?,
+        "google.protobuf.Value" | "google.protobuf.Struct" => {
+            let mut m = DynamicMessage::new(desc.clone());
+            ctx.marshaler
+                .unmarshal_into(&mut m, value)
+                .map_err(|e| FieldError {
+                    message: e.to_string(),
+                    origin: ErrorOrigin::Decoder,
+                })?;
+            m
+        }
         other => {
             return Err(FieldError::gateway(format!(
                 "unsupported message type: {}",

@@ -514,16 +514,27 @@ pub(crate) fn decode_field(
     field: &FieldDescriptor,
     body: &[u8],
 ) -> Result<(), JsonError> {
-    if is_real_oneof(field) {
-        return Err(JsonError::unsupported(
-            "a body field inside a oneof is not supported",
-        ));
-    }
     let kind = field.kind();
+    if let Some(oneof) = field.containing_oneof().filter(|o| !o.is_synthetic()) {
+        // The generated handler's `AssignableExprPrep`: the oneof wrapper is
+        // allocated before the decoder reads, so the member is set whatever
+        // the body holds; another member already set is refused.
+        if let Some(other) = oneof.fields().find(|f| f != field && msg.has_field(f)) {
+            return Err(JsonError::invalid(format!(
+                "expect type: *{}_{}, but: {}",
+                msg.descriptor().name(),
+                field.name(),
+                other.name()
+            )));
+        }
+        if !msg.has_field(field) {
+            msg.set_field(field, zero(&kind));
+        }
+    }
     let pointer = !field.is_list()
         && !field.is_map()
         && (matches!(kind, Kind::Message(_))
-            || field.supports_presence() && !matches!(kind, Kind::Bytes));
+            || field.supports_presence() && !is_real_oneof(field) && !matches!(kind, Kind::Bytes));
     // `decodeNonProtoField` allocates a nil pointer before it reads: the
     // field is present afterwards whatever the body holds.
     if pointer && !msg.has_field(field) {

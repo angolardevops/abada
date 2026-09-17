@@ -240,9 +240,11 @@ impl Marshaler {
     }
 
     /// `marshaler.NewDecoder(body).Decode(&protoReq.<Field>)` for a
-    /// `body: "<field>"` binding. `field` must belong to `msg`'s type and
-    /// not be a member of a (non-synthetic) oneof. On error the message may
-    /// be partly written.
+    /// `body: "<field>"` binding. `field` must belong to `msg`'s type. A
+    /// member of a oneof is set before the body is read, as the generated
+    /// handler allocates the oneof wrapper first, and refused when another
+    /// member of the oneof is set. On error the message may be partly
+    /// written.
     pub fn decode_field(
         &self,
         msg: &mut DynamicMessage,

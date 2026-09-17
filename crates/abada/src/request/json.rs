@@ -4,7 +4,7 @@
 //! `body: "<field>"` rule names when they are not messages, and the tree
 //! `runtime.FieldMaskFromRequestBody` walks — are decoded with its rules.
 //!
-//! This is not the proto3 JSON codec: messages go through [`super::BodyDecoder`].
+//! This is not the proto3 JSON codec, which is [`crate::json::Marshaler`].
 
 use super::strconv::{decode_rune, quote};
 
@@ -28,19 +28,6 @@ pub(crate) struct Node {
     pub(crate) json: Json,
     pub(crate) start: usize,
     pub(crate) end: usize,
-}
-
-impl Json {
-    pub(crate) fn kind(&self) -> &'static str {
-        match self {
-            Json::Null => "null",
-            Json::Bool(_) => "bool",
-            Json::Number(_) => "number",
-            Json::String(_) => "string",
-            Json::Array(_) => "array",
-            Json::Object(_) => "object",
-        }
-    }
 }
 
 /// The outcome of `json.Decoder.Decode(&json.RawMessage)` on a body.
