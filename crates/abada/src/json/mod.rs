@@ -28,16 +28,14 @@
 //!   value through `JSONPb.marshalNonProtoField`, again `encoding/json` for
 //!   anything but messages.
 //!
-//! Written deviations, each with a vector that shows it:
+//! One written deviation, with the vector that shows it (`depth_101`):
+//! messages nest at most [`UnmarshalOptions::recursion_limit`] levels (100 by
+//! default, prost's own limit for the binary form the body is sent in), where
+//! Go allows 10 000. A deeper body is rejected instead of risking the stack.
 //!
-//! - Messages nest at most [`UnmarshalOptions::recursion_limit`] levels (100
-//!   by default, prost's own limit for the binary form the body is sent in);
-//!   Go allows 10 000. A deeper body is rejected instead of overflowing the
-//!   stack.
-//! - A float in a map key, or an out-of-range float converted to an enum
-//!   number in a `body: "<field>"`, follows Go on amd64 (`int32(f)` of an
-//!   out-of-range `f` is `-2147483648`); Go on other architectures differs
-//!   from itself.
+//! Where Go itself depends on the platform — `int32(f)` of an out-of-range
+//! float, when a `body: "<field>"` enum is given as `3e9` — abada follows Go
+//! on amd64, where the vectors were measured.
 
 mod decode;
 mod encode;
