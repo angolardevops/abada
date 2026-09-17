@@ -6,8 +6,10 @@ repository. It is read by Codex, Copilot, Cursor, Gemini and Claude Code
 When this file and a tool-specific file disagree, **this file wins** and the
 other one is a bug.
 
-`scripts/check-harness.py` keeps this file honest: the crate table, the ADR
-index and every relative link are checked in CI.
+`scripts/check-harness.py` checks in CI that the crate table (names and
+dependencies), the ADR index, the skill and reviewer lists and every relative
+link match the repository. The prose rules and the facts in §7 are not
+machine-checked; the reviewers in §8 check them.
 
 ---
 
@@ -35,14 +37,17 @@ A change that weakens one of these is not a feature; it needs an ADR (§6).
 
 | Crate | Role | May depend on |
 |---|---|---|
-| `abada` | runtime used by generated code: routing, transcoding, errors, streaming | `http`, `tower`, `prost`, `prost-reflect` (ADR 0001) — never `axum`, never `abada-codegen` |
+| `abada` | runtime used by generated code: routing, transcoding, errors, streaming | `http`; `prost-reflect`, `serde`, `serde_json` (ADR 0001); `tower`, `prost` (property 4, when the service lands) — never `axum`, never `abada-codegen` |
 | `abada-codegen` | `FileDescriptorSet` → `HttpRule`s → Rust code; pure, no I/O besides what it is handed | `abada`, `prost` |
 | `abada-build` | `build.rs` API in the style of `tonic-build` | `abada-codegen` |
 | `protoc-gen-abada` | protoc/buf plugin: `CodeGeneratorRequest` on stdin, response on stdout | `abada-codegen` |
 | `abada-json-bench` | `benches/json-transcode`, evidence for ADR 0001; `publish = false` | anything it measures |
 
 The arrow never points back: `abada` does not know code generation exists.
-Details and the rules for public API live in the
+The "May depend on" column is the dependency allow-list: a normal dependency
+not named there fails `scripts/check-harness.py` until the table (and, for a
+dependency of weight, an ADR) says so. Details and the rules for public API
+live in the
 [`abada-architecture`](.claude/skills/abada-architecture/SKILL.md) skill.
 
 | Path | What it holds | Who writes it |
@@ -95,8 +100,10 @@ stale vector cannot make the Rust tests pass.
 6. **No structural change without an ADR** — new crate, new dependency of
    weight in `abada`, a change to one of the four properties, a v0.1 scope item
    moved in or out ([`abada-adr`](.claude/skills/abada-adr/SKILL.md)).
-7. **No `unwrap`/`expect`/`panic!` on a path reachable from a request.**
-   Request input is hostile. Tests and build scripts may unwrap.
+7. **Nothing a request or a user's descriptor controls may panic.** No
+   `unwrap`, `panic!` or unchecked indexing on those paths; `expect` only for
+   an invariant the same function establishes, stated in the message. Tests
+   and build scripts may unwrap.
 8. **Numbers carry their conditions.** A benchmark states the host, its load
    average before and after, runs, and what is NOT comparable
    ([`abada-measure`](.claude/skills/abada-measure/SKILL.md)).
@@ -106,14 +113,16 @@ stale vector cannot make the Rust tests pass.
 ## 5. Workflow
 
 ```bash
-scripts/check.sh               # everything CI runs: fmt, clippy -D warnings, tests, vectors --check
-scripts/check.sh --no-oracle   # without Go; prints what was NOT validated and exits non-zero
+scripts/check.sh               # everything CI runs: fmt, clippy, tests, MSRV, harness, vectors --check
+scripts/check.sh --no-oracle   # without Go; still runs the rest, lists what was NOT validated, exits non-zero
+scripts/harness/install-git-hooks.sh  # git-level guards for any tool (no push to main, no tags)
 scripts/regen-vectors.sh       # regenerate vectors after changing cases or the oracle
 scripts/check-harness.py       # this file, the skills and the agents are consistent
 ```
 
-Toolchain: Rust `1.85` (edition 2024, see `Cargo.toml`), Go `1.26.2` for the
-oracle, `protoc` when a case needs a descriptor set.
+Toolchain: Rust stable for development and `1.85` as the MSRV (edition 2024;
+CI builds with both), Go `1.26.2` for the oracle, Python 3.11+ for the harness
+check, `protoc` when a case needs a descriptor set.
 
 **Branches and parallel work.** One branch per task, from `origin/main`. When
 several agents work on the same machine, each one gets its own
@@ -127,7 +136,8 @@ verified.
 **The Go checkout is shared.** `regen-vectors.sh` copies the oracle into
 `~/.cache/abada-ref`; two runs at the same time corrupt each other. Run it under
 a lock when more than one agent is working:
-`flock ~/.cache/abada-ref/.lock scripts/regen-vectors.sh`.
+`flock "${ABADA_REF_DIR:-$HOME/.cache/abada-ref}/.lock" scripts/regen-vectors.sh`
+(`scripts/check.sh` does this for you).
 
 **Commits** are small and say why. **PRs** use
 [the template](.github/pull_request_template.md): proof, not validated, docs
@@ -147,15 +157,16 @@ file.
 - **grpc-gateway tries the handler registered LAST first.** Declaration order
   in a `.proto` changes routing (`GetOperation` vs `WatchOperation` in
   `delonix.node.v1`). abada reproduces it; do not "fix" it.
-- **A wrong method is 501 (code 12), not 405.** A malformed escape is 400 with
-  code 2, and routing continues into the same response.
+- **A path that matches with the wrong method is answered 501 (code 12), not
+  405.** A malformed escape is 400 with code 2, and routing continues into the
+  same response.
 - **grpc-gateway's JSON bytes are not stable across Go builds**: protojson adds
   a space after commas depending on a hash of the binary (`internal/detrand`).
   The oracle normalises it; never compare raw protojson bytes from two builds.
 - **The default marshaler emits unpopulated fields** (`EmitUnpopulated: true`,
   `null` for unset messages) and discards unknown fields and unknown enum names.
-- **The 405 fallback walks a Go map**: its order is random. The oracle drops
-  cases whose answer depends on it.
+- **The method-mismatch fallback walks a Go map**: its order is random. The
+  oracle drops cases whose answer depends on it.
 - **Binding values in vectors went through Go's JSON encoder**, which replaces
   invalid UTF-8.
 - **`http::HeaderValue` cannot hold control bytes** that Go writes raw over
@@ -183,3 +194,10 @@ Any tool can read them as plain Markdown.
 
 Before opening a PR, run the reviewers that match the diff. Their findings go
 in the PR or get fixed; they are not optional reading.
+
+**Mechanical guards.** Claude Code loads `.claude/settings.json`, whose hook
+(`scripts/harness/guard.py`) refuses editing generated files, broad `git add`,
+`git commit -a`, pushing to `main` or tags, `--no-verify`, merging, releasing
+and publishing. Other tools get the git-level part through
+`scripts/harness/install-git-hooks.sh`. Both are seatbelts, not sandboxes:
+CI and branch protection are the backstop.

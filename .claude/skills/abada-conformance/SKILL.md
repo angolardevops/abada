@@ -66,7 +66,7 @@ Add the area to `scripts/regen-vectors.sh` as a separate block with the same
 ## 3. Vectors
 
 ```bash
-flock ~/.cache/abada-ref/.lock scripts/regen-vectors.sh
+flock "${ABADA_REF_DIR:-$HOME/.cache/abada-ref}/.lock" scripts/regen-vectors.sh
 ```
 
 Read the diff of `conformance/vectors/` before committing it. A vector that

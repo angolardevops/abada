@@ -45,8 +45,8 @@ abada-build ──────┘
 |---|---|
 | `path` | template parser, `Pattern`, `Router`, `RequestPath`, unescaping modes |
 | `error` | `google.rpc.Status` responses, code → HTTP status, routing errors, error headers/trailers |
-| `json` | proto3 JSON as grpc-gateway's default marshaler (ADR 0001: `prost-reflect`) |
-| `request` | path values, query parameters, body selection, `FieldMask` for PATCH |
+| `json` (in progress) | proto3 JSON as grpc-gateway's default marshaler (ADR 0001: `prost-reflect`) |
+| `request` (in progress) | path values, query parameters, body selection, `FieldMask` for PATCH |
 | service / streaming (planned) | the `tower::Service`, metadata in/out, NDJSON streaming |
 
 One module owns one concern. A module does not re-implement another's job
@@ -58,13 +58,20 @@ A new runtime dependency needs, in the PR: what it replaces, its transitive
 cost (`cargo tree -p abada -e normal`), MSRV compatibility, and why it cannot
 be a dev- or optional dependency. A dependency of weight (async runtime, a
 serialisation framework, anything with a build script or `unsafe`-heavy) needs
-an ADR. Already accepted: `http`; `prost-reflect` (ADR 0001).
+an ADR. The allow-list is the "May depend on" column of `AGENTS.md` §2, and
+`scripts/check-harness.py` enforces it — keep one list, there.
 
 No runtime choice is imposed on users: no `tokio` features beyond what `tower`
 requires, no global allocator, no logging backend (use `tracing` facade only if
 accepted by ADR).
 
 ## Public API
+
+These rules apply to **new and changed** public items. Existing items that do
+not follow them yet are known debt, to be settled before the first release:
+`path::{Segment, RouteOutcome, UnescapingMode, PatternError, MatchError}` and
+`error::RoutingError` lack `#[non_exhaustive]`; `error::{Status, Any, ServerMetadata, ErrorResponse}`
+expose public fields. Do not copy those patterns into new code.
 
 - Public means semver. Before `1.0` it can change, but each change is named in
   the PR.
@@ -79,11 +86,12 @@ accepted by ADR).
 
 ## Panics, errors, `unsafe`
 
-- No `unwrap`/`expect`/`panic!`/indexing that can go out of bounds on any path
-  reachable from an HTTP request or a descriptor supplied by a user. Hostile
-  input returns the grpc-gateway error for it.
-- `expect` is fine for invariants the code itself establishes, with the
-  invariant in the message.
+- Nothing a request or a user's descriptor controls may panic: no `unwrap`,
+  `panic!` or unchecked indexing on those paths. Hostile input returns the
+  grpc-gateway error for it.
+- `expect` only for an invariant the same function establishes (e.g. a stack
+  it just pushed to), with the invariant in the message. This is the same rule
+  as `AGENTS.md` §4.7.
 - No `unsafe` in `abada` without an ADR and a `// SAFETY:` comment per block.
 
 ## Hot path
@@ -97,7 +105,8 @@ Routing, request population and JSON run per request.
 
 ## Code style
 
-- Edition 2024, `rust-version = 1.85` — do not use newer std APIs.
+- Edition 2024, `rust-version = 1.85` — do not use newer std APIs; the `msrv`
+  CI job and `scripts/check.sh` build with 1.85.
 - `cargo fmt`, `cargo clippy --all-targets -- -D warnings` clean.
 - Module doc comment at the top of every file saying what it mirrors in
   grpc-gateway and what it deliberately does not do.
