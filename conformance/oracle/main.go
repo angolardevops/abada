@@ -72,6 +72,18 @@ type vectors struct {
 }
 
 func main() {
+	if len(os.Args) == 3 && os.Args[1] == "bench" {
+		runBench(os.Args[2])
+		return
+	}
+	if len(os.Args) == 3 && os.Args[1] == "inventory" {
+		runInventory(os.Args[2])
+		return
+	}
+	if len(os.Args) == 4 && os.Args[1] == "contract" {
+		runContract(os.Args[2], os.Args[3])
+		return
+	}
 	var c cases
 	if err := json.NewDecoder(os.Stdin).Decode(&c); err != nil {
 		fail("decode cases: %v", err)

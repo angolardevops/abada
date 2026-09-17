@@ -1,0 +1,7603 @@
+{
+  "generator": "grpc-gateway v2.27.3, go1.26.2",
+  "source": "angolardevops/delonix-runtime@964f6a4f proto/delonix/node/v1 (protoc --include_imports, googleapis vendored in third_party/)",
+  "bindings": [
+    {
+      "service": "delonix.node.v1.OperationService",
+      "method": "GetOperation",
+      "http_method": "GET",
+      "template": "/v1/operations/{id}",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.OperationService",
+      "method": "ListOperations",
+      "http_method": "GET",
+      "template": "/v1/operations",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.OperationService",
+      "method": "WatchOperation",
+      "http_method": "GET",
+      "template": "/v1/operations/{id}:watch",
+      "server_streaming": true,
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.OperationService",
+      "method": "CancelOperation",
+      "http_method": "POST",
+      "template": "/v1/operations/{id}:cancel",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ContainerService",
+      "method": "CreateContainer",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/containers",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ContainerService",
+      "method": "GetContainer",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/containers/{name}",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ContainerService",
+      "method": "ListContainers",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/containers",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ContainerService",
+      "method": "UpdateContainer",
+      "http_method": "PATCH",
+      "template": "/v1/namespaces/{namespace}/containers/{name}",
+      "body": "container",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ContainerService",
+      "method": "DeleteContainer",
+      "http_method": "DELETE",
+      "template": "/v1/namespaces/{namespace}/containers/{name}",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ContainerService",
+      "method": "StartContainer",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/containers/{name}:start",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ContainerService",
+      "method": "StopContainer",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/containers/{name}:stop",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ContainerService",
+      "method": "KillContainer",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/containers/{name}:kill",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ContainerService",
+      "method": "WaitContainer",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/containers/{name}:wait",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ContainerService",
+      "method": "Logs",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/containers/{container}/logs",
+      "server_streaming": true,
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ContainerService",
+      "method": "Stats",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/containers/{name}/stats",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.PodService",
+      "method": "CreatePod",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/pods",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.PodService",
+      "method": "GetPod",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/pods/{name}",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.PodService",
+      "method": "ListPods",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/pods",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.PodService",
+      "method": "DeletePod",
+      "http_method": "DELETE",
+      "template": "/v1/namespaces/{namespace}/pods/{name}",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VirtualMachineService",
+      "method": "CreateVirtualMachine",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/virtualmachines",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VirtualMachineService",
+      "method": "GetVirtualMachine",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/virtualmachines/{name}",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VirtualMachineService",
+      "method": "ListVirtualMachines",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/virtualmachines",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VirtualMachineService",
+      "method": "DeleteVirtualMachine",
+      "http_method": "DELETE",
+      "template": "/v1/namespaces/{namespace}/virtualmachines/{name}",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VirtualMachineService",
+      "method": "StartVirtualMachine",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/virtualmachines/{name}:start",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VirtualMachineService",
+      "method": "StopVirtualMachine",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/virtualmachines/{name}:stop",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VirtualMachineService",
+      "method": "PauseVirtualMachine",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/virtualmachines/{name}:pause",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VirtualMachineService",
+      "method": "ResumeVirtualMachine",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/virtualmachines/{name}:resume",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VirtualMachineService",
+      "method": "CreateSnapshot",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/virtualmachines/{virtual_machine}/snapshots",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VirtualMachineService",
+      "method": "ListSnapshots",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/virtualmachines/{virtual_machine}/snapshots",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VirtualMachineService",
+      "method": "RestoreSnapshot",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/virtualmachines/{virtual_machine}/snapshots/{snapshot}:restore",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VirtualMachineService",
+      "method": "DeleteSnapshot",
+      "http_method": "DELETE",
+      "template": "/v1/namespaces/{namespace}/virtualmachines/{virtual_machine}/snapshots/{snapshot}",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.NetworkService",
+      "method": "CreateNetwork",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/networks",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.NetworkService",
+      "method": "GetNetwork",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/networks/{name}",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.NetworkService",
+      "method": "ListNetworks",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/networks",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.NetworkService",
+      "method": "DeleteNetwork",
+      "http_method": "DELETE",
+      "template": "/v1/namespaces/{namespace}/networks/{name}",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.NetworkService",
+      "method": "ConnectContainer",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/networks/{network}:connect",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.NetworkService",
+      "method": "DisconnectContainer",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/networks/{network}:disconnect",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VolumeService",
+      "method": "CreateVolume",
+      "http_method": "POST",
+      "template": "/v1/namespaces/{namespace}/volumes",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VolumeService",
+      "method": "GetVolume",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/volumes/{name}",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VolumeService",
+      "method": "ListVolumes",
+      "http_method": "GET",
+      "template": "/v1/namespaces/{namespace}/volumes",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.VolumeService",
+      "method": "DeleteVolume",
+      "http_method": "DELETE",
+      "template": "/v1/namespaces/{namespace}/volumes/{name}",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ImageService",
+      "method": "PullImage",
+      "http_method": "POST",
+      "template": "/v1/images:pull",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ImageService",
+      "method": "GetImage",
+      "http_method": "GET",
+      "template": "/v1/images:get",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ImageService",
+      "method": "ListImages",
+      "http_method": "GET",
+      "template": "/v1/images",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ImageService",
+      "method": "DeleteImage",
+      "http_method": "POST",
+      "template": "/v1/images:delete",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ImageService",
+      "method": "PushImage",
+      "http_method": "POST",
+      "template": "/v1/images:push",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ImageService",
+      "method": "BuildImage",
+      "http_method": "POST",
+      "template": "/v1/images:build",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.ImageService",
+      "method": "ScanImage",
+      "http_method": "POST",
+      "template": "/v1/images:scan",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.StackService",
+      "method": "PlanStack",
+      "http_method": "POST",
+      "template": "/v1/stacks/{stack}:plan",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.StackService",
+      "method": "ApplyStack",
+      "http_method": "POST",
+      "template": "/v1/stacks/{stack}:apply",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.StackService",
+      "method": "DestroyStack",
+      "http_method": "POST",
+      "template": "/v1/stacks/{stack}:destroy",
+      "body": "*",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.NodeService",
+      "method": "GetNodeInfo",
+      "http_method": "GET",
+      "template": "/v1/node",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.NodeService",
+      "method": "GetHealth",
+      "http_method": "GET",
+      "template": "/v1/node/health",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.NodeService",
+      "method": "GetCapacity",
+      "http_method": "GET",
+      "template": "/v1/node/capacity",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.NodeService",
+      "method": "ListProviders",
+      "http_method": "GET",
+      "template": "/v1/providers",
+      "index": 0
+    },
+    {
+      "service": "delonix.node.v1.NodeService",
+      "method": "WatchEvents",
+      "http_method": "GET",
+      "template": "/v1/events:watch",
+      "server_streaming": true,
+      "index": 0
+    }
+  ],
+  "routes": [
+    {
+      "from": 0,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/x",
+      "outcome": "matched",
+      "params": {
+        "id": "x"
+      }
+    },
+    {
+      "from": 1,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 2,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/x:watch",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "id": "x"
+      }
+    },
+    {
+      "from": 3,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/operations/x:cancel",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "id": "x"
+      }
+    },
+    {
+      "from": 4,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/containers",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 5,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/containers/x",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 6,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/containers",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 7,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "PATCH",
+      "target": "/v1/namespaces/x/containers/x",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 8,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x/containers/x",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 9,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/containers/x:start",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 10,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/containers/x:stop",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 11,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/containers/x:kill",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 12,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/containers/x:wait",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 13,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/containers/x/logs",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "container": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 14,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/containers/x/stats",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 15,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/pods",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 16,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/pods/x",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 17,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/pods",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 18,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x/pods/x",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 19,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/virtualmachines",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 20,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/virtualmachines/x",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 21,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/virtualmachines",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 22,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x/virtualmachines/x",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 23,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/virtualmachines/x:start",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 24,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/virtualmachines/x:stop",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 25,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/virtualmachines/x:pause",
+      "outcome": "matched",
+      "handler": 25,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 26,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/virtualmachines/x:resume",
+      "outcome": "matched",
+      "handler": 26,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 27,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/virtualmachines/x/snapshots",
+      "outcome": "matched",
+      "handler": 27,
+      "params": {
+        "namespace": "x",
+        "virtual_machine": "x"
+      }
+    },
+    {
+      "from": 28,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/virtualmachines/x/snapshots",
+      "outcome": "matched",
+      "handler": 28,
+      "params": {
+        "namespace": "x",
+        "virtual_machine": "x"
+      }
+    },
+    {
+      "from": 29,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/virtualmachines/x/snapshots/x:restore",
+      "outcome": "matched",
+      "handler": 29,
+      "params": {
+        "namespace": "x",
+        "snapshot": "x",
+        "virtual_machine": "x"
+      }
+    },
+    {
+      "from": 30,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x/virtualmachines/x/snapshots/x",
+      "outcome": "matched",
+      "handler": 30,
+      "params": {
+        "namespace": "x",
+        "snapshot": "x",
+        "virtual_machine": "x"
+      }
+    },
+    {
+      "from": 31,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/networks",
+      "outcome": "matched",
+      "handler": 31,
+      "params": {
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 32,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/networks/x",
+      "outcome": "matched",
+      "handler": 32,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 33,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/networks",
+      "outcome": "matched",
+      "handler": 33,
+      "params": {
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 34,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x/networks/x",
+      "outcome": "matched",
+      "handler": 34,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 35,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/networks/x:connect",
+      "outcome": "matched",
+      "handler": 35,
+      "params": {
+        "namespace": "x",
+        "network": "x"
+      }
+    },
+    {
+      "from": 36,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/networks/x:disconnect",
+      "outcome": "matched",
+      "handler": 36,
+      "params": {
+        "namespace": "x",
+        "network": "x"
+      }
+    },
+    {
+      "from": 37,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x/volumes",
+      "outcome": "matched",
+      "handler": 37,
+      "params": {
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 38,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/volumes/x",
+      "outcome": "matched",
+      "handler": 38,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 39,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x/volumes",
+      "outcome": "matched",
+      "handler": 39,
+      "params": {
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 40,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x/volumes/x",
+      "outcome": "matched",
+      "handler": 40,
+      "params": {
+        "name": "x",
+        "namespace": "x"
+      }
+    },
+    {
+      "from": 41,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:pull",
+      "outcome": "matched",
+      "handler": 41
+    },
+    {
+      "from": 42,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images:get",
+      "outcome": "matched",
+      "handler": 42
+    },
+    {
+      "from": 43,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 44,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:delete",
+      "outcome": "matched",
+      "handler": 44
+    },
+    {
+      "from": 45,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:push",
+      "outcome": "matched",
+      "handler": 45
+    },
+    {
+      "from": 46,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:build",
+      "outcome": "matched",
+      "handler": 46
+    },
+    {
+      "from": 47,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:scan",
+      "outcome": "matched",
+      "handler": 47
+    },
+    {
+      "from": 48,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/x:plan",
+      "outcome": "matched",
+      "handler": 48,
+      "params": {
+        "stack": "x"
+      }
+    },
+    {
+      "from": 49,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/x:apply",
+      "outcome": "matched",
+      "handler": 49,
+      "params": {
+        "stack": "x"
+      }
+    },
+    {
+      "from": 50,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/x:destroy",
+      "outcome": "matched",
+      "handler": 50,
+      "params": {
+        "stack": "x"
+      }
+    },
+    {
+      "from": 51,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 52,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 53,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 54,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 55,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/events:watch",
+      "outcome": "matched",
+      "handler": 55
+    },
+    {
+      "from": 0,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/",
+      "outcome": "matched",
+      "params": {
+        "id": ""
+      }
+    },
+    {
+      "from": 0,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/:get",
+      "outcome": "not_found"
+    },
+    {
+      "from": 0,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/a",
+      "outcome": "matched",
+      "params": {
+        "id": "a"
+      }
+    },
+    {
+      "from": 0,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 0,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/a:a:b",
+      "outcome": "matched",
+      "params": {
+        "id": "a:a:b"
+      }
+    },
+    {
+      "from": 0,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/a",
+      "outcome": "matched",
+      "params": {
+        "id": "a"
+      }
+    },
+    {
+      "from": 1,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 1,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 1,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 1,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 1,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 1,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 2,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/a:a:b:watch",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "id": "a:a:b"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/a:watch",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "id": "a"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/a:get:watch",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "id": "a:get"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/:get:watch",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "id": ":get"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/a:a:b",
+      "outcome": "matched",
+      "params": {
+        "id": "a:a:b"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/operations/v1:watch",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "id": "v1"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/operations/%20",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 3,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/operations/%zz:cancel",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 3,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/operations/a:a:b:cancel",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "id": "a:a:b"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/operations/%25:cancel",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "id": "%"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/operations/~:cancel",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "id": "~"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/operations/x%2Fy:cancel",
+      "outcome": "not_found"
+    },
+    {
+      "from": 4,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a%3Aget/containers",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%25/containers",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "namespace": "%"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a/containers",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a/containers",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2Fy/containers",
+      "outcome": "not_found"
+    },
+    {
+      "from": 4,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/b/containers",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a:a:b/containers/~",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "~",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/b/containers/b",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "b",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces//containers/projects",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "projects",
+        "namespace": ""
+      }
+    },
+    {
+      "from": 5,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/users/containers/projects",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "projects",
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a%3Aget/containers/projects",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "projects",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a%3Aget/containers/",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/%25/containers",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "namespace": "%"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/%25/containers",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "namespace": "%"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/items/containers",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/users/containers",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2fy/containers",
+      "outcome": "not_found"
+    },
+    {
+      "from": 6,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/items/containers",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "legacy",
+      "method": "PATCH",
+      "target": "/v1/namespaces/a:get/containers/:get",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": ":get",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "legacy",
+      "method": "PATCH",
+      "target": "/v1/namespaces/%20/containers/:get",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": ":get",
+        "namespace": " "
+      }
+    },
+    {
+      "from": 7,
+      "mode": "legacy",
+      "method": "PATCH",
+      "target": "/v1/namespaces/x%2fy/containers/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 7,
+      "mode": "legacy",
+      "method": "PATCH",
+      "target": "/v1/namespaces//containers/a:get",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "a:get",
+        "namespace": ""
+      }
+    },
+    {
+      "from": 7,
+      "mode": "legacy",
+      "method": "PATCH",
+      "target": "/v1/namespaces/items/containers/%20",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": " ",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "legacy",
+      "method": "PATCH",
+      "target": "/v1/namespaces/b/containers/:get",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": ":get",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces//containers/end",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "end",
+        "namespace": ""
+      }
+    },
+    {
+      "from": 8,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a:get/containers/a",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "a",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces//containers/items",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "items",
+        "namespace": ""
+      }
+    },
+    {
+      "from": 8,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/users/containers/a:get",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "a:get",
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/v1/containers/a:a:b",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "a:a:b",
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a%3Aget/containers/b",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "b",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/b/containers/items:start",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "items",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2fy/containers/%zz:start",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 9,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%25/containers/v1",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 9,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/users/containers/%zz:start",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 9,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/items/containers/items:start",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "items",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2fy/containers/items:start",
+      "outcome": "not_found"
+    },
+    {
+      "from": 10,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/users/containers/%25",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 10,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2fy/containers/end",
+      "outcome": "not_found"
+    },
+    {
+      "from": 10,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/projects/containers/a%3Aget:stop",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "a:get",
+        "namespace": "projects"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%25/containers/%25:stop",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "%",
+        "namespace": "%"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a:get/containers/%25:stop",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "%",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a%3Aget/containers/a%3Aget:stop",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "a:get",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a:get/containers/projects:kill",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "projects",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a%3Aget/containers/%zz:kill",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 11,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/b/containers/%25",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 11,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/b/containers/a:kill",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "a",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/b/containers/%25:kill",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "%",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/projects/containers/a:a:b:kill",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "a:a:b",
+        "namespace": "projects"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%zz/containers/users:wait",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 12,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/v1/containers/v1:wait",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "v1",
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/~/containers/a:a:b:wait",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "a:a:b",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/~/containers/%25:wait",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "%",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%20/containers/:wait",
+      "outcome": "not_found"
+    },
+    {
+      "from": 12,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/v1/containers/projects:wait",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "projects",
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/users/containers/a/logs",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "container": "a",
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/users/containers/a:a:b/logs",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "container": "a:a:b",
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a:get/containers//logs",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "container": "",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces//containers/end/logs",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "container": "end",
+        "namespace": ""
+      }
+    },
+    {
+      "from": 13,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/:get/containers/~/logs",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "container": "~",
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2fy/containers/a:get/logs",
+      "outcome": "not_found"
+    },
+    {
+      "from": 14,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2Fy/containers/%25/stats",
+      "outcome": "not_found"
+    },
+    {
+      "from": 14,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a/containers/~/stats",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "~",
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a:a:b/containers/users/stats",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "users",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/items/containers/users/stats",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "users",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/b/containers/a%3Aget/stats",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "a:get",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a%3Aget/containers/items/stats",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "items",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/end/pods",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a:get/pods",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2Fy/pods",
+      "outcome": "not_found"
+    },
+    {
+      "from": 15,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/v1/pods",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/:get/pods",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/end/pods",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a%3Aget/pods/~",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "~",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a:get/pods/a%3Aget",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "a:get",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/items/pods/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 16,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/%25/pods/users",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "users",
+        "namespace": "%"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a%3Aget/pods/",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/end/pods/v1",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "v1",
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a:get/pods",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/~/pods",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/:get/pods",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2Fy/pods",
+      "outcome": "not_found"
+    },
+    {
+      "from": 17,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2fy/pods",
+      "outcome": "not_found"
+    },
+    {
+      "from": 17,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces//pods",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "namespace": ""
+      }
+    },
+    {
+      "from": 18,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/%25/pods/%20",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": " ",
+        "namespace": "%"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a/pods/a:a:b",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "a:a:b",
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/%zz/pods/~",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 18,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a/pods/~",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "~",
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/v1/pods/users",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "users",
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/v1/pods/users",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "users",
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/~/virtualmachines",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2Fy/virtualmachines",
+      "outcome": "not_found"
+    },
+    {
+      "from": 19,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/items/virtualmachines",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/end/virtualmachines",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%20/virtualmachines",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "namespace": " "
+      }
+    },
+    {
+      "from": 19,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2Fy/virtualmachines",
+      "outcome": "not_found"
+    },
+    {
+      "from": 20,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a:get/virtualmachines/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 20,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/~/virtualmachines/projects",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "projects",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/~/virtualmachines/end",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "end",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/items/virtualmachines/%25",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "%",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/v1/virtualmachines/items",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "items",
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/b/virtualmachines/%20",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": " ",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/v1/virtualmachines",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/:get/virtualmachines",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces//virtualmachines",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "namespace": ""
+      }
+    },
+    {
+      "from": 21,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/:get/virtualmachines",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/%zz/virtualmachines",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 21,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2Fy/virtualmachines",
+      "outcome": "not_found"
+    },
+    {
+      "from": 22,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/%20/virtualmachines/v1",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "v1",
+        "namespace": " "
+      }
+    },
+    {
+      "from": 22,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/%25/virtualmachines/:get",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": ":get",
+        "namespace": "%"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/items/virtualmachines/a:a:b",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "a:a:b",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/%20/virtualmachines/:get",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": ":get",
+        "namespace": " "
+      }
+    },
+    {
+      "from": 22,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/items/virtualmachines/a:a:b",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "a:a:b",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/v1/virtualmachines/%20",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": " ",
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/~/virtualmachines/x%2fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 23,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/b/virtualmachines/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 23,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/~/virtualmachines/a:a:b",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 23,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/v1/virtualmachines/a:get:start",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "a:get",
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/users/virtualmachines/users:start",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "users",
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/:get/virtualmachines/items:start",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "items",
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 24,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2fy/virtualmachines/x%2fy:stop",
+      "outcome": "not_found"
+    },
+    {
+      "from": 24,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/:get/virtualmachines/x%2Fy:stop",
+      "outcome": "not_found"
+    },
+    {
+      "from": 24,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%25/virtualmachines/a:get:stop",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "a:get",
+        "namespace": "%"
+      }
+    },
+    {
+      "from": 24,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a%3Aget/virtualmachines/v1:stop",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "v1",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 24,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a%3Aget/virtualmachines/v1",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 24,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/b/virtualmachines/end:stop",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "end",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 25,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/end/virtualmachines/x%2fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 25,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%25/virtualmachines/items:pause",
+      "outcome": "matched",
+      "handler": 25,
+      "params": {
+        "name": "items",
+        "namespace": "%"
+      }
+    },
+    {
+      "from": 25,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/~/virtualmachines/%25:pause",
+      "outcome": "matched",
+      "handler": 25,
+      "params": {
+        "name": "%",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 25,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a:get/virtualmachines/:get:pause",
+      "outcome": "matched",
+      "handler": 25,
+      "params": {
+        "name": ":get",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 25,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/:get/virtualmachines/items:pause",
+      "outcome": "matched",
+      "handler": 25,
+      "params": {
+        "name": "items",
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 25,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces//virtualmachines/items",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 26,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/v1/virtualmachines/a%3Aget:resume",
+      "outcome": "matched",
+      "handler": 26,
+      "params": {
+        "name": "a:get",
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 26,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%25/virtualmachines/%20:resume",
+      "outcome": "matched",
+      "handler": 26,
+      "params": {
+        "name": " ",
+        "namespace": "%"
+      }
+    },
+    {
+      "from": 26,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2fy/virtualmachines/~:resume",
+      "outcome": "not_found"
+    },
+    {
+      "from": 26,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%20/virtualmachines/b:resume",
+      "outcome": "matched",
+      "handler": 26,
+      "params": {
+        "name": "b",
+        "namespace": " "
+      }
+    },
+    {
+      "from": 26,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%25/virtualmachines/x%2fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 26,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/~/virtualmachines/projects:resume",
+      "outcome": "matched",
+      "handler": 26,
+      "params": {
+        "name": "projects",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 27,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/v1/virtualmachines/projects/snapshots",
+      "outcome": "matched",
+      "handler": 27,
+      "params": {
+        "namespace": "v1",
+        "virtual_machine": "projects"
+      }
+    },
+    {
+      "from": 27,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/items/virtualmachines/projects/snapshots",
+      "outcome": "matched",
+      "handler": 27,
+      "params": {
+        "namespace": "items",
+        "virtual_machine": "projects"
+      }
+    },
+    {
+      "from": 27,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2Fy/virtualmachines/x%2fy/snapshots",
+      "outcome": "not_found"
+    },
+    {
+      "from": 27,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/~/virtualmachines/a:a:b/snapshots",
+      "outcome": "matched",
+      "handler": 27,
+      "params": {
+        "namespace": "~",
+        "virtual_machine": "a:a:b"
+      }
+    },
+    {
+      "from": 27,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/end/virtualmachines/b/snapshots",
+      "outcome": "matched",
+      "handler": 27,
+      "params": {
+        "namespace": "end",
+        "virtual_machine": "b"
+      }
+    },
+    {
+      "from": 27,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a:get/virtualmachines/:get/snapshots",
+      "outcome": "matched",
+      "handler": 27,
+      "params": {
+        "namespace": "a:get",
+        "virtual_machine": ":get"
+      }
+    },
+    {
+      "from": 28,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/end/virtualmachines/%zz/snapshots",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 28,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/b/virtualmachines/users/snapshots",
+      "outcome": "matched",
+      "handler": 28,
+      "params": {
+        "namespace": "b",
+        "virtual_machine": "users"
+      }
+    },
+    {
+      "from": 28,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/projects/virtualmachines/users/snapshots",
+      "outcome": "matched",
+      "handler": 28,
+      "params": {
+        "namespace": "projects",
+        "virtual_machine": "users"
+      }
+    },
+    {
+      "from": 28,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2fy/virtualmachines//snapshots",
+      "outcome": "not_found"
+    },
+    {
+      "from": 28,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/~/virtualmachines/projects/snapshots",
+      "outcome": "matched",
+      "handler": 28,
+      "params": {
+        "namespace": "~",
+        "virtual_machine": "projects"
+      }
+    },
+    {
+      "from": 28,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/items/virtualmachines/%zz/snapshots",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 29,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a/virtualmachines/%20/snapshots/:restore",
+      "outcome": "not_found"
+    },
+    {
+      "from": 29,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a:get/virtualmachines/items/snapshots/v1",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 29,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/v1/virtualmachines/items/snapshots/~:restore",
+      "outcome": "matched",
+      "handler": 29,
+      "params": {
+        "namespace": "v1",
+        "snapshot": "~",
+        "virtual_machine": "items"
+      }
+    },
+    {
+      "from": 29,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a%3Aget/virtualmachines/%20/snapshots/%zz:restore",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 29,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/b/virtualmachines/projects/snapshots/a:get",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 29,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/b/virtualmachines//snapshots/users",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 30,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a/virtualmachines/x%2fy/snapshots/:get",
+      "outcome": "not_found"
+    },
+    {
+      "from": 30,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a:a:b/virtualmachines/a:get/snapshots/users",
+      "outcome": "matched",
+      "handler": 30,
+      "params": {
+        "namespace": "a:a:b",
+        "snapshot": "users",
+        "virtual_machine": "a:get"
+      }
+    },
+    {
+      "from": 30,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a/virtualmachines/end/snapshots/a:a:b",
+      "outcome": "matched",
+      "handler": 30,
+      "params": {
+        "namespace": "a",
+        "snapshot": "a:a:b",
+        "virtual_machine": "end"
+      }
+    },
+    {
+      "from": 30,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a:get/virtualmachines/a:a:b/snapshots/%20",
+      "outcome": "matched",
+      "handler": 30,
+      "params": {
+        "namespace": "a:get",
+        "snapshot": " ",
+        "virtual_machine": "a:a:b"
+      }
+    },
+    {
+      "from": 30,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/v1/virtualmachines/~/snapshots/end",
+      "outcome": "matched",
+      "handler": 30,
+      "params": {
+        "namespace": "v1",
+        "snapshot": "end",
+        "virtual_machine": "~"
+      }
+    },
+    {
+      "from": 30,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x%2Fy/virtualmachines/b/snapshots/projects",
+      "outcome": "not_found"
+    },
+    {
+      "from": 31,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2fy/networks",
+      "outcome": "not_found"
+    },
+    {
+      "from": 31,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/b/networks",
+      "outcome": "matched",
+      "handler": 31,
+      "params": {
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 31,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/end/networks",
+      "outcome": "matched",
+      "handler": 31,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 31,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/b/networks",
+      "outcome": "matched",
+      "handler": 31,
+      "params": {
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 31,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2fy/networks",
+      "outcome": "not_found"
+    },
+    {
+      "from": 31,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/users/networks",
+      "outcome": "matched",
+      "handler": 31,
+      "params": {
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 32,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/items/networks/x%2fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 32,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a:get/networks/a",
+      "outcome": "matched",
+      "handler": 32,
+      "params": {
+        "name": "a",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 32,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2fy/networks/items",
+      "outcome": "not_found"
+    },
+    {
+      "from": 32,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/%zz/networks/%20",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 32,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a:get/networks/a%3Aget",
+      "outcome": "matched",
+      "handler": 32,
+      "params": {
+        "name": "a:get",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 32,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/users/networks/:get",
+      "outcome": "not_found"
+    },
+    {
+      "from": 33,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/end/networks",
+      "outcome": "matched",
+      "handler": 33,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 33,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/%zz/networks",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 33,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a:a:b/networks",
+      "outcome": "matched",
+      "handler": 33,
+      "params": {
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 33,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a/networks",
+      "outcome": "matched",
+      "handler": 33,
+      "params": {
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 33,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/:get/networks",
+      "outcome": "matched",
+      "handler": 33,
+      "params": {
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 33,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/items/networks",
+      "outcome": "matched",
+      "handler": 33,
+      "params": {
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 34,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/b/networks/x%2fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 34,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/~/networks/x%2fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 34,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/items/networks/~",
+      "outcome": "matched",
+      "handler": 34,
+      "params": {
+        "name": "~",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 34,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a%3Aget/networks/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 34,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a:a:b/networks/users",
+      "outcome": "matched",
+      "handler": 34,
+      "params": {
+        "name": "users",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 34,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/b/networks/",
+      "outcome": "matched",
+      "handler": 34,
+      "params": {
+        "name": "",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 35,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a:a:b/networks/%25:connect",
+      "outcome": "matched",
+      "handler": 35,
+      "params": {
+        "namespace": "a:a:b",
+        "network": "%"
+      }
+    },
+    {
+      "from": 35,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%20/networks/projects",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 35,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a:a:b/networks/b:connect",
+      "outcome": "matched",
+      "handler": 35,
+      "params": {
+        "namespace": "a:a:b",
+        "network": "b"
+      }
+    },
+    {
+      "from": 35,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/users/networks/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 35,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a:a:b/networks/x%2fy:connect",
+      "outcome": "not_found"
+    },
+    {
+      "from": 35,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/items/networks/a:a:b:connect",
+      "outcome": "matched",
+      "handler": 35,
+      "params": {
+        "namespace": "items",
+        "network": "a:a:b"
+      }
+    },
+    {
+      "from": 36,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/projects/networks/:get:disconnect",
+      "outcome": "matched",
+      "handler": 36,
+      "params": {
+        "namespace": "projects",
+        "network": ":get"
+      }
+    },
+    {
+      "from": 36,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/b/networks/x%2fy:disconnect",
+      "outcome": "not_found"
+    },
+    {
+      "from": 36,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a:a:b/networks/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 36,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%20/networks/%20:disconnect",
+      "outcome": "matched",
+      "handler": 36,
+      "params": {
+        "namespace": " ",
+        "network": " "
+      }
+    },
+    {
+      "from": 36,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%25/networks/x%2Fy:disconnect",
+      "outcome": "not_found"
+    },
+    {
+      "from": 36,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/end/networks/%zz:disconnect",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 37,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a/volumes",
+      "outcome": "matched",
+      "handler": 37,
+      "params": {
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 37,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/items/volumes",
+      "outcome": "matched",
+      "handler": 37,
+      "params": {
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 37,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%zz/volumes",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 37,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/users/volumes",
+      "outcome": "matched",
+      "handler": 37,
+      "params": {
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 37,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/a/volumes",
+      "outcome": "matched",
+      "handler": 37,
+      "params": {
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 37,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/namespaces/%zz/volumes",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 38,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces//volumes/projects",
+      "outcome": "matched",
+      "handler": 38,
+      "params": {
+        "name": "projects",
+        "namespace": ""
+      }
+    },
+    {
+      "from": 38,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/v1/volumes/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 38,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/a:a:b/volumes/items",
+      "outcome": "matched",
+      "handler": 38,
+      "params": {
+        "name": "items",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 38,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/%25/volumes/%25",
+      "outcome": "matched",
+      "handler": 38,
+      "params": {
+        "name": "%",
+        "namespace": "%"
+      }
+    },
+    {
+      "from": 38,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/b/volumes/end",
+      "outcome": "matched",
+      "handler": 38,
+      "params": {
+        "name": "end",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 38,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces//volumes/users",
+      "outcome": "matched",
+      "handler": 38,
+      "params": {
+        "name": "users",
+        "namespace": ""
+      }
+    },
+    {
+      "from": 39,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/end/volumes",
+      "outcome": "matched",
+      "handler": 39,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 39,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2fy/volumes",
+      "outcome": "not_found"
+    },
+    {
+      "from": 39,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/end/volumes",
+      "outcome": "matched",
+      "handler": 39,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 39,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/projects/volumes",
+      "outcome": "matched",
+      "handler": 39,
+      "params": {
+        "namespace": "projects"
+      }
+    },
+    {
+      "from": 39,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/v1/volumes",
+      "outcome": "matched",
+      "handler": 39,
+      "params": {
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 39,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/namespaces/%20/volumes",
+      "outcome": "matched",
+      "handler": 39,
+      "params": {
+        "namespace": " "
+      }
+    },
+    {
+      "from": 40,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x%2fy/volumes/end",
+      "outcome": "not_found"
+    },
+    {
+      "from": 40,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a%3Aget/volumes/b",
+      "outcome": "matched",
+      "handler": 40,
+      "params": {
+        "name": "b",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 40,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/~/volumes/a%3Aget",
+      "outcome": "matched",
+      "handler": 40,
+      "params": {
+        "name": "a:get",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 40,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a:a:b/volumes/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 40,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/~/volumes/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 40,
+      "mode": "legacy",
+      "method": "DELETE",
+      "target": "/v1/namespaces/:get/volumes/v1",
+      "outcome": "matched",
+      "handler": 40,
+      "params": {
+        "name": "v1",
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 41,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:pull",
+      "outcome": "matched",
+      "handler": 41
+    },
+    {
+      "from": 41,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:pull",
+      "outcome": "matched",
+      "handler": 41
+    },
+    {
+      "from": 41,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:pull",
+      "outcome": "matched",
+      "handler": 41
+    },
+    {
+      "from": 41,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:pull",
+      "outcome": "matched",
+      "handler": 41
+    },
+    {
+      "from": 41,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:pull",
+      "outcome": "matched",
+      "handler": 41
+    },
+    {
+      "from": 41,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:pull",
+      "outcome": "matched",
+      "handler": 41
+    },
+    {
+      "from": 42,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images:get",
+      "outcome": "matched",
+      "handler": 42
+    },
+    {
+      "from": 42,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images:get",
+      "outcome": "matched",
+      "handler": 42
+    },
+    {
+      "from": 42,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images:get",
+      "outcome": "matched",
+      "handler": 42
+    },
+    {
+      "from": 42,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images:get",
+      "outcome": "matched",
+      "handler": 42
+    },
+    {
+      "from": 42,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images:get",
+      "outcome": "matched",
+      "handler": 42
+    },
+    {
+      "from": 42,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images:get",
+      "outcome": "matched",
+      "handler": 42
+    },
+    {
+      "from": 43,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 43,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 43,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 43,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 43,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 43,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 44,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:delete",
+      "outcome": "matched",
+      "handler": 44
+    },
+    {
+      "from": 44,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 44,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:delete",
+      "outcome": "matched",
+      "handler": 44
+    },
+    {
+      "from": 44,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:delete",
+      "outcome": "matched",
+      "handler": 44
+    },
+    {
+      "from": 44,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:delete",
+      "outcome": "matched",
+      "handler": 44
+    },
+    {
+      "from": 44,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:delete",
+      "outcome": "matched",
+      "handler": 44
+    },
+    {
+      "from": 45,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 45,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:push",
+      "outcome": "matched",
+      "handler": 45
+    },
+    {
+      "from": 45,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:push",
+      "outcome": "matched",
+      "handler": 45
+    },
+    {
+      "from": 45,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:push",
+      "outcome": "matched",
+      "handler": 45
+    },
+    {
+      "from": 45,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:push",
+      "outcome": "matched",
+      "handler": 45
+    },
+    {
+      "from": 45,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:push",
+      "outcome": "matched",
+      "handler": 45
+    },
+    {
+      "from": 46,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:build",
+      "outcome": "matched",
+      "handler": 46
+    },
+    {
+      "from": 46,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:build",
+      "outcome": "matched",
+      "handler": 46
+    },
+    {
+      "from": 46,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 46,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:build",
+      "outcome": "matched",
+      "handler": 46
+    },
+    {
+      "from": 46,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:build",
+      "outcome": "matched",
+      "handler": 46
+    },
+    {
+      "from": 46,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:build",
+      "outcome": "matched",
+      "handler": 46
+    },
+    {
+      "from": 47,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:scan",
+      "outcome": "matched",
+      "handler": 47
+    },
+    {
+      "from": 47,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 47,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:scan",
+      "outcome": "matched",
+      "handler": 47
+    },
+    {
+      "from": 47,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 47,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:scan",
+      "outcome": "matched",
+      "handler": 47
+    },
+    {
+      "from": 47,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/images:scan",
+      "outcome": "matched",
+      "handler": 47
+    },
+    {
+      "from": 48,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/v1:plan",
+      "outcome": "matched",
+      "handler": 48,
+      "params": {
+        "stack": "v1"
+      }
+    },
+    {
+      "from": 48,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/a:a:b",
+      "outcome": "not_found"
+    },
+    {
+      "from": 48,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/end:plan",
+      "outcome": "matched",
+      "handler": 48,
+      "params": {
+        "stack": "end"
+      }
+    },
+    {
+      "from": 48,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/a%3Aget",
+      "outcome": "not_found"
+    },
+    {
+      "from": 48,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 48,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/a:plan",
+      "outcome": "matched",
+      "handler": 48,
+      "params": {
+        "stack": "a"
+      }
+    },
+    {
+      "from": 49,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/b",
+      "outcome": "not_found"
+    },
+    {
+      "from": 49,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/a%3Aget:apply",
+      "outcome": "matched",
+      "handler": 49,
+      "params": {
+        "stack": "a:get"
+      }
+    },
+    {
+      "from": 49,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/users:apply",
+      "outcome": "matched",
+      "handler": 49,
+      "params": {
+        "stack": "users"
+      }
+    },
+    {
+      "from": 49,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/a:get:apply",
+      "outcome": "matched",
+      "handler": 49,
+      "params": {
+        "stack": "a:get"
+      }
+    },
+    {
+      "from": 49,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/x%2fy:apply",
+      "outcome": "not_found"
+    },
+    {
+      "from": 49,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/%25:apply",
+      "outcome": "matched",
+      "handler": 49,
+      "params": {
+        "stack": "%"
+      }
+    },
+    {
+      "from": 50,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/~:destroy",
+      "outcome": "matched",
+      "handler": 50,
+      "params": {
+        "stack": "~"
+      }
+    },
+    {
+      "from": 50,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/:get",
+      "outcome": "not_found"
+    },
+    {
+      "from": 50,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/~:destroy",
+      "outcome": "matched",
+      "handler": 50,
+      "params": {
+        "stack": "~"
+      }
+    },
+    {
+      "from": 50,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/%zz:destroy",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 50,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/x%2Fy:destroy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 50,
+      "mode": "legacy",
+      "method": "POST",
+      "target": "/v1/stacks/a%3Aget:destroy",
+      "outcome": "matched",
+      "handler": 50,
+      "params": {
+        "stack": "a:get"
+      }
+    },
+    {
+      "from": 51,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 51,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 51,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 51,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 51,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 51,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 52,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 52,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 52,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 52,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 52,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 52,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 53,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 53,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 53,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 53,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 53,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 53,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 54,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 54,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 54,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 54,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 54,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 54,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 55,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/events:watch",
+      "outcome": "matched",
+      "handler": 55
+    },
+    {
+      "from": 55,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/events:watch",
+      "outcome": "matched",
+      "handler": 55
+    },
+    {
+      "from": 55,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/events:watch",
+      "outcome": "matched",
+      "handler": 55
+    },
+    {
+      "from": 55,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/events:watch",
+      "outcome": "matched",
+      "handler": 55
+    },
+    {
+      "from": 55,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/events",
+      "outcome": "not_found"
+    },
+    {
+      "from": 55,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/events",
+      "outcome": "not_found"
+    },
+    {
+      "from": 0,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations/b",
+      "outcome": "matched",
+      "params": {
+        "id": "b"
+      }
+    },
+    {
+      "from": 0,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations/:get",
+      "outcome": "not_found"
+    },
+    {
+      "from": 0,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations/a",
+      "outcome": "matched",
+      "params": {
+        "id": "a"
+      }
+    },
+    {
+      "from": 0,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations/x%2fy",
+      "outcome": "matched",
+      "params": {
+        "id": "x/y"
+      }
+    },
+    {
+      "from": 0,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 0,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations/b",
+      "outcome": "matched",
+      "params": {
+        "id": "b"
+      }
+    },
+    {
+      "from": 1,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 1,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 1,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 1,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 1,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 1,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations",
+      "outcome": "matched",
+      "handler": 1
+    },
+    {
+      "from": 2,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations/projects:watch",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "id": "projects"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations/x%2Fy:watch",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "id": "x/y"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations/projects:watch",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "id": "projects"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations/x%2Fy:watch",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "id": "x/y"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations/%zz:watch",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 2,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/operations/items:watch",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "id": "items"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/operations/",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 3,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/operations/x%2Fy",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 3,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/operations/:cancel",
+      "outcome": "not_found"
+    },
+    {
+      "from": 3,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/operations/items:cancel",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "id": "items"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/operations/~",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 3,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/operations/a:a:b",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 4,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces//containers",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "namespace": ""
+      }
+    },
+    {
+      "from": 4,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/items/containers",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/end/containers",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2Fy/containers",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces//containers",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "namespace": ""
+      }
+    },
+    {
+      "from": 4,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2fy/containers",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a:get/containers/users",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "users",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a%3Aget/containers/b",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "b",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/~/containers/x%2fy",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "x/y",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%20/containers/",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "",
+        "namespace": " "
+      }
+    },
+    {
+      "from": 5,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a/containers/users",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "users",
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/projects/containers/users",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "users",
+        "namespace": "projects"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/users/containers",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a%3Aget/containers",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/end/containers",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/end/containers",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a%3Aget/containers",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a/containers",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "all_except_reserved",
+      "method": "PATCH",
+      "target": "/v1/namespaces/~/containers/users",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "users",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "all_except_reserved",
+      "method": "PATCH",
+      "target": "/v1/namespaces/%25/containers/a:get",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 7,
+      "mode": "all_except_reserved",
+      "method": "PATCH",
+      "target": "/v1/namespaces/~/containers/a",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "a",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "all_except_reserved",
+      "method": "PATCH",
+      "target": "/v1/namespaces/x%2fy/containers/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 7,
+      "mode": "all_except_reserved",
+      "method": "PATCH",
+      "target": "/v1/namespaces/projects/containers/b",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "b",
+        "namespace": "projects"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "all_except_reserved",
+      "method": "PATCH",
+      "target": "/v1/namespaces/a:a:b/containers/%20",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": " ",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/items/containers/~",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "~",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a:get/containers/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 8,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x%2fy/containers/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 8,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x%2Fy/containers/a:a:b",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "a:a:b",
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/end/containers/v1",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "v1",
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces//containers/items",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "items",
+        "namespace": ""
+      }
+    },
+    {
+      "from": 9,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a/containers/x%2fy:start",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "x/y",
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/users/containers/x%2Fy:start",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "x/y",
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/users/containers/:get",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 9,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a:get/containers/:start",
+      "outcome": "not_found"
+    },
+    {
+      "from": 9,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a/containers/end:start",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "end",
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/:get/containers/%25:start",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 10,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a/containers/a%3Aget:stop",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "a:get",
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a%3Aget/containers/%20:stop",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": " ",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a/containers/projects:stop",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "projects",
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/v1/containers/%20:stop",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": " ",
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/users/containers/users:stop",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "users",
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/items/containers/",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 11,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2fy/containers/x%2fy:kill",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "x/y",
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%20/containers/%20:kill",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": " ",
+        "namespace": " "
+      }
+    },
+    {
+      "from": 11,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%25/containers/a:get",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 11,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/items/containers/x%2Fy:kill",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "x/y",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/projects/containers/%zz:kill",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 11,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%zz/containers/%zz:kill",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 12,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/users/containers/:get:wait",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": ":get",
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/~/containers/:get:wait",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": ":get",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%20/containers/:wait",
+      "outcome": "not_found"
+    },
+    {
+      "from": 12,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces//containers/x%2Fy:wait",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "x/y",
+        "namespace": ""
+      }
+    },
+    {
+      "from": 12,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%20/containers/a:a:b:wait",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "a:a:b",
+        "namespace": " "
+      }
+    },
+    {
+      "from": 12,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2fy/containers/x%2fy:wait",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "x/y",
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a:get/containers//logs",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "container": "",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/items/containers/a%3Aget/logs",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "container": "a:get",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/end/containers/a%3Aget/logs",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "container": "a:get",
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2fy/containers/x%2fy/logs",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "container": "x/y",
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a/containers/a:a:b/logs",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "container": "a:a:b",
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a:a:b/containers/a:get/logs",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "container": "a:get",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a:a:b/containers/end/stats",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "end",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/b/containers/projects/stats",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "projects",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%20/containers/a%3Aget/stats",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "a:get",
+        "namespace": " "
+      }
+    },
+    {
+      "from": 14,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%20/containers/users/stats",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "users",
+        "namespace": " "
+      }
+    },
+    {
+      "from": 14,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a%3Aget/containers/end/stats",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "end",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%zz/containers/~/stats",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 15,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%25/pods",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 15,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/users/pods",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/b/pods",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a:get/pods",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces//pods",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "namespace": ""
+      }
+    },
+    {
+      "from": 15,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/items/pods",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%zz/pods/:get",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 16,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%25/pods/users",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 16,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a:a:b/pods/items",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "items",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%20/pods/:get",
+      "outcome": "not_found"
+    },
+    {
+      "from": 16,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%zz/pods/end",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 16,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a:a:b/pods/a",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "a",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%20/pods",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "namespace": " "
+      }
+    },
+    {
+      "from": 17,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/~/pods",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a:get/pods",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2Fy/pods",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/items/pods",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/b/pods",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x%2fy/pods/a:a:b",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "a:a:b",
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a:a:b/pods/a:a:b",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "a:a:b",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x%2Fy/pods/end",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "end",
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/items/pods/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 18,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/b/pods/x%2fy",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "x/y",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/%25/pods/b",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 19,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/end/virtualmachines",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/:get/virtualmachines",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/end/virtualmachines",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2Fy/virtualmachines",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/end/virtualmachines",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a:a:b/virtualmachines",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%25/virtualmachines/items",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 20,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a%3Aget/virtualmachines/~",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "~",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a%3Aget/virtualmachines/a:a:b",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "a:a:b",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/~/virtualmachines/:get",
+      "outcome": "not_found"
+    },
+    {
+      "from": 20,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a:a:b/virtualmachines/items",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "items",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/users/virtualmachines/end",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "end",
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/projects/virtualmachines",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "namespace": "projects"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/:get/virtualmachines",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%20/virtualmachines",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "namespace": " "
+      }
+    },
+    {
+      "from": 21,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a:a:b/virtualmachines",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2Fy/virtualmachines",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/projects/virtualmachines",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "namespace": "projects"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a%3Aget/virtualmachines/:get",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": ":get",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/items/virtualmachines/items",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "items",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x%2Fy/virtualmachines/v1",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "v1",
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x%2Fy/virtualmachines/end",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "end",
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/x%2Fy/virtualmachines/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 22,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/projects/virtualmachines/b",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "b",
+        "namespace": "projects"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a:a:b/virtualmachines/x%2Fy:start",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "x/y",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%zz/virtualmachines/%zz:start",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 23,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/~/virtualmachines/x%2fy:start",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "x/y",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/:get/virtualmachines/a:a:b:start",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "a:a:b",
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a:a:b/virtualmachines/v1:start",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "v1",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/v1/virtualmachines/:get",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 24,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a:a:b/virtualmachines/end",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 24,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/items/virtualmachines/end:stop",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "end",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 24,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a:a:b/virtualmachines/:get:stop",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": ":get",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 24,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces//virtualmachines/a:a:b:stop",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "a:a:b",
+        "namespace": ""
+      }
+    },
+    {
+      "from": 24,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/end/virtualmachines/%25:stop",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 24,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a/virtualmachines/v1:stop",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "v1",
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 25,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2Fy/virtualmachines/%25:pause",
+      "outcome": "matched",
+      "handler": 25,
+      "params": {
+        "name": "%",
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 25,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/projects/virtualmachines/:pause",
+      "outcome": "not_found"
+    },
+    {
+      "from": 25,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/v1/virtualmachines/:get",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 25,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/:get/virtualmachines/a:pause",
+      "outcome": "matched",
+      "handler": 25,
+      "params": {
+        "name": "a",
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 25,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/b/virtualmachines/v1:pause",
+      "outcome": "matched",
+      "handler": 25,
+      "params": {
+        "name": "v1",
+        "namespace": "b"
+      }
+    },
+    {
+      "from": 25,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/~/virtualmachines/:pause",
+      "outcome": "not_found"
+    },
+    {
+      "from": 26,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/end/virtualmachines/:get",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 26,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces//virtualmachines/a:a:b",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 26,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%zz/virtualmachines/a:get",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 26,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/:get/virtualmachines/~:resume",
+      "outcome": "matched",
+      "handler": 26,
+      "params": {
+        "name": "~",
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 26,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a:a:b/virtualmachines/a:resume",
+      "outcome": "matched",
+      "handler": 26,
+      "params": {
+        "name": "a",
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 26,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/items/virtualmachines/a:get",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 27,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%zz/virtualmachines/:get/snapshots",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 27,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/b/virtualmachines/b/snapshots",
+      "outcome": "matched",
+      "handler": 27,
+      "params": {
+        "namespace": "b",
+        "virtual_machine": "b"
+      }
+    },
+    {
+      "from": 27,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/users/virtualmachines/:get/snapshots",
+      "outcome": "matched",
+      "handler": 27,
+      "params": {
+        "namespace": "users",
+        "virtual_machine": ":get"
+      }
+    },
+    {
+      "from": 27,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a/virtualmachines//snapshots",
+      "outcome": "matched",
+      "handler": 27,
+      "params": {
+        "namespace": "a",
+        "virtual_machine": ""
+      }
+    },
+    {
+      "from": 27,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a/virtualmachines/%20/snapshots",
+      "outcome": "matched",
+      "handler": 27,
+      "params": {
+        "namespace": "a",
+        "virtual_machine": " "
+      }
+    },
+    {
+      "from": 27,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces//virtualmachines/~/snapshots",
+      "outcome": "matched",
+      "handler": 27,
+      "params": {
+        "namespace": "",
+        "virtual_machine": "~"
+      }
+    },
+    {
+      "from": 28,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/b/virtualmachines/x%2Fy/snapshots",
+      "outcome": "matched",
+      "handler": 28,
+      "params": {
+        "namespace": "b",
+        "virtual_machine": "x/y"
+      }
+    },
+    {
+      "from": 28,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a:get/virtualmachines/%zz/snapshots",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 28,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/projects/virtualmachines/:get/snapshots",
+      "outcome": "matched",
+      "handler": 28,
+      "params": {
+        "namespace": "projects",
+        "virtual_machine": ":get"
+      }
+    },
+    {
+      "from": 28,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/end/virtualmachines/a:a:b/snapshots",
+      "outcome": "matched",
+      "handler": 28,
+      "params": {
+        "namespace": "end",
+        "virtual_machine": "a:a:b"
+      }
+    },
+    {
+      "from": 28,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces//virtualmachines/%zz/snapshots",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 28,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/:get/virtualmachines/a%3Aget/snapshots",
+      "outcome": "matched",
+      "handler": 28,
+      "params": {
+        "namespace": ":get",
+        "virtual_machine": "a:get"
+      }
+    },
+    {
+      "from": 29,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a%3Aget/virtualmachines/a/snapshots/a:a:b:restore",
+      "outcome": "matched",
+      "handler": 29,
+      "params": {
+        "namespace": "a:get",
+        "snapshot": "a:a:b",
+        "virtual_machine": "a"
+      }
+    },
+    {
+      "from": 29,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a:get/virtualmachines/a%3Aget/snapshots/x%2Fy:restore",
+      "outcome": "matched",
+      "handler": 29,
+      "params": {
+        "namespace": "a:get",
+        "snapshot": "x/y",
+        "virtual_machine": "a:get"
+      }
+    },
+    {
+      "from": 29,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%20/virtualmachines//snapshots/:get:restore",
+      "outcome": "matched",
+      "handler": 29,
+      "params": {
+        "namespace": " ",
+        "snapshot": ":get",
+        "virtual_machine": ""
+      }
+    },
+    {
+      "from": 29,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/projects/virtualmachines/users/snapshots/~:restore",
+      "outcome": "matched",
+      "handler": 29,
+      "params": {
+        "namespace": "projects",
+        "snapshot": "~",
+        "virtual_machine": "users"
+      }
+    },
+    {
+      "from": 29,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2fy/virtualmachines/%25/snapshots/x%2Fy:restore",
+      "outcome": "matched",
+      "handler": 29,
+      "params": {
+        "namespace": "x/y",
+        "snapshot": "x/y",
+        "virtual_machine": "%"
+      }
+    },
+    {
+      "from": 29,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/~/virtualmachines/a/snapshots/a%3Aget:restore",
+      "outcome": "matched",
+      "handler": 29,
+      "params": {
+        "namespace": "~",
+        "snapshot": "a:get",
+        "virtual_machine": "a"
+      }
+    },
+    {
+      "from": 30,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a/virtualmachines/a/snapshots/items",
+      "outcome": "matched",
+      "handler": 30,
+      "params": {
+        "namespace": "a",
+        "snapshot": "items",
+        "virtual_machine": "a"
+      }
+    },
+    {
+      "from": 30,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/users/virtualmachines//snapshots/a%3Aget",
+      "outcome": "matched",
+      "handler": 30,
+      "params": {
+        "namespace": "users",
+        "snapshot": "a:get",
+        "virtual_machine": ""
+      }
+    },
+    {
+      "from": 30,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/b/virtualmachines/%20/snapshots/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 30,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/~/virtualmachines//snapshots/items",
+      "outcome": "matched",
+      "handler": 30,
+      "params": {
+        "namespace": "~",
+        "snapshot": "items",
+        "virtual_machine": ""
+      }
+    },
+    {
+      "from": 30,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/%25/virtualmachines/%zz/snapshots/a:a:b",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 30,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a:get/virtualmachines/end/snapshots/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 31,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/users/networks",
+      "outcome": "matched",
+      "handler": 31,
+      "params": {
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 31,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces//networks",
+      "outcome": "matched",
+      "handler": 31,
+      "params": {
+        "namespace": ""
+      }
+    },
+    {
+      "from": 31,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a:a:b/networks",
+      "outcome": "matched",
+      "handler": 31,
+      "params": {
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 31,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/items/networks",
+      "outcome": "matched",
+      "handler": 31,
+      "params": {
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 31,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a%3Aget/networks",
+      "outcome": "matched",
+      "handler": 31,
+      "params": {
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 31,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/~/networks",
+      "outcome": "matched",
+      "handler": 31,
+      "params": {
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 32,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a/networks/end",
+      "outcome": "matched",
+      "handler": 32,
+      "params": {
+        "name": "end",
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 32,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/:get/networks/:get",
+      "outcome": "not_found"
+    },
+    {
+      "from": 32,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/~/networks/a",
+      "outcome": "matched",
+      "handler": 32,
+      "params": {
+        "name": "a",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 32,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/projects/networks/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 32,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%25/networks/users",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 32,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2Fy/networks/items",
+      "outcome": "matched",
+      "handler": 32,
+      "params": {
+        "name": "items",
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 33,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a:a:b/networks",
+      "outcome": "matched",
+      "handler": 33,
+      "params": {
+        "namespace": "a:a:b"
+      }
+    },
+    {
+      "from": 33,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%zz/networks",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 33,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces//networks",
+      "outcome": "matched",
+      "handler": 33,
+      "params": {
+        "namespace": ""
+      }
+    },
+    {
+      "from": 33,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a/networks",
+      "outcome": "matched",
+      "handler": 33,
+      "params": {
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 33,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/v1/networks",
+      "outcome": "matched",
+      "handler": 33,
+      "params": {
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 33,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/end/networks",
+      "outcome": "matched",
+      "handler": 33,
+      "params": {
+        "namespace": "end"
+      }
+    },
+    {
+      "from": 34,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/%25/networks/%20",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 34,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/~/networks/~",
+      "outcome": "matched",
+      "handler": 34,
+      "params": {
+        "name": "~",
+        "namespace": "~"
+      }
+    },
+    {
+      "from": 34,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/items/networks/a:get",
+      "outcome": "matched",
+      "handler": 34,
+      "params": {
+        "name": "a:get",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 34,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces//networks/end",
+      "outcome": "matched",
+      "handler": 34,
+      "params": {
+        "name": "end",
+        "namespace": ""
+      }
+    },
+    {
+      "from": 34,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a/networks/a:a:b",
+      "outcome": "matched",
+      "handler": 34,
+      "params": {
+        "name": "a:a:b",
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 34,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/%zz/networks/v1",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 35,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2fy/networks/%25",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 35,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/users/networks/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 35,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a:a:b/networks/projects:connect",
+      "outcome": "matched",
+      "handler": 35,
+      "params": {
+        "namespace": "a:a:b",
+        "network": "projects"
+      }
+    },
+    {
+      "from": 35,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/end/networks/~",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 35,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/items/networks/x%2Fy:connect",
+      "outcome": "matched",
+      "handler": 35,
+      "params": {
+        "namespace": "items",
+        "network": "x/y"
+      }
+    },
+    {
+      "from": 35,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%20/networks/end:connect",
+      "outcome": "matched",
+      "handler": 35,
+      "params": {
+        "namespace": " ",
+        "network": "end"
+      }
+    },
+    {
+      "from": 36,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/:get/networks/b",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 36,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/~/networks/items:disconnect",
+      "outcome": "matched",
+      "handler": 36,
+      "params": {
+        "namespace": "~",
+        "network": "items"
+      }
+    },
+    {
+      "from": 36,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/x%2Fy/networks/~:disconnect",
+      "outcome": "matched",
+      "handler": 36,
+      "params": {
+        "namespace": "x/y",
+        "network": "~"
+      }
+    },
+    {
+      "from": 36,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/items/networks/%zz:disconnect",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 36,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a:get/networks/a:a:b:disconnect",
+      "outcome": "matched",
+      "handler": 36,
+      "params": {
+        "namespace": "a:get",
+        "network": "a:a:b"
+      }
+    },
+    {
+      "from": 36,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/end/networks/x%2Fy:disconnect",
+      "outcome": "matched",
+      "handler": 36,
+      "params": {
+        "namespace": "end",
+        "network": "x/y"
+      }
+    },
+    {
+      "from": 37,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%20/volumes",
+      "outcome": "matched",
+      "handler": 37,
+      "params": {
+        "namespace": " "
+      }
+    },
+    {
+      "from": 37,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a/volumes",
+      "outcome": "matched",
+      "handler": 37,
+      "params": {
+        "namespace": "a"
+      }
+    },
+    {
+      "from": 37,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/a%3Aget/volumes",
+      "outcome": "matched",
+      "handler": 37,
+      "params": {
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 37,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/items/volumes",
+      "outcome": "matched",
+      "handler": 37,
+      "params": {
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 37,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/%25/volumes",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 37,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/namespaces/v1/volumes",
+      "outcome": "matched",
+      "handler": 37,
+      "params": {
+        "namespace": "v1"
+      }
+    },
+    {
+      "from": 38,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/:get/volumes/a:get",
+      "outcome": "matched",
+      "handler": 38,
+      "params": {
+        "name": "a:get",
+        "namespace": ":get"
+      }
+    },
+    {
+      "from": 38,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/projects/volumes/a",
+      "outcome": "matched",
+      "handler": 38,
+      "params": {
+        "name": "a",
+        "namespace": "projects"
+      }
+    },
+    {
+      "from": 38,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/b/volumes/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 38,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/users/volumes/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 38,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%25/volumes/",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 38,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/b/volumes/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 39,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2Fy/volumes",
+      "outcome": "matched",
+      "handler": 39,
+      "params": {
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 39,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%20/volumes",
+      "outcome": "matched",
+      "handler": 39,
+      "params": {
+        "namespace": " "
+      }
+    },
+    {
+      "from": 39,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%20/volumes",
+      "outcome": "matched",
+      "handler": 39,
+      "params": {
+        "namespace": " "
+      }
+    },
+    {
+      "from": 39,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/x%2Fy/volumes",
+      "outcome": "matched",
+      "handler": 39,
+      "params": {
+        "namespace": "x/y"
+      }
+    },
+    {
+      "from": 39,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/a:get/volumes",
+      "outcome": "matched",
+      "handler": 39,
+      "params": {
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 39,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/namespaces/%zz/volumes",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 40,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/users/volumes/%20",
+      "outcome": "matched",
+      "handler": 40,
+      "params": {
+        "name": " ",
+        "namespace": "users"
+      }
+    },
+    {
+      "from": 40,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/%zz/volumes/a",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 40,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/a:get/volumes/:get",
+      "outcome": "matched",
+      "handler": 40,
+      "params": {
+        "name": ":get",
+        "namespace": "a:get"
+      }
+    },
+    {
+      "from": 40,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/%20/volumes/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 40,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/items/volumes/items",
+      "outcome": "matched",
+      "handler": 40,
+      "params": {
+        "name": "items",
+        "namespace": "items"
+      }
+    },
+    {
+      "from": 40,
+      "mode": "all_except_reserved",
+      "method": "DELETE",
+      "target": "/v1/namespaces/end/volumes/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 41,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:pull",
+      "outcome": "matched",
+      "handler": 41
+    },
+    {
+      "from": 41,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:pull",
+      "outcome": "matched",
+      "handler": 41
+    },
+    {
+      "from": 41,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 41,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:pull",
+      "outcome": "matched",
+      "handler": 41
+    },
+    {
+      "from": 41,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:pull",
+      "outcome": "matched",
+      "handler": 41
+    },
+    {
+      "from": 41,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 42,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/images:get",
+      "outcome": "matched",
+      "handler": 42
+    },
+    {
+      "from": 42,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/images:get",
+      "outcome": "matched",
+      "handler": 42
+    },
+    {
+      "from": 42,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/images:get",
+      "outcome": "matched",
+      "handler": 42
+    },
+    {
+      "from": 42,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 42,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/images:get",
+      "outcome": "matched",
+      "handler": 42
+    },
+    {
+      "from": 42,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/images:get",
+      "outcome": "matched",
+      "handler": 42
+    },
+    {
+      "from": 43,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 43,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 43,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 43,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 43,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 43,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/images",
+      "outcome": "matched",
+      "handler": 43
+    },
+    {
+      "from": 44,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:delete",
+      "outcome": "matched",
+      "handler": 44
+    },
+    {
+      "from": 44,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:delete",
+      "outcome": "matched",
+      "handler": 44
+    },
+    {
+      "from": 44,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:delete",
+      "outcome": "matched",
+      "handler": 44
+    },
+    {
+      "from": 44,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:delete",
+      "outcome": "matched",
+      "handler": 44
+    },
+    {
+      "from": 44,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:delete",
+      "outcome": "matched",
+      "handler": 44
+    },
+    {
+      "from": 44,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 45,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:push",
+      "outcome": "matched",
+      "handler": 45
+    },
+    {
+      "from": 45,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:push",
+      "outcome": "matched",
+      "handler": 45
+    },
+    {
+      "from": 45,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 45,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:push",
+      "outcome": "matched",
+      "handler": 45
+    },
+    {
+      "from": 45,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:push",
+      "outcome": "matched",
+      "handler": 45
+    },
+    {
+      "from": 45,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 46,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:build",
+      "outcome": "matched",
+      "handler": 46
+    },
+    {
+      "from": 46,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:build",
+      "outcome": "matched",
+      "handler": 46
+    },
+    {
+      "from": 46,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:build",
+      "outcome": "matched",
+      "handler": 46
+    },
+    {
+      "from": 46,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 46,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:build",
+      "outcome": "matched",
+      "handler": 46
+    },
+    {
+      "from": 46,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:build",
+      "outcome": "matched",
+      "handler": 46
+    },
+    {
+      "from": 47,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 47,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:scan",
+      "outcome": "matched",
+      "handler": 47
+    },
+    {
+      "from": 47,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images",
+      "outcome": "method_not_allowed"
+    },
+    {
+      "from": 47,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:scan",
+      "outcome": "matched",
+      "handler": 47
+    },
+    {
+      "from": 47,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:scan",
+      "outcome": "matched",
+      "handler": 47
+    },
+    {
+      "from": 47,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/images:scan",
+      "outcome": "matched",
+      "handler": 47
+    },
+    {
+      "from": 48,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/~:plan",
+      "outcome": "matched",
+      "handler": 48,
+      "params": {
+        "stack": "~"
+      }
+    },
+    {
+      "from": 48,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/a:plan",
+      "outcome": "matched",
+      "handler": 48,
+      "params": {
+        "stack": "a"
+      }
+    },
+    {
+      "from": 48,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/b:plan",
+      "outcome": "matched",
+      "handler": 48,
+      "params": {
+        "stack": "b"
+      }
+    },
+    {
+      "from": 48,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/x%2Fy:plan",
+      "outcome": "matched",
+      "handler": 48,
+      "params": {
+        "stack": "x/y"
+      }
+    },
+    {
+      "from": 48,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/b:plan",
+      "outcome": "matched",
+      "handler": 48,
+      "params": {
+        "stack": "b"
+      }
+    },
+    {
+      "from": 48,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/v1:plan",
+      "outcome": "matched",
+      "handler": 48,
+      "params": {
+        "stack": "v1"
+      }
+    },
+    {
+      "from": 49,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/a%3Aget:apply",
+      "outcome": "matched",
+      "handler": 49,
+      "params": {
+        "stack": "a:get"
+      }
+    },
+    {
+      "from": 49,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/:get:apply",
+      "outcome": "matched",
+      "handler": 49,
+      "params": {
+        "stack": ":get"
+      }
+    },
+    {
+      "from": 49,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/%25:apply",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 49,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/v1:apply",
+      "outcome": "matched",
+      "handler": 49,
+      "params": {
+        "stack": "v1"
+      }
+    },
+    {
+      "from": 49,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/projects:apply",
+      "outcome": "matched",
+      "handler": 49,
+      "params": {
+        "stack": "projects"
+      }
+    },
+    {
+      "from": 49,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/x%2Fy:apply",
+      "outcome": "matched",
+      "handler": 49,
+      "params": {
+        "stack": "x/y"
+      }
+    },
+    {
+      "from": 50,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/a:get:destroy",
+      "outcome": "matched",
+      "handler": 50,
+      "params": {
+        "stack": "a:get"
+      }
+    },
+    {
+      "from": 50,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/a%3Aget:destroy",
+      "outcome": "matched",
+      "handler": 50,
+      "params": {
+        "stack": "a:get"
+      }
+    },
+    {
+      "from": 50,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/a:destroy",
+      "outcome": "matched",
+      "handler": 50,
+      "params": {
+        "stack": "a"
+      }
+    },
+    {
+      "from": 50,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/a%3Aget:destroy",
+      "outcome": "matched",
+      "handler": 50,
+      "params": {
+        "stack": "a:get"
+      }
+    },
+    {
+      "from": 50,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/%20",
+      "outcome": "not_found"
+    },
+    {
+      "from": 50,
+      "mode": "all_except_reserved",
+      "method": "POST",
+      "target": "/v1/stacks/projects",
+      "outcome": "not_found"
+    },
+    {
+      "from": 51,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 51,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 51,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 51,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 51,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 51,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node",
+      "outcome": "matched",
+      "handler": 51
+    },
+    {
+      "from": 52,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 52,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 52,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 52,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 52,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 52,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "outcome": "matched",
+      "handler": 52
+    },
+    {
+      "from": 53,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 53,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 53,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 53,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 53,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 53,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "outcome": "matched",
+      "handler": 53
+    },
+    {
+      "from": 54,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 54,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 54,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 54,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 54,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 54,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/providers",
+      "outcome": "matched",
+      "handler": 54
+    },
+    {
+      "from": 55,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/events:watch",
+      "outcome": "matched",
+      "handler": 55
+    },
+    {
+      "from": 55,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/events:watch",
+      "outcome": "matched",
+      "handler": 55
+    },
+    {
+      "from": 55,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/events:watch",
+      "outcome": "matched",
+      "handler": 55
+    },
+    {
+      "from": 55,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/events:watch",
+      "outcome": "matched",
+      "handler": 55
+    },
+    {
+      "from": 55,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/events:watch",
+      "outcome": "matched",
+      "handler": 55
+    },
+    {
+      "from": 55,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/events:watch",
+      "outcome": "matched",
+      "handler": 55
+    }
+  ],
+  "dropped_nondeterministic": 0
+}

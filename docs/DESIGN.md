@@ -68,6 +68,7 @@ four properties together, and each one is a test, not a claim:
 | Pattern matching and unescaping modes (`Pattern`) | done | replayed in the route vectors below |
 | Routing: handler order, verbs, 404/405/400 (`Router`) | done | 632 routes, all four unescaping modes, identical outcome, handler and bindings to `runtime.ServeMux` |
 | Request target → `Path`/`RawPath` (`RequestPath`) | done | the bytes `net/url` leaves unescaped are measured from Go, not transcribed |
+| Rule extraction from a descriptor set (`abada_codegen::bindings`) | done | the `delonix.node.v1` contract: same 56 bindings as grpc-gateway, and 728 requests routed identically with all of them registered — see `docs/readiness/delonix-node-v1.md` |
 | POST → GET path-length fallback (`X-HTTP-Method-Override`) | not started | — |
 | Query parameters, body, JSON, errors, metadata, streaming | not started | — |
 
