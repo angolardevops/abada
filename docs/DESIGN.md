@@ -70,6 +70,7 @@ four properties together, and each one is a test, not a claim:
 | Request target → `Path`/`RawPath` (`RequestPath`) | done | the bytes `net/url` leaves unescaped are measured from Go, not transcribed |
 | Rule extraction from a descriptor set (`abada_codegen::bindings`) | done | the `delonix.node.v1` contract: same 56 bindings as grpc-gateway, and 728 requests routed identically with all of them registered — see `docs/readiness/delonix-node-v1.md` |
 | POST → GET path-length fallback (`X-HTTP-Method-Override`) | not started | — |
+| JSON transcoding: choice of library | decided: `prost-reflect` | [ADR 0001](adr/0001-transcodificacao-json.md) — 29 bodies over the contract compared with grpc-gateway's default marshaler (`benches/json-transcode`), both directions timed |
 | Query parameters, body, JSON, errors, metadata, streaming | not started | — |
 
 The conformance suite (`crates/abada/tests/conformance.rs`) was checked by
@@ -83,15 +84,19 @@ fallback, so abada tries other methods in registration order and the oracle
 drops any case whose answer depends on that order; and binding values are
 compared after Go's JSON encoding, which replaces invalid UTF-8.
 
-## Open decision: how JSON is transcoded
+## Decision: how JSON is transcoded
+
+Settled by [ADR 0001](adr/0001-transcodificacao-json.md): **`prost-reflect`
+`DynamicMessage`**, driven by the descriptor. `pbjson` was 2–21× cheaper per
+operation on the `delonix.node.v1` bodies, but cannot read or write `Any` or
+`FieldMask` as grpc-gateway does, and fails to encode unknown enum numbers.
+Measured against grpc-gateway's default marshaler, not by preference; five
+deviations of `prost-reflect` remain to be closed (see the ADR).
 
 | Option | For | Against |
 |---|---|---|
-| `prost-reflect` `DynamicMessage` at runtime | Works with any prost types, no serde derive on user code; mapping is driven by the descriptor, which is what grpc-gateway does | Runtime descriptor lookup cost; one extra decode/encode step |
+| `prost-reflect` `DynamicMessage` at runtime (**chosen**) | Works with any prost types, no serde derive on user code; mapping is driven by the descriptor, which is what grpc-gateway does | Runtime descriptor lookup cost; one extra decode/encode step |
 | `pbjson`-generated serde impls | Static, fast | Forces a second codegen step on the user's types; fields must match exactly |
-
-Settle with a benchmark on a realistic message before the first release, not by
-preference.
 
 ## First consumer
 

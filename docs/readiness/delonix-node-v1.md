@@ -19,7 +19,7 @@ a request into a gRPC call and back is not started.
 | Query parameters | 18 RPCs (every `List*`, `Delete*`, `GetImage`, `Logs`, `WatchEvents`, …) | not started | — |
 | `body: "*"` | 26 `POST` | not started | — |
 | `body: <field>` with a `FieldMask` | 1 `PATCH` (`UpdateContainer`) | not started | — |
-| Canonical proto3 JSON | 64-bit ints ×28, maps ×20, enums ×13, oneofs ×13, bytes ×9, `optional` ×3; `Any`, `Struct`, `FieldMask`, `Timestamp`, `Duration` | not started — the prost-reflect/pbjson decision is still open | — |
+| Canonical proto3 JSON | 64-bit ints ×28, maps ×20, enums ×13, oneofs ×13, bytes ×9, `optional` ×3; `Any`, `Struct`, `FieldMask`, `Timestamp`, `Duration` | not started — library chosen: prost-reflect ([ADR 0001](../adr/0001-transcodificacao-json.md)), with five known deviations | 29 bodies compared with grpc-gateway's default marshaler |
 | `google.rpc.Status` errors with grpc-gateway's HTTP codes | every RPC | not started | — |
 | Server streaming | `WatchOperation`, `Logs`, `WatchEvents` | not started | — |
 | `Exec`, `Console` (bidirectional, no mapping; WebSocket per ADR-0040 D4) | 2 RPCs | out of v0.1 scope | — |
