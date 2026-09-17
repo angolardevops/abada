@@ -278,13 +278,29 @@ func runJSON(path, source string) {
 				fail("%s: proto_hex: %v", c.Name, err)
 			}
 		case c.Field != "":
-			if err := (prototext.UnmarshalOptions{AllowPartial: true}).Unmarshal([]byte(c.Prefill), msg); err != nil {
-				fail("%s: prefill: %v", c.Name, err)
+			// decodeNonProtoField walks Go maps: a case whose answer depends on
+			// map order (two JSON keys naming the same map key) cannot be a
+			// fixed expectation, so it is refused rather than recorded.
+			var first []byte
+			for run := 0; run < 16; run++ {
+				msg = newMessage(c.Message)
+				if err := (prototext.UnmarshalOptions{AllowPartial: true}).Unmarshal([]byte(c.Prefill), msg); err != nil {
+					fail("%s: prefill: %v", c.Name, err)
+				}
+				if v.PrefillProto, err = deterministic.Marshal(msg); err != nil {
+					fail("%s: prefill binary: %v", c.Name, err)
+				}
+				err = decodeBody(m, caseBody(c), structField(msg, c.Field, c.Name).Addr().Interface())
+				b, _ := deterministic.Marshal(msg)
+				if err != nil {
+					b = []byte("error")
+				}
+				if run == 0 {
+					first = b
+				} else if !bytes.Equal(first, b) {
+					fail("%s: the answer depends on Go map order; change the case", c.Name)
+				}
 			}
-			if v.PrefillProto, err = deterministic.Marshal(msg); err != nil {
-				fail("%s: prefill binary: %v", c.Name, err)
-			}
-			err = decodeBody(m, caseBody(c), structField(msg, c.Field, c.Name).Addr().Interface())
 		default:
 			err = decodeBody(m, caseBody(c), msg)
 		}

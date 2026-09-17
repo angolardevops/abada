@@ -713,7 +713,7 @@
     {"name": "field_map_i32_octal_bad", "message": "abada.conformance.v1.Maps", "field": "i32", "input": {"08": "a"}},
     {"name": "field_map_i32_empty_key", "message": "abada.conformance.v1.Maps", "field": "i32", "input": {"": "a"}},
     {"name": "field_map_i32_min_hex", "message": "abada.conformance.v1.Maps", "field": "i32", "input": {"-0x80000000": "a"}},
-    {"name": "field_map_i64_max", "message": "abada.conformance.v1.Maps", "field": "i64", "input": {"9223372036854775807": "a", "0x7fffffffffffffff": "b"}},
+    {"name": "field_map_i64_max", "message": "abada.conformance.v1.Maps", "field": "i64", "input": {"9223372036854775807": "a", "0x7ffffffffffffffe": "b"}},
     {"name": "field_map_u32_negative", "message": "abada.conformance.v1.Maps", "field": "u32", "input": {"-1": "a"}},
     {"name": "field_map_u32_plus", "message": "abada.conformance.v1.Maps", "field": "u32", "input": {"+1": "a"}},
     {"name": "field_map_u64_hex", "message": "abada.conformance.v1.Maps", "field": "u64", "input": {"0xffffffffffffffff": "a"}},

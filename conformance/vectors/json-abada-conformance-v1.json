@@ -8024,13 +8024,13 @@
       "message": "abada.conformance.v1.Maps",
       "input": {
         "9223372036854775807": "a",
-        "0x7fffffffffffffff": "b"
+        "0x7ffffffffffffffe": "b"
       },
       "field": "i64",
       "accepted": true,
-      "output": "{\"i32\":{},\"i64\":{\"9223372036854775807\":\"b\"},\"u32\":{},\"u64\":{},\"s32\":{},\"s64\":{},\"fx32\":{},\"fx64\":{},\"sfx32\":{},\"sfx64\":{},\"flag\":{},\"str\":{},\"byt\":{},\"color\":{},\"nested\":{},\"dbl\":{},\"i64Value\":{},\"value\":{},\"ts\":{},\"strWrapper\":{},\"flt\":{},\"flagValue\":{},\"u32Value\":{},\"recursive\":{}}",
-      "output_omit_unpopulated": "{\"i64\":{\"9223372036854775807\":\"b\"}}",
-      "proto": "Eg0I//////////9/EgFi"
+      "output": "{\"i32\":{},\"i64\":{\"9223372036854775806\":\"b\",\"9223372036854775807\":\"a\"},\"u32\":{},\"u64\":{},\"s32\":{},\"s64\":{},\"fx32\":{},\"fx64\":{},\"sfx32\":{},\"sfx64\":{},\"flag\":{},\"str\":{},\"byt\":{},\"color\":{},\"nested\":{},\"dbl\":{},\"i64Value\":{},\"value\":{},\"ts\":{},\"strWrapper\":{},\"flt\":{},\"flagValue\":{},\"u32Value\":{},\"recursive\":{}}",
+      "output_omit_unpopulated": "{\"i64\":{\"9223372036854775806\":\"b\",\"9223372036854775807\":\"a\"}}",
+      "proto": "Eg0I/v////////9/EgFiEg0I//////////9/EgFh"
     },
     {
       "name": "field_map_u32_negative",
