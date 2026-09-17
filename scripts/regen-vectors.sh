@@ -12,6 +12,9 @@ if [ ! -d "$WORK" ]; then
   git clone --quiet --depth 1 --branch "$GATEWAY_TAG" \
     https://github.com/grpc-ecosystem/grpc-gateway.git "$WORK"
 fi
+# The checkout is shared between runs and branches: start from an empty oracle
+# directory, or a file removed or renamed here keeps compiling from the cache.
+rm -rf "$WORK/internal/abadaoracle"
 mkdir -p "$WORK/internal/abadaoracle"
 cp "$ROOT"/conformance/oracle/*.go "$WORK/internal/abadaoracle/"
 
