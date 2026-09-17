@@ -60,6 +60,28 @@ four properties together, and each one is a test, not a claim:
 - SSE as an alternative streaming encoding.
 - Field behaviour validation (`REQUIRED`, `OUTPUT_ONLY`).
 
+## Progress
+
+| Piece | State | Proof |
+|---|---|---|
+| Path template parser (`abada::path::PathTemplate`) | done | 447 templates (47 hand-written, 400 from a fixed seed) parse, print and compile op for op like `internal/httprule` |
+| Pattern matching and unescaping modes (`Pattern`) | done | replayed in the route vectors below |
+| Routing: handler order, verbs, 404/405/400 (`Router`) | done | 632 routes, all four unescaping modes, identical outcome, handler and bindings to `runtime.ServeMux` |
+| Request target → `Path`/`RawPath` (`RequestPath`) | done | the bytes `net/url` leaves unescaped are measured from Go, not transcribed |
+| POST → GET path-length fallback (`X-HTTP-Method-Override`) | not started | — |
+| Query parameters, body, JSON, errors, metadata, streaming | not started | — |
+
+The conformance suite (`crates/abada/tests/conformance.rs`) was checked by
+breaking the code on purpose: dropping the `/` quirk of the parser, the
+registration order, the deep-wildcard tail, the escape table or the bare-verb
+404 each makes it fail. The tail was NOT caught until cases with a request
+shorter than the fixed tail were added.
+
+Two known limits of the vectors: grpc-gateway walks a Go map for the 405
+fallback, so abada tries other methods in registration order and the oracle
+drops any case whose answer depends on that order; and binding values are
+compared after Go's JSON encoding, which replaces invalid UTF-8.
+
 ## Open decision: how JSON is transcoded
 
 | Option | For | Against |
