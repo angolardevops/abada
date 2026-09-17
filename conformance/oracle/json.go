@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"sort"
+	"strings"
 	"testing"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -44,6 +45,10 @@ type jsonVector struct {
 	// OutputOmitUnpopulated is the same message with EmitUnpopulated: false,
 	// the most common override of the default.
 	OutputOmitUnpopulated string `json:"output_omit_unpopulated,omitempty"`
+	// Proto is the decoded message in deterministic binary form (map entries
+	// sorted), so a decoder can be checked without trusting its own encoder.
+	// Absent when the message is empty.
+	Proto []byte `json:"proto,omitempty"`
 }
 
 type jsonVectors struct {
@@ -179,7 +184,9 @@ func runJSON(path, source string) {
 		v := jsonVector{jsonCase: c}
 		msg := newMessage(files, c.Message)
 		if err := decodeBody(m, c.Input, msg); err != nil {
-			v.Error = err.Error()
+			// protojson picks a space or a non-breaking space in its errors at
+			// random, so that nobody matches on them; normalised for --check.
+			v.Error = strings.ReplaceAll(err.Error(), "\u00a0", " ")
 		} else {
 			v.Accepted = true
 			b, err := m.Marshal(msg)
@@ -192,6 +199,9 @@ func runJSON(path, source string) {
 				fail("%s: marshal: %v", c.Name, err)
 			}
 			v.OutputOmitUnpopulated = compact(b)
+			if v.Proto, err = (proto.MarshalOptions{Deterministic: true}).Marshal(msg); err != nil {
+				fail("%s: binary: %v", c.Name, err)
+			}
 		}
 		out.Cases = append(out.Cases, v)
 	}

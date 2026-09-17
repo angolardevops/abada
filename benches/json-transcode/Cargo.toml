@@ -1,0 +1,23 @@
+[package]
+name = "abada-json-bench"
+description = "Measures the JSON transcoding options for abada against grpc-gateway's own answers. Not published."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+prost.workspace = true
+prost-reflect = { version = "0.16", features = ["serde"] }
+pbjson = "0.9"
+pbjson-types = "0.9"
+serde.workspace = true
+serde_json = { workspace = true, features = ["raw_value"] }
+base64 = "0.22"
+
+[build-dependencies]
+prost = { workspace = true }
+prost-types = "0.14"
+prost-build = "0.14"
+pbjson-build = "0.9"

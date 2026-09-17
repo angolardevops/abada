@@ -121,7 +121,8 @@
       "bench": true,
       "accepted": true,
       "output": "{\"namespace\":\"shop\",\"name\":\"web\",\"labels\":{\"app\":\"web\",\"team\":\"payments\",\"tier\":\"frontend\"},\"annotations\":{\"delonix.io/owner\":\"walter\",\"delonix.io/revision\":\"42\"},\"spec\":{\"image\":\"registry.ngola.cloud/shop/web@sha256:3f1c0e1b8a9d4f7a2c6e5b4d3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f\",\"entrypoint\":[\"/usr/local/bin/web\"],\"command\":[\"--listen\",\"0.0.0.0:8080\",\"--log-format\",\"json\"],\"env\":{\"DATABASE_URL\":\"postgres://db.shop.svc:5432/shop\",\"PORT\":\"8080\",\"RUST_LOG\":\"info\"},\"secrets\":[{\"secret\":\"shop-db\",\"key\":\"password\",\"delivery\":\"SECRET_DELIVERY_ENV\"},{\"secret\":\"shop-tls\",\"key\":\"\",\"delivery\":\"SECRET_DELIVERY_FILE\"}],\"workdir\":\"/srv\",\"user\":\"1000:1000\",\"hostname\":\"web\",\"resources\":{\"memoryLimitBytes\":\"536870912\",\"memoryReservationBytes\":\"268435456\",\"cpuLimitMillis\":\"1500\",\"cpuWeight\":\"100\",\"cpuset\":\"0-3\",\"pidsLimit\":\"512\"},\"mounts\":[{\"volume\":\"shop-data\",\"target\":\"/srv/data\",\"readOnly\":false},{\"hostPath\":\"/etc/ssl/certs\",\"target\":\"/etc/ssl/certs\",\"readOnly\":true}],\"networks\":[{\"network\":\"shop\",\"ipv4Address\":\"\",\"aliases\":[\"web\",\"www\"]}],\"ports\":[{\"hostIp\":\"\",\"hostPort\":8080,\"containerPort\":8080,\"protocol\":\"PROTOCOL_TCP\"}],\"security\":{\"privileged\":false,\"capAdd\":[\"NET_BIND_SERVICE\"],\"capDrop\":[\"ALL\"],\"seccompProfile\":\"\",\"apparmorProfile\":\"\",\"noNewPrivileges\":true,\"maskedPaths\":[\"/proc/kcore\"],\"readonlyPaths\":[]},\"restart\":{\"mode\":\"RESTART_MODE_ON_FAILURE\",\"maxRetries\":5},\"healthCheck\":{\"command\":[\"/usr/local/bin/web\",\"healthz\"],\"interval\":\"10s\",\"timeout\":\"2.500s\",\"retries\":3,\"startPeriod\":\"30s\"},\"pod\":\"\",\"devices\":[],\"tmpfs\":[],\"readOnlyRootfs\":true,\"sysctls\":{\"net.core.somaxconn\":\"4096\"},\"logFormat\":\"json-file\"},\"requestId\":\"4f6c2b8e-1d3a-4c5b-9e7f-0a1b2c3d4e5f\",\"start\":true}",
-      "output_omit_unpopulated": "{\"namespace\":\"shop\",\"name\":\"web\",\"labels\":{\"app\":\"web\",\"team\":\"payments\",\"tier\":\"frontend\"},\"annotations\":{\"delonix.io/owner\":\"walter\",\"delonix.io/revision\":\"42\"},\"spec\":{\"image\":\"registry.ngola.cloud/shop/web@sha256:3f1c0e1b8a9d4f7a2c6e5b4d3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f\",\"entrypoint\":[\"/usr/local/bin/web\"],\"command\":[\"--listen\",\"0.0.0.0:8080\",\"--log-format\",\"json\"],\"env\":{\"DATABASE_URL\":\"postgres://db.shop.svc:5432/shop\",\"PORT\":\"8080\",\"RUST_LOG\":\"info\"},\"secrets\":[{\"secret\":\"shop-db\",\"key\":\"password\",\"delivery\":\"SECRET_DELIVERY_ENV\"},{\"secret\":\"shop-tls\",\"delivery\":\"SECRET_DELIVERY_FILE\"}],\"workdir\":\"/srv\",\"user\":\"1000:1000\",\"hostname\":\"web\",\"resources\":{\"memoryLimitBytes\":\"536870912\",\"memoryReservationBytes\":\"268435456\",\"cpuLimitMillis\":\"1500\",\"cpuWeight\":\"100\",\"cpuset\":\"0-3\",\"pidsLimit\":\"512\"},\"mounts\":[{\"volume\":\"shop-data\",\"target\":\"/srv/data\"},{\"hostPath\":\"/etc/ssl/certs\",\"target\":\"/etc/ssl/certs\",\"readOnly\":true}],\"networks\":[{\"network\":\"shop\",\"aliases\":[\"web\",\"www\"]}],\"ports\":[{\"hostPort\":8080,\"containerPort\":8080,\"protocol\":\"PROTOCOL_TCP\"}],\"security\":{\"capAdd\":[\"NET_BIND_SERVICE\"],\"capDrop\":[\"ALL\"],\"noNewPrivileges\":true,\"maskedPaths\":[\"/proc/kcore\"]},\"restart\":{\"mode\":\"RESTART_MODE_ON_FAILURE\",\"maxRetries\":5},\"healthCheck\":{\"command\":[\"/usr/local/bin/web\",\"healthz\"],\"interval\":\"10s\",\"timeout\":\"2.500s\",\"retries\":3,\"startPeriod\":\"30s\"},\"readOnlyRootfs\":true,\"sysctls\":{\"net.core.somaxconn\":\"4096\"},\"logFormat\":\"json-file\"},\"requestId\":\"4f6c2b8e-1d3a-4c5b-9e7f-0a1b2c3d4e5f\",\"start\":true}"
+      "output_omit_unpopulated": "{\"namespace\":\"shop\",\"name\":\"web\",\"labels\":{\"app\":\"web\",\"team\":\"payments\",\"tier\":\"frontend\"},\"annotations\":{\"delonix.io/owner\":\"walter\",\"delonix.io/revision\":\"42\"},\"spec\":{\"image\":\"registry.ngola.cloud/shop/web@sha256:3f1c0e1b8a9d4f7a2c6e5b4d3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f\",\"entrypoint\":[\"/usr/local/bin/web\"],\"command\":[\"--listen\",\"0.0.0.0:8080\",\"--log-format\",\"json\"],\"env\":{\"DATABASE_URL\":\"postgres://db.shop.svc:5432/shop\",\"PORT\":\"8080\",\"RUST_LOG\":\"info\"},\"secrets\":[{\"secret\":\"shop-db\",\"key\":\"password\",\"delivery\":\"SECRET_DELIVERY_ENV\"},{\"secret\":\"shop-tls\",\"delivery\":\"SECRET_DELIVERY_FILE\"}],\"workdir\":\"/srv\",\"user\":\"1000:1000\",\"hostname\":\"web\",\"resources\":{\"memoryLimitBytes\":\"536870912\",\"memoryReservationBytes\":\"268435456\",\"cpuLimitMillis\":\"1500\",\"cpuWeight\":\"100\",\"cpuset\":\"0-3\",\"pidsLimit\":\"512\"},\"mounts\":[{\"volume\":\"shop-data\",\"target\":\"/srv/data\"},{\"hostPath\":\"/etc/ssl/certs\",\"target\":\"/etc/ssl/certs\",\"readOnly\":true}],\"networks\":[{\"network\":\"shop\",\"aliases\":[\"web\",\"www\"]}],\"ports\":[{\"hostPort\":8080,\"containerPort\":8080,\"protocol\":\"PROTOCOL_TCP\"}],\"security\":{\"capAdd\":[\"NET_BIND_SERVICE\"],\"capDrop\":[\"ALL\"],\"noNewPrivileges\":true,\"maskedPaths\":[\"/proc/kcore\"]},\"restart\":{\"mode\":\"RESTART_MODE_ON_FAILURE\",\"maxRetries\":5},\"healthCheck\":{\"command\":[\"/usr/local/bin/web\",\"healthz\"],\"interval\":\"10s\",\"timeout\":\"2.500s\",\"retries\":3,\"startPeriod\":\"30s\"},\"readOnlyRootfs\":true,\"sysctls\":{\"net.core.somaxconn\":\"4096\"},\"logFormat\":\"json-file\"},\"requestId\":\"4f6c2b8e-1d3a-4c5b-9e7f-0a1b2c3d4e5f\",\"start\":true}",
+      "proto": "CgRzaG9wEgN3ZWIaCgoDYXBwEgN3ZWIaEAoEdGVhbRIIcGF5bWVudHMaEAoEdGllchIIZnJvbnRlbmQiGgoQZGVsb25peC5pby9vd25lchIGd2FsdGVyIhkKE2RlbG9uaXguaW8vcmV2aXNpb24SAjQyKrQECmVyZWdpc3RyeS5uZ29sYS5jbG91ZC9zaG9wL3dlYkBzaGEyNTY6M2YxYzBlMWI4YTlkNGY3YTJjNmU1YjRkM2EyZjFlMGQ5YzhiN2E2ZjVlNGQzYzJiMWEwZjllOGQ3YzZiNWE0ZhISL3Vzci9sb2NhbC9iaW4vd2ViGggtLWxpc3RlbhoMMC4wLjAuMDo4MDgwGgwtLWxvZy1mb3JtYXQaBGpzb24iMAoMREFUQUJBU0VfVVJMEiBwb3N0Z3JlczovL2RiLnNob3Auc3ZjOjU0MzIvc2hvcCIMCgRQT1JUEgQ4MDgwIhAKCFJVU1RfTE9HEgRpbmZvKhUKB3Nob3AtZGISCHBhc3N3b3JkGAEqDAoIc2hvcC10bHMYAjIEL3NydjoJMTAwMDoxMDAwQgN3ZWJKGQiAgICAAhCAgICAARjcCyBkKgMwLTMwgARSFhoJL3Nydi9kYXRhCglzaG9wLWRhdGFSIhoOL2V0Yy9zc2wvY2VydHMgARIOL2V0Yy9zc2wvY2VydHNaEAoEc2hvcBoDd2ViGgN3d3diCBCQPxiQPyABaiYSEE5FVF9CSU5EX1NFUlZJQ0UaA0FMTDABOgsvcHJvYy9rY29yZXIECAIQBXoxChIvdXNyL2xvY2FsL2Jpbi93ZWIKB2hlYWx0aHoSAggKGggIAhCAyrXuASADKgIIHpgBAaIBGgoSbmV0LmNvcmUuc29tYXhjb25uEgQ0MDk2qgEJanNvbi1maWxlMiQ0ZjZjMmI4ZS0xZDNhLTRjNWItOWU3Zi0wYTFiMmMzZDRlNWY4AQ=="
     },
     {
       "name": "create_container_request_alternative_spellings",
@@ -158,7 +159,8 @@
       },
       "accepted": true,
       "output": "{\"namespace\":\"\",\"name\":\"\",\"labels\":{},\"annotations\":{},\"spec\":{\"image\":\"nginx\",\"entrypoint\":[],\"command\":[],\"env\":{},\"secrets\":[],\"workdir\":\"\",\"user\":\"\",\"hostname\":\"\",\"resources\":{\"memoryLimitBytes\":\"536870912\",\"memoryReservationBytes\":\"0\",\"cpuLimitMillis\":\"1500\",\"cpuWeight\":\"0\",\"cpuset\":\"\",\"pidsLimit\":\"0\"},\"mounts\":[{\"hostPath\":\"/data\",\"target\":\"/data\",\"readOnly\":false}],\"networks\":[],\"ports\":[{\"hostIp\":\"\",\"hostPort\":0,\"containerPort\":80,\"protocol\":\"PROTOCOL_TCP\"}],\"security\":null,\"restart\":{\"mode\":\"RESTART_MODE_ON_FAILURE\",\"maxRetries\":5},\"healthCheck\":{\"command\":[],\"interval\":\"1.500s\",\"timeout\":null,\"retries\":0,\"startPeriod\":null},\"pod\":\"\",\"devices\":[],\"tmpfs\":[],\"readOnlyRootfs\":true,\"sysctls\":{},\"logFormat\":\"\"},\"requestId\":\"r-1\",\"start\":false}",
-      "output_omit_unpopulated": "{\"spec\":{\"image\":\"nginx\",\"resources\":{\"memoryLimitBytes\":\"536870912\",\"cpuLimitMillis\":\"1500\"},\"mounts\":[{\"hostPath\":\"/data\",\"target\":\"/data\"}],\"ports\":[{\"containerPort\":80,\"protocol\":\"PROTOCOL_TCP\"}],\"restart\":{\"mode\":\"RESTART_MODE_ON_FAILURE\",\"maxRetries\":5},\"healthCheck\":{\"interval\":\"1.500s\"},\"readOnlyRootfs\":true},\"requestId\":\"r-1\"}"
+      "output_omit_unpopulated": "{\"spec\":{\"image\":\"nginx\",\"resources\":{\"memoryLimitBytes\":\"536870912\",\"cpuLimitMillis\":\"1500\"},\"mounts\":[{\"hostPath\":\"/data\",\"target\":\"/data\"}],\"ports\":[{\"containerPort\":80,\"protocol\":\"PROTOCOL_TCP\"}],\"restart\":{\"mode\":\"RESTART_MODE_ON_FAILURE\",\"maxRetries\":5},\"healthCheck\":{\"interval\":\"1.500s\"},\"readOnlyRootfs\":true},\"requestId\":\"r-1\"}",
+      "proto": "Kj0KBW5naW54SgkIgICAgAIY3AtSDhoFL2RhdGESBS9kYXRhYgQYUCABcgQIAhAFegoSCAgBEIDKte4BmAEBMgNyLTE="
     },
     {
       "name": "create_virtual_machine_request",
@@ -223,7 +225,8 @@
       "bench": true,
       "accepted": true,
       "output": "{\"namespace\":\"infra\",\"name\":\"db-1\",\"labels\":{\"role\":\"database\"},\"annotations\":{},\"spec\":{\"image\":\"debian-13-genericcloud\",\"vcpus\":4,\"memoryBytes\":\"8589934592\",\"diskBytes\":\"107374182400\",\"networks\":[{\"network\":\"infra\",\"ipv4Address\":\"10.20.0.11\",\"aliases\":[]}],\"cloudInit\":{\"hostname\":\"db-1\",\"sshAuthorizedKeys\":[\"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ walter@ngola\"],\"userData\":\"#cloud-config\\npackages: [postgresql]\\n\"},\"provider\":\"\",\"requiredCapabilities\":[\"vm.snapshot.memory\"],\"extensions\":{\"byProvider\":{\"libvirt\":{\"cpuMode\":\"host-passthrough\",\"disk\":{\"bus\":\"virtio\",\"cache\":null,\"iops\":3000.5},\"hugepages\":true,\"machine\":\"q35\",\"numaNodes\":[0,1]},\"proxmox\":{\"node\":\"pve-2\",\"tags\":[\"db\",\"prod\"]}}},\"restart\":\"RESTART_MODE_ALWAYS\"},\"requestId\":\"vm-req-7\",\"waitUntilReachable\":true}",
-      "output_omit_unpopulated": "{\"namespace\":\"infra\",\"name\":\"db-1\",\"labels\":{\"role\":\"database\"},\"spec\":{\"image\":\"debian-13-genericcloud\",\"vcpus\":4,\"memoryBytes\":\"8589934592\",\"diskBytes\":\"107374182400\",\"networks\":[{\"network\":\"infra\",\"ipv4Address\":\"10.20.0.11\"}],\"cloudInit\":{\"hostname\":\"db-1\",\"sshAuthorizedKeys\":[\"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ walter@ngola\"],\"userData\":\"#cloud-config\\npackages: [postgresql]\\n\"},\"requiredCapabilities\":[\"vm.snapshot.memory\"],\"extensions\":{\"byProvider\":{\"libvirt\":{\"cpuMode\":\"host-passthrough\",\"disk\":{\"bus\":\"virtio\",\"cache\":null,\"iops\":3000.5},\"hugepages\":true,\"machine\":\"q35\",\"numaNodes\":[0,1]},\"proxmox\":{\"node\":\"pve-2\",\"tags\":[\"db\",\"prod\"]}}},\"restart\":\"RESTART_MODE_ALWAYS\"},\"requestId\":\"vm-req-7\",\"waitUntilReachable\":true}"
+      "output_omit_unpopulated": "{\"namespace\":\"infra\",\"name\":\"db-1\",\"labels\":{\"role\":\"database\"},\"spec\":{\"image\":\"debian-13-genericcloud\",\"vcpus\":4,\"memoryBytes\":\"8589934592\",\"diskBytes\":\"107374182400\",\"networks\":[{\"network\":\"infra\",\"ipv4Address\":\"10.20.0.11\"}],\"cloudInit\":{\"hostname\":\"db-1\",\"sshAuthorizedKeys\":[\"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ walter@ngola\"],\"userData\":\"#cloud-config\\npackages: [postgresql]\\n\"},\"requiredCapabilities\":[\"vm.snapshot.memory\"],\"extensions\":{\"byProvider\":{\"libvirt\":{\"cpuMode\":\"host-passthrough\",\"disk\":{\"bus\":\"virtio\",\"cache\":null,\"iops\":3000.5},\"hugepages\":true,\"machine\":\"q35\",\"numaNodes\":[0,1]},\"proxmox\":{\"node\":\"pve-2\",\"tags\":[\"db\",\"prod\"]}}},\"restart\":\"RESTART_MODE_ALWAYS\"},\"requestId\":\"vm-req-7\",\"waitUntilReachable\":true}",
+      "proto": "CgVpbmZyYRIEZGItMRoQCgRyb2xlEghkYXRhYmFzZSqmAwoWZGViaWFuLTEzLWdlbmVyaWNjbG91ZBAEGICAgIAgIICAgICQAyoTCgVpbmZyYRIKMTAuMjAuMC4xMTJiCgRkYi0xEjNzc2gtZWQyNTUxOSBBQUFBQzNOemFDMWxaREkxTlRFNUFBQUFJSiB3YWx0ZXJAbmdvbGEaJSNjbG91ZC1jb25maWcKcGFja2FnZXM6IFtwb3N0Z3Jlc3FsXQpCEnZtLnNuYXBzaG90Lm1lbW9yeUrtAQqyAQoHbGlidmlydBKmAQodCgdjcHVNb2RlEhIaEGhvc3QtcGFzc3Rocm91Z2gKOwoEZGlzaxIzKjEKDwoDYnVzEggaBnZpcnRpbwoLCgVjYWNoZRICCAAKEQoEaW9wcxIJEQAAAAAAcadACg8KCWh1Z2VwYWdlcxICIAEKEAoHbWFjaGluZRIFGgNxMzUKJQoJbnVtYU5vZGVzEhgyFgoJEQAAAAAAAAAACgkRAAAAAAAA8D8KNgoHcHJveG1veBIrCg8KBG5vZGUSBxoFcHZlLTIKGAoEdGFncxIQMg4KBBoCZGIKBhoEcHJvZFADMgh2bS1yZXEtNzgB"
     },
     {
       "name": "container",
@@ -268,7 +271,8 @@
       },
       "accepted": true,
       "output": "{\"meta\":{\"name\":\"web\",\"namespace\":\"shop\",\"uid\":\"01J8Z3K4M5N6P7Q8R9S0T1V2W3\",\"labels\":{\"app\":\"web\"},\"annotations\":{},\"createTime\":\"2026-09-17T08:30:00Z\",\"updateTime\":\"2026-09-17T08:31:02.123456789Z\",\"etag\":\"W/\\\"7\\\"\"},\"spec\":{\"image\":\"nginx\",\"entrypoint\":[],\"command\":[],\"env\":{},\"secrets\":[],\"workdir\":\"\",\"user\":\"\",\"hostname\":\"\",\"resources\":{\"memoryLimitBytes\":\"-1\",\"memoryReservationBytes\":\"0\",\"cpuLimitMillis\":\"0\",\"cpuWeight\":\"0\",\"cpuset\":\"\",\"pidsLimit\":\"0\"},\"mounts\":[],\"networks\":[],\"ports\":[],\"security\":null,\"restart\":null,\"healthCheck\":null,\"pod\":\"\",\"devices\":[],\"tmpfs\":[],\"readOnlyRootfs\":false,\"sysctls\":{},\"logFormat\":\"\"},\"status\":{\"phase\":\"CONTAINER_PHASE_EXITED\",\"pid\":0,\"exitCode\":0,\"reason\":\"Completed\",\"ipAddresses\":[\"10.88.0.4\"],\"conditions\":[{\"type\":\"Ready\",\"status\":\"CONDITION_STATUS_FALSE\",\"reason\":\"Exited\",\"message\":\"container exited\",\"lastTransitionTime\":\"2026-09-17T08:31:02Z\"}],\"imageDigest\":\"sha256:abc\"}}",
-      "output_omit_unpopulated": "{\"meta\":{\"name\":\"web\",\"namespace\":\"shop\",\"uid\":\"01J8Z3K4M5N6P7Q8R9S0T1V2W3\",\"labels\":{\"app\":\"web\"},\"createTime\":\"2026-09-17T08:30:00Z\",\"updateTime\":\"2026-09-17T08:31:02.123456789Z\",\"etag\":\"W/\\\"7\\\"\"},\"spec\":{\"image\":\"nginx\",\"resources\":{\"memoryLimitBytes\":\"-1\"}},\"status\":{\"phase\":\"CONTAINER_PHASE_EXITED\",\"exitCode\":0,\"reason\":\"Completed\",\"ipAddresses\":[\"10.88.0.4\"],\"conditions\":[{\"type\":\"Ready\",\"status\":\"CONDITION_STATUS_FALSE\",\"reason\":\"Exited\",\"message\":\"container exited\",\"lastTransitionTime\":\"2026-09-17T08:31:02Z\"}],\"imageDigest\":\"sha256:abc\"}}"
+      "output_omit_unpopulated": "{\"meta\":{\"name\":\"web\",\"namespace\":\"shop\",\"uid\":\"01J8Z3K4M5N6P7Q8R9S0T1V2W3\",\"labels\":{\"app\":\"web\"},\"createTime\":\"2026-09-17T08:30:00Z\",\"updateTime\":\"2026-09-17T08:31:02.123456789Z\",\"etag\":\"W/\\\"7\\\"\"},\"spec\":{\"image\":\"nginx\",\"resources\":{\"memoryLimitBytes\":\"-1\"}},\"status\":{\"phase\":\"CONTAINER_PHASE_EXITED\",\"exitCode\":0,\"reason\":\"Completed\",\"ipAddresses\":[\"10.88.0.4\"],\"conditions\":[{\"type\":\"Ready\",\"status\":\"CONDITION_STATUS_FALSE\",\"reason\":\"Exited\",\"message\":\"container exited\",\"lastTransitionTime\":\"2026-09-17T08:31:02Z\"}],\"imageDigest\":\"sha256:abc\"}}",
+      "proto": "Ck8KA3dlYhIEc2hvcBoaMDFKOFozSzRNNU42UDdROFI5UzBUMVYyVzMiCgoDYXBwEgN3ZWIyBgiIyq7VBjoLCMbKrtUGEJWa7zpCBVcvIjciEhQKBW5naW54SgsI////////////ARpTCAQYACIJQ29tcGxldGVkKgkxMC44OC4wLjQyKwoFUmVhZHkQAhoGRXhpdGVkIhBjb250YWluZXIgZXhpdGVkKgYIxsqu1QY6CnNoYTI1NjphYmM="
     },
     {
       "name": "list_containers_response",
@@ -388,7 +392,8 @@
       "bench": true,
       "accepted": true,
       "output": "{\"containers\":[{\"meta\":{\"name\":\"web\",\"namespace\":\"shop\",\"uid\":\"01J8Z3K4M5N6P7Q8R9S0T1V2W3\",\"labels\":{\"app\":\"web\",\"tier\":\"frontend\"},\"annotations\":{\"delonix.io/revision\":\"42\"},\"createTime\":\"2026-09-17T08:30:00Z\",\"updateTime\":\"2026-09-17T08:31:02.123456789Z\",\"etag\":\"W/\\\"7\\\"\"},\"spec\":{\"image\":\"registry.ngola.cloud/shop/web:1.4.2\",\"entrypoint\":[],\"command\":[\"--listen\",\"0.0.0.0:8080\"],\"env\":{\"PORT\":\"8080\",\"RUST_LOG\":\"info\"},\"secrets\":[],\"workdir\":\"\",\"user\":\"\",\"hostname\":\"\",\"resources\":{\"memoryLimitBytes\":\"536870912\",\"memoryReservationBytes\":\"0\",\"cpuLimitMillis\":\"1500\",\"cpuWeight\":\"0\",\"cpuset\":\"\",\"pidsLimit\":\"0\"},\"mounts\":[],\"networks\":[],\"ports\":[{\"hostIp\":\"\",\"hostPort\":8080,\"containerPort\":8080,\"protocol\":\"PROTOCOL_TCP\"}],\"security\":null,\"restart\":{\"mode\":\"RESTART_MODE_ALWAYS\",\"maxRetries\":0},\"healthCheck\":{\"command\":[\"healthz\"],\"interval\":\"10s\",\"timeout\":\"2s\",\"retries\":0,\"startPeriod\":null},\"pod\":\"\",\"devices\":[],\"tmpfs\":[],\"readOnlyRootfs\":false,\"sysctls\":{},\"logFormat\":\"\"},\"status\":{\"phase\":\"CONTAINER_PHASE_RUNNING\",\"pid\":48213,\"reason\":\"\",\"ipAddresses\":[\"10.88.0.4\"],\"conditions\":[{\"type\":\"Ready\",\"status\":\"CONDITION_STATUS_TRUE\",\"reason\":\"HealthCheckPassed\",\"message\":\"\",\"lastTransitionTime\":\"2026-09-17T08:31:02Z\"}],\"imageDigest\":\"sha256:3f1c0e1b8a9d4f7a2c6e5b4d3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f\"}},{\"meta\":{\"name\":\"worker\",\"namespace\":\"shop\",\"uid\":\"01J8Z3K4M5N6P7Q8R9S0T1V2W4\",\"labels\":{\"app\":\"worker\"},\"annotations\":{},\"createTime\":\"2026-09-16T22:00:00Z\",\"updateTime\":null,\"etag\":\"W/\\\"2\\\"\"},\"spec\":{\"image\":\"registry.ngola.cloud/shop/worker:1.4.2\",\"entrypoint\":[],\"command\":[],\"env\":{},\"secrets\":[],\"workdir\":\"\",\"user\":\"\",\"hostname\":\"\",\"resources\":{\"memoryLimitBytes\":\"1073741824\",\"memoryReservationBytes\":\"0\",\"cpuLimitMillis\":\"0\",\"cpuWeight\":\"0\",\"cpuset\":\"\",\"pidsLimit\":\"256\"},\"mounts\":[{\"volume\":\"queue\",\"target\":\"/var/queue\",\"readOnly\":false}],\"networks\":[],\"ports\":[],\"security\":null,\"restart\":null,\"healthCheck\":null,\"pod\":\"\",\"devices\":[],\"tmpfs\":[],\"readOnlyRootfs\":false,\"sysctls\":{},\"logFormat\":\"\"},\"status\":{\"phase\":\"CONTAINER_PHASE_EXITED\",\"pid\":0,\"exitCode\":137,\"reason\":\"OOMKilled\",\"ipAddresses\":[],\"conditions\":[{\"type\":\"Ready\",\"status\":\"CONDITION_STATUS_FALSE\",\"reason\":\"OOMKilled\",\"message\":\"memory limit reached\",\"lastTransitionTime\":\"2026-09-17T03:12:45.500Z\"}],\"imageDigest\":\"\"}}],\"page\":{\"nextPageToken\":\"eyJvZmZzZXQiOjUwfQ\"}}",
-      "output_omit_unpopulated": "{\"containers\":[{\"meta\":{\"name\":\"web\",\"namespace\":\"shop\",\"uid\":\"01J8Z3K4M5N6P7Q8R9S0T1V2W3\",\"labels\":{\"app\":\"web\",\"tier\":\"frontend\"},\"annotations\":{\"delonix.io/revision\":\"42\"},\"createTime\":\"2026-09-17T08:30:00Z\",\"updateTime\":\"2026-09-17T08:31:02.123456789Z\",\"etag\":\"W/\\\"7\\\"\"},\"spec\":{\"image\":\"registry.ngola.cloud/shop/web:1.4.2\",\"command\":[\"--listen\",\"0.0.0.0:8080\"],\"env\":{\"PORT\":\"8080\",\"RUST_LOG\":\"info\"},\"resources\":{\"memoryLimitBytes\":\"536870912\",\"cpuLimitMillis\":\"1500\"},\"ports\":[{\"hostPort\":8080,\"containerPort\":8080,\"protocol\":\"PROTOCOL_TCP\"}],\"restart\":{\"mode\":\"RESTART_MODE_ALWAYS\"},\"healthCheck\":{\"command\":[\"healthz\"],\"interval\":\"10s\",\"timeout\":\"2s\"}},\"status\":{\"phase\":\"CONTAINER_PHASE_RUNNING\",\"pid\":48213,\"ipAddresses\":[\"10.88.0.4\"],\"conditions\":[{\"type\":\"Ready\",\"status\":\"CONDITION_STATUS_TRUE\",\"reason\":\"HealthCheckPassed\",\"lastTransitionTime\":\"2026-09-17T08:31:02Z\"}],\"imageDigest\":\"sha256:3f1c0e1b8a9d4f7a2c6e5b4d3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f\"}},{\"meta\":{\"name\":\"worker\",\"namespace\":\"shop\",\"uid\":\"01J8Z3K4M5N6P7Q8R9S0T1V2W4\",\"labels\":{\"app\":\"worker\"},\"createTime\":\"2026-09-16T22:00:00Z\",\"etag\":\"W/\\\"2\\\"\"},\"spec\":{\"image\":\"registry.ngola.cloud/shop/worker:1.4.2\",\"resources\":{\"memoryLimitBytes\":\"1073741824\",\"pidsLimit\":\"256\"},\"mounts\":[{\"volume\":\"queue\",\"target\":\"/var/queue\"}]},\"status\":{\"phase\":\"CONTAINER_PHASE_EXITED\",\"exitCode\":137,\"reason\":\"OOMKilled\",\"conditions\":[{\"type\":\"Ready\",\"status\":\"CONDITION_STATUS_FALSE\",\"reason\":\"OOMKilled\",\"message\":\"memory limit reached\",\"lastTransitionTime\":\"2026-09-17T03:12:45.500Z\"}]}}],\"page\":{\"nextPageToken\":\"eyJvZmZzZXQiOjUwfQ\"}}"
+      "output_omit_unpopulated": "{\"containers\":[{\"meta\":{\"name\":\"web\",\"namespace\":\"shop\",\"uid\":\"01J8Z3K4M5N6P7Q8R9S0T1V2W3\",\"labels\":{\"app\":\"web\",\"tier\":\"frontend\"},\"annotations\":{\"delonix.io/revision\":\"42\"},\"createTime\":\"2026-09-17T08:30:00Z\",\"updateTime\":\"2026-09-17T08:31:02.123456789Z\",\"etag\":\"W/\\\"7\\\"\"},\"spec\":{\"image\":\"registry.ngola.cloud/shop/web:1.4.2\",\"command\":[\"--listen\",\"0.0.0.0:8080\"],\"env\":{\"PORT\":\"8080\",\"RUST_LOG\":\"info\"},\"resources\":{\"memoryLimitBytes\":\"536870912\",\"cpuLimitMillis\":\"1500\"},\"ports\":[{\"hostPort\":8080,\"containerPort\":8080,\"protocol\":\"PROTOCOL_TCP\"}],\"restart\":{\"mode\":\"RESTART_MODE_ALWAYS\"},\"healthCheck\":{\"command\":[\"healthz\"],\"interval\":\"10s\",\"timeout\":\"2s\"}},\"status\":{\"phase\":\"CONTAINER_PHASE_RUNNING\",\"pid\":48213,\"ipAddresses\":[\"10.88.0.4\"],\"conditions\":[{\"type\":\"Ready\",\"status\":\"CONDITION_STATUS_TRUE\",\"reason\":\"HealthCheckPassed\",\"lastTransitionTime\":\"2026-09-17T08:31:02Z\"}],\"imageDigest\":\"sha256:3f1c0e1b8a9d4f7a2c6e5b4d3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f\"}},{\"meta\":{\"name\":\"worker\",\"namespace\":\"shop\",\"uid\":\"01J8Z3K4M5N6P7Q8R9S0T1V2W4\",\"labels\":{\"app\":\"worker\"},\"createTime\":\"2026-09-16T22:00:00Z\",\"etag\":\"W/\\\"2\\\"\"},\"spec\":{\"image\":\"registry.ngola.cloud/shop/worker:1.4.2\",\"resources\":{\"memoryLimitBytes\":\"1073741824\",\"pidsLimit\":\"256\"},\"mounts\":[{\"volume\":\"queue\",\"target\":\"/var/queue\"}]},\"status\":{\"phase\":\"CONTAINER_PHASE_EXITED\",\"exitCode\":137,\"reason\":\"OOMKilled\",\"conditions\":[{\"type\":\"Ready\",\"status\":\"CONDITION_STATUS_FALSE\",\"reason\":\"OOMKilled\",\"message\":\"memory limit reached\",\"lastTransitionTime\":\"2026-09-17T03:12:45.500Z\"}]}}],\"page\":{\"nextPageToken\":\"eyJvZmZzZXQiOjUwfQ\"}}",
+      "proto": "Co0DCnwKA3dlYhIEc2hvcBoaMDFKOFozSzRNNU42UDdROFI5UzBUMVYyVzMiCgoDYXBwEgN3ZWIiEAoEdGllchIIZnJvbnRlbmQqGQoTZGVsb25peC5pby9yZXZpc2lvbhICNDIyBgiIyq7VBjoLCMbKrtUGEJWa7zpCBVcvIjciEokBCiNyZWdpc3RyeS5uZ29sYS5jbG91ZC9zaG9wL3dlYjoxLjQuMhoILS1saXN0ZW4aDDAuMC4wLjA6ODA4MCIMCgRQT1JUEgQ4MDgwIhAKCFJVU1RfTE9HEgRpbmZvSgkIgICAgAIY3AtiCBCQPxiQPyABcgIIA3oRCgdoZWFsdGh6EgIIChoCCAIagAEIAhDV+AIqCTEwLjg4LjAuNDIkCgVSZWFkeRABGhFIZWFsdGhDaGVja1Bhc3NlZCoGCMbKrtUGOkdzaGEyNTY6M2YxYzBlMWI4YTlkNGY3YTJjNmU1YjRkM2EyZjFlMGQ5YzhiN2E2ZjVlNGQzYzJiMWEwZjllOGQ3YzZiNWE0ZgrgAQpICgZ3b3JrZXISBHNob3AaGjAxSjhaM0s0TTVONlA3UThSOVMwVDFWMlc0Ig0KA2FwcBIGd29ya2VyMgYI4KKs1QZCBVcvIjIiEkgKJnJlZ2lzdHJ5Lm5nb2xhLmNsb3VkL3Nob3Avd29ya2VyOjEuNC4ySgkIgICAgAQwgAJSExoKL3Zhci9xdWV1ZQoFcXVldWUaSggEGIkBIglPT01LaWxsZWQyOAoFUmVhZHkQAhoJT09NS2lsbGVkIhRtZW1vcnkgbGltaXQgcmVhY2hlZCoMCK21rdUGEIDKte4BEhQKEmV5SnZabVp6WlhRaU9qVXdmUQ=="
     },
     {
       "name": "operation_with_any_result",
@@ -427,7 +432,8 @@
       "bench": true,
       "accepted": true,
       "output": "{\"id\":\"op-01J8Z3M0000000000000000000\",\"state\":\"OPERATION_STATE_SUCCEEDED\",\"target\":\"Container/web\",\"verb\":\"create\",\"progressMessage\":\"started\",\"progressPercent\":100,\"createTime\":\"2026-09-17T08:30:00Z\",\"endTime\":\"2026-09-17T08:30:01.250Z\",\"result\":{\"@type\":\"type.googleapis.com/delonix.node.v1.Container\",\"meta\":{\"name\":\"web\",\"namespace\":\"shop\",\"uid\":\"01J8Z3K4M5N6P7Q8R9S0T1V2W3\",\"labels\":{},\"annotations\":{},\"createTime\":\"2026-09-17T08:30:00Z\",\"updateTime\":null,\"etag\":\"\"},\"spec\":{\"image\":\"nginx\",\"entrypoint\":[],\"command\":[],\"env\":{},\"secrets\":[],\"workdir\":\"\",\"user\":\"\",\"hostname\":\"\",\"resources\":{\"memoryLimitBytes\":\"536870912\",\"memoryReservationBytes\":\"0\",\"cpuLimitMillis\":\"0\",\"cpuWeight\":\"0\",\"cpuset\":\"\",\"pidsLimit\":\"0\"},\"mounts\":[],\"networks\":[],\"ports\":[],\"security\":null,\"restart\":null,\"healthCheck\":null,\"pod\":\"\",\"devices\":[],\"tmpfs\":[],\"readOnlyRootfs\":false,\"sysctls\":{},\"logFormat\":\"\"},\"status\":{\"phase\":\"CONTAINER_PHASE_RUNNING\",\"pid\":48213,\"reason\":\"\",\"ipAddresses\":[],\"conditions\":[],\"imageDigest\":\"\"}},\"error\":null,\"requestId\":\"4f6c2b8e-1d3a-4c5b-9e7f-0a1b2c3d4e5f\",\"traceId\":\"4bf92f3577b34da6a3ce929d0e0e4736\"}",
-      "output_omit_unpopulated": "{\"id\":\"op-01J8Z3M0000000000000000000\",\"state\":\"OPERATION_STATE_SUCCEEDED\",\"target\":\"Container/web\",\"verb\":\"create\",\"progressMessage\":\"started\",\"progressPercent\":100,\"createTime\":\"2026-09-17T08:30:00Z\",\"endTime\":\"2026-09-17T08:30:01.250Z\",\"result\":{\"@type\":\"type.googleapis.com/delonix.node.v1.Container\",\"meta\":{\"name\":\"web\",\"namespace\":\"shop\",\"uid\":\"01J8Z3K4M5N6P7Q8R9S0T1V2W3\",\"createTime\":\"2026-09-17T08:30:00Z\"},\"spec\":{\"image\":\"nginx\",\"resources\":{\"memoryLimitBytes\":\"536870912\"}},\"status\":{\"phase\":\"CONTAINER_PHASE_RUNNING\",\"pid\":48213}},\"requestId\":\"4f6c2b8e-1d3a-4c5b-9e7f-0a1b2c3d4e5f\",\"traceId\":\"4bf92f3577b34da6a3ce929d0e0e4736\"}"
+      "output_omit_unpopulated": "{\"id\":\"op-01J8Z3M0000000000000000000\",\"state\":\"OPERATION_STATE_SUCCEEDED\",\"target\":\"Container/web\",\"verb\":\"create\",\"progressMessage\":\"started\",\"progressPercent\":100,\"createTime\":\"2026-09-17T08:30:00Z\",\"endTime\":\"2026-09-17T08:30:01.250Z\",\"result\":{\"@type\":\"type.googleapis.com/delonix.node.v1.Container\",\"meta\":{\"name\":\"web\",\"namespace\":\"shop\",\"uid\":\"01J8Z3K4M5N6P7Q8R9S0T1V2W3\",\"createTime\":\"2026-09-17T08:30:00Z\"},\"spec\":{\"image\":\"nginx\",\"resources\":{\"memoryLimitBytes\":\"536870912\"}},\"status\":{\"phase\":\"CONTAINER_PHASE_RUNNING\",\"pid\":48213}},\"requestId\":\"4f6c2b8e-1d3a-4c5b-9e7f-0a1b2c3d4e5f\",\"traceId\":\"4bf92f3577b34da6a3ce929d0e0e4736\"}",
+      "proto": "Ch1vcC0wMUo4WjNNMDAwMDAwMDAwMDAwMDAwMDAwMBADGg1Db250YWluZXIvd2ViIgZjcmVhdGUqB3N0YXJ0ZWQwZDoGCIjKrtUGQgsIicqu1QYQgOWad0p7Ci10eXBlLmdvb2dsZWFwaXMuY29tL2RlbG9uaXgubm9kZS52MS5Db250YWluZXISSgovCgN3ZWISBHNob3AaGjAxSjhaM0s0TTVONlA3UThSOVMwVDFWMlczMgYIiMqu1QYSDwoFbmdpbnhKBgiAgICAAhoGCAIQ1fgCWiQ0ZjZjMmI4ZS0xZDNhLTRjNWItOWU3Zi0wYTFiMmMzZDRlNWZiIDRiZjkyZjM1NzdiMzRkYTZhM2NlOTI5ZDBlMGU0NzM2"
     },
     {
       "name": "operation_failed_with_wkt_any",
@@ -451,7 +457,8 @@
       },
       "accepted": true,
       "output": "{\"id\":\"op-2\",\"state\":\"OPERATION_STATE_FAILED\",\"target\":\"\",\"verb\":\"\",\"progressMessage\":\"\",\"progressPercent\":0,\"createTime\":null,\"endTime\":null,\"result\":{\"@type\":\"type.googleapis.com/google.protobuf.Duration\",\"value\":\"3s\"},\"error\":{\"reason\":\"DX_UNAVAILABLE\",\"resource\":\"Container/web\",\"metadata\":{\"provider\":\"libvirt\"},\"retryable\":true,\"retryAfter\":\"0.250s\"},\"requestId\":\"\",\"traceId\":\"\"}",
-      "output_omit_unpopulated": "{\"id\":\"op-2\",\"state\":\"OPERATION_STATE_FAILED\",\"result\":{\"@type\":\"type.googleapis.com/google.protobuf.Duration\",\"value\":\"3s\"},\"error\":{\"reason\":\"DX_UNAVAILABLE\",\"resource\":\"Container/web\",\"metadata\":{\"provider\":\"libvirt\"},\"retryable\":true,\"retryAfter\":\"0.250s\"}}"
+      "output_omit_unpopulated": "{\"id\":\"op-2\",\"state\":\"OPERATION_STATE_FAILED\",\"result\":{\"@type\":\"type.googleapis.com/google.protobuf.Duration\",\"value\":\"3s\"},\"error\":{\"reason\":\"DX_UNAVAILABLE\",\"resource\":\"Container/web\",\"metadata\":{\"provider\":\"libvirt\"},\"retryable\":true,\"retryAfter\":\"0.250s\"}}",
+      "proto": "CgRvcC0yEARKMgosdHlwZS5nb29nbGVhcGlzLmNvbS9nb29nbGUucHJvdG9idWYuRHVyYXRpb24SAggDUj0KDkRYX1VOQVZBSUxBQkxFEg1Db250YWluZXIvd2ViGhMKCHByb3ZpZGVyEgdsaWJ2aXJ0IAEqBRCA5Zp3"
     },
     {
       "name": "log_chunk",
@@ -464,7 +471,8 @@
       "bench": true,
       "accepted": true,
       "output": "{\"stream\":\"LOG_STREAM_STDERR\",\"data\":\"MjAyNi0wOS0xN1QwODozMTowMlogRVJST1IgY29ubmVjdGlvbiByZWZ1c2VkOiBkYi5zaG9wLnN2Yzo1NDMyCg==\",\"timestampUnixNanos\":\"1758097862123456789\"}",
-      "output_omit_unpopulated": "{\"stream\":\"LOG_STREAM_STDERR\",\"data\":\"MjAyNi0wOS0xN1QwODozMTowMlogRVJST1IgY29ubmVjdGlvbiByZWZ1c2VkOiBkYi5zaG9wLnN2Yzo1NDMyCg==\",\"timestampUnixNanos\":\"1758097862123456789\"}"
+      "output_omit_unpopulated": "{\"stream\":\"LOG_STREAM_STDERR\",\"data\":\"MjAyNi0wOS0xN1QwODozMTowMlogRVJST1IgY29ubmVjdGlvbiByZWZ1c2VkOiBkYi5zaG9wLnN2Yzo1NDMyCg==\",\"timestampUnixNanos\":\"1758097862123456789\"}",
+      "proto": "CAISQDIwMjYtMDktMTdUMDg6MzE6MDJaIEVSUk9SIGNvbm5lY3Rpb24gcmVmdXNlZDogZGIuc2hvcC5zdmM6NTQzMgoYlZL4wY2WgbMY"
     },
     {
       "name": "update_container_request_field_mask",
@@ -486,7 +494,8 @@
       },
       "accepted": true,
       "output": "{\"namespace\":\"shop\",\"name\":\"web\",\"container\":{\"meta\":null,\"spec\":{\"image\":\"\",\"entrypoint\":[],\"command\":[],\"env\":{\"A\":\"1\"},\"secrets\":[],\"workdir\":\"\",\"user\":\"\",\"hostname\":\"\",\"resources\":{\"memoryLimitBytes\":\"1\",\"memoryReservationBytes\":\"0\",\"cpuLimitMillis\":\"0\",\"cpuWeight\":\"0\",\"cpuset\":\"\",\"pidsLimit\":\"0\"},\"mounts\":[],\"networks\":[],\"ports\":[],\"security\":null,\"restart\":null,\"healthCheck\":null,\"pod\":\"\",\"devices\":[],\"tmpfs\":[],\"readOnlyRootfs\":false,\"sysctls\":{},\"logFormat\":\"\"},\"status\":null},\"updateMask\":\"spec.env,spec.resources.memoryLimitBytes\"}",
-      "output_omit_unpopulated": "{\"namespace\":\"shop\",\"name\":\"web\",\"container\":{\"spec\":{\"env\":{\"A\":\"1\"},\"resources\":{\"memoryLimitBytes\":\"1\"}}},\"updateMask\":\"spec.env,spec.resources.memoryLimitBytes\"}"
+      "output_omit_unpopulated": "{\"namespace\":\"shop\",\"name\":\"web\",\"container\":{\"spec\":{\"env\":{\"A\":\"1\"},\"resources\":{\"memoryLimitBytes\":\"1\"}}},\"updateMask\":\"spec.env,spec.resources.memoryLimitBytes\"}",
+      "proto": "CgRzaG9wEgN3ZWIaDhIMIgYKAUESATFKAggBIi0KCHNwZWMuZW52CiFzcGVjLnJlc291cmNlcy5tZW1vcnlfbGltaXRfYnl0ZXM="
     },
     {
       "name": "empty_container",
@@ -510,7 +519,8 @@
       },
       "accepted": true,
       "output": "{\"namespace\":\"\",\"name\":\"\",\"labels\":{},\"annotations\":{},\"spec\":{\"image\":\"\",\"vcpus\":0,\"memoryBytes\":\"0\",\"diskBytes\":\"0\",\"networks\":[],\"cloudInit\":null,\"provider\":\"\",\"requiredCapabilities\":[],\"extensions\":{\"byProvider\":{\"libvirt\":{}}},\"restart\":\"RESTART_MODE_UNSPECIFIED\"},\"requestId\":\"\",\"waitUntilReachable\":false}",
-      "output_omit_unpopulated": "{\"spec\":{\"extensions\":{\"byProvider\":{\"libvirt\":{}}}}}"
+      "output_omit_unpopulated": "{\"spec\":{\"extensions\":{\"byProvider\":{\"libvirt\":{}}}}}",
+      "proto": "Kg9KDQoLCgdsaWJ2aXJ0EgA="
     },
     {
       "name": "unknown_field_is_discarded",
@@ -526,7 +536,8 @@
       },
       "accepted": true,
       "output": "{\"name\":\"web\",\"namespace\":\"\"}",
-      "output_omit_unpopulated": "{\"name\":\"web\"}"
+      "output_omit_unpopulated": "{\"name\":\"web\"}",
+      "proto": "CgN3ZWI="
     },
     {
       "name": "null_fields",
@@ -541,7 +552,8 @@
       },
       "accepted": true,
       "output": "{\"namespace\":\"\",\"name\":\"\",\"labels\":{},\"annotations\":{},\"spec\":{\"image\":\"\",\"entrypoint\":[],\"command\":[],\"env\":{},\"secrets\":[],\"workdir\":\"\",\"user\":\"\",\"hostname\":\"\",\"resources\":null,\"mounts\":[],\"networks\":[],\"ports\":[],\"security\":null,\"restart\":null,\"healthCheck\":null,\"pod\":\"\",\"devices\":[],\"tmpfs\":[],\"readOnlyRootfs\":false,\"sysctls\":{},\"logFormat\":\"\"},\"requestId\":\"\",\"start\":false}",
-      "output_omit_unpopulated": "{\"spec\":{}}"
+      "output_omit_unpopulated": "{\"spec\":{}}",
+      "proto": "KgA="
     },
     {
       "name": "unknown_enum_name",
@@ -561,7 +573,8 @@
       },
       "accepted": true,
       "output": "{\"stream\":7,\"data\":\"\",\"timestampUnixNanos\":\"0\"}",
-      "output_omit_unpopulated": "{\"stream\":7}"
+      "output_omit_unpopulated": "{\"stream\":7}",
+      "proto": "CAc="
     },
     {
       "name": "oneof_twice",
@@ -571,7 +584,7 @@
         "hostPath": "/b"
       },
       "accepted": false,
-      "error": "proto: (line 1:17): error parsing \"hostPath\", oneof delonix.node.v1.Mount.source is already set"
+      "error": "proto: (line 1:17): error parsing \"hostPath\", oneof delonix.node.v1.Mount.source is already set"
     },
     {
       "name": "int64_out_of_range",
@@ -580,7 +593,7 @@
         "memoryLimitBytes": "9223372036854775808"
       },
       "accepted": false,
-      "error": "proto: (line 1:22): invalid value for int64 field memoryLimitBytes: \"9223372036854775808\""
+      "error": "proto: (line 1:22): invalid value for int64 field memoryLimitBytes: \"9223372036854775808\""
     },
     {
       "name": "int64_exponent",
@@ -591,7 +604,8 @@
       },
       "accepted": true,
       "output": "{\"memoryLimitBytes\":\"1000\",\"memoryReservationBytes\":\"0\",\"cpuLimitMillis\":\"0\",\"cpuWeight\":\"200\",\"cpuset\":\"\",\"pidsLimit\":\"0\"}",
-      "output_omit_unpopulated": "{\"memoryLimitBytes\":\"1000\",\"cpuWeight\":\"200\"}"
+      "output_omit_unpopulated": "{\"memoryLimitBytes\":\"1000\",\"cpuWeight\":\"200\"}",
+      "proto": "COgHIMgB"
     },
     {
       "name": "int32_fractional",
@@ -600,7 +614,7 @@
         "hostPort": 80.5
       },
       "accepted": false,
-      "error": "proto: (line 1:14): invalid value for int32 field hostPort: 80.5"
+      "error": "proto: (line 1:14): invalid value for int32 field hostPort: 80.5"
     },
     {
       "name": "bytes_url_safe_unpadded",
@@ -610,7 +624,8 @@
       },
       "accepted": true,
       "output": "{\"stream\":\"LOG_STREAM_UNSPECIFIED\",\"data\":\"+/8=\",\"timestampUnixNanos\":\"0\"}",
-      "output_omit_unpopulated": "{\"data\":\"+/8=\"}"
+      "output_omit_unpopulated": "{\"data\":\"+/8=\"}",
+      "proto": "EgL7/w=="
     },
     {
       "name": "timestamp_with_offset",
@@ -620,7 +635,8 @@
       },
       "accepted": true,
       "output": "{\"type\":\"\",\"status\":\"CONDITION_STATUS_UNSPECIFIED\",\"reason\":\"\",\"message\":\"\",\"lastTransitionTime\":\"2026-09-17T09:00:00Z\"}",
-      "output_omit_unpopulated": "{\"lastTransitionTime\":\"2026-09-17T09:00:00Z\"}"
+      "output_omit_unpopulated": "{\"lastTransitionTime\":\"2026-09-17T09:00:00Z\"}",
+      "proto": "KgYIkNiu1QY="
     },
     {
       "name": "timestamp_lowercase",
@@ -629,7 +645,7 @@
         "lastTransitionTime": "2026-09-17t10:00:00z"
       },
       "accepted": false,
-      "error": "proto: (line 1:24): invalid google.protobuf.Timestamp value \"2026-09-17t10:00:00z\""
+      "error": "proto: (line 1:24): invalid google.protobuf.Timestamp value \"2026-09-17t10:00:00z\""
     },
     {
       "name": "duration_negative_fraction",
@@ -639,7 +655,8 @@
       },
       "accepted": true,
       "output": "{\"reason\":\"\",\"resource\":\"\",\"metadata\":{},\"retryable\":false,\"retryAfter\":\"-0.000001s\"}",
-      "output_omit_unpopulated": "{\"retryAfter\":\"-0.000001s\"}"
+      "output_omit_unpopulated": "{\"retryAfter\":\"-0.000001s\"}",
+      "proto": "KgsQmPj/////////AQ=="
     },
     {
       "name": "any_unknown_type",
@@ -651,7 +668,7 @@
         }
       },
       "accepted": false,
-      "error": "proto: (line 1:22): unable to resolve \"type.googleapis.com/nope.Missing\": \"not found\""
+      "error": "proto: (line 1:22): unable to resolve \"type.googleapis.com/nope.Missing\": \"not found\""
     },
     {
       "name": "field_mask_snake_case_rejected",
@@ -660,7 +677,7 @@
         "updateMask": "spec.read_only_rootfs"
       },
       "accepted": false,
-      "error": "proto: (line 1:16): google.protobuf.FieldMask.paths contains invalid path: \"spec.read_only_rootfs\""
+      "error": "proto: (line 1:16): google.protobuf.FieldMask.paths contains invalid path: \"spec.read_only_rootfs\""
     },
     {
       "name": "duplicate_key",
@@ -670,7 +687,7 @@
         "name": "b"
       },
       "accepted": false,
-      "error": "proto: (line 1:15): duplicate field \"name\""
+      "error": "proto: (line 1:15): duplicate field \"name\""
     },
     {
       "name": "proto_and_json_name_both",
@@ -680,7 +697,7 @@
         "request_id": "b"
       },
       "accepted": false,
-      "error": "proto: (line 1:20): duplicate field \"request_id\""
+      "error": "proto: (line 1:20): duplicate field \"request_id\""
     },
     {
       "name": "not_an_object",
@@ -689,7 +706,7 @@
         "web"
       ],
       "accepted": false,
-      "error": "proto: syntax error (line 1:1): unexpected token ["
+      "error": "proto: syntax error (line 1:1): unexpected token ["
     }
   ]
 }
