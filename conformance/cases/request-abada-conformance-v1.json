@@ -1,0 +1,5 @@
+{"cases": [
+ {"name": "top-int32", "method": "GET", "target": "/v1/top/int32/0x1f?f_string=a+b&nested.f_int64=-5"},
+ {"name": "top-int32-bad", "method": "GET", "target": "/v1/top/int32/abc"},
+ {"name": "form-fallback", "method": "POST", "target": "/v1/top/string/x?f_int32=1", "headers": [["Content-Type", "application/x-www-form-urlencoded"]], "body": "f_int32=2&f_bool=true"}
+]}

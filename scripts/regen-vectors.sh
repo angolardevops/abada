@@ -18,6 +18,35 @@ rm -rf "$WORK/internal/abadaoracle"
 mkdir -p "$WORK/internal/abadaoracle"
 cp "$ROOT"/conformance/oracle/*.go "$WORK/internal/abadaoracle/"
 
+# Test protos: conformance/protos/<pkg path>/*.proto compile into
+# conformance/contracts/<pkg with dashes>.binpb, so they are routed and
+# measured like a real contract. google/api comes from the delonix contract's
+# set, google/protobuf from protoc's include directory. The binary is
+# committed; --check fails if the .proto and the .binpb disagree.
+PROTOC="${PROTOC:-protoc}"
+PROTOC_INCLUDE="${PROTOC_INCLUDE:-$(dirname "$(command -v "$PROTOC")")/../include}"
+for pdir in "$ROOT"/conformance/protos/abada/conformance/v1; do
+  [ -d "$pdir" ] || continue
+  rel="${pdir#"$ROOT"/conformance/protos/}"
+  pname="$(echo "$rel" | tr '/' '-')"
+  ptmp="$(mktemp "$ROOT/conformance/contracts/.$pname.XXXXXX")"
+  (cd "$ROOT/conformance/protos" && "$PROTOC" --include_imports \
+    --descriptor_set_in="$ROOT/conformance/contracts/delonix-node-v1.binpb" \
+    -I . -I "$PROTOC_INCLUDE" -o "$ptmp" "$rel"/*.proto)
+  pout="$ROOT/conformance/contracts/$pname.binpb"
+  if [ "${1:-}" = "--check" ]; then
+    if ! cmp -s "$ptmp" "$pout"; then
+      rm -f "$ptmp"
+      echo "$pout is stale: run scripts/regen-vectors.sh ($("$PROTOC" --version))" >&2
+      exit 1
+    fi
+    rm -f "$ptmp"
+  else
+    mv "$ptmp" "$pout"
+    echo "wrote $pout"
+  fi
+done
+
 out="$ROOT/conformance/vectors/path.json"
 tmp="$(mktemp "$ROOT/conformance/vectors/.path.XXXXXX")"
 trap 'rm -f "$tmp"' EXIT
@@ -86,6 +115,57 @@ for jcases in "$ROOT"/conformance/cases/json-*.json; do
   else
     mv "$jtmp" "$jout"
     echo "wrote $jout"
+  fi
+done
+
+# Requests: what the code protoc-gen-grpc-gateway generates puts in the gRPC
+# request for an HTTP request. The generated Go code is not committed: it is
+# produced here, in the cache, from each contract with the plugins at pinned
+# versions (protoc-gen-go from grpc-gateway's go.mod, protoc-gen-grpc-gateway
+# from the checkout itself), then conformance/cases/request-<name>.json is
+# replayed through it.
+PROTOC_GEN_GO_GRPC_VERSION="${PROTOC_GEN_GO_GRPC_VERSION:-v1.5.1}"
+BIN="$(dirname "$WORK")/bin"
+mkdir -p "$BIN" "$WORK/internal/abadaoracle/e2e/protogen"
+cp "$ROOT"/conformance/oracle/e2e/*.go "$WORK/internal/abadaoracle/e2e/"
+cp "$ROOT"/conformance/oracle/e2e/protogen/*.go "$WORK/internal/abadaoracle/e2e/protogen/"
+(cd "$WORK" && go build -o "$BIN/protoc-gen-grpc-gateway-$GATEWAY_TAG" ./protoc-gen-grpc-gateway \
+  && go build -o "$BIN/protoc-gen-go-$GATEWAY_TAG" google.golang.org/protobuf/cmd/protoc-gen-go)
+if [ ! -x "$BIN/protoc-gen-go-grpc-$PROTOC_GEN_GO_GRPC_VERSION" ]; then
+  gtmp="$(mktemp -d "$BIN/.go-grpc.XXXXXX")"
+  GOBIN="$gtmp" go install "google.golang.org/grpc/cmd/protoc-gen-go-grpc@$PROTOC_GEN_GO_GRPC_VERSION"
+  mv "$gtmp/protoc-gen-go-grpc" "$BIN/protoc-gen-go-grpc-$PROTOC_GEN_GO_GRPC_VERSION"
+  rmdir "$gtmp"
+fi
+for binpb in "$ROOT"/conformance/contracts/*.binpb; do
+  [ -e "$binpb" ] || continue
+  name="$(basename "$binpb" .binpb)"
+  (cd "$WORK" && go run ./internal/abadaoracle/e2e/protogen -set "$binpb" \
+    -importpath "github.com/grpc-ecosystem/grpc-gateway/v2/internal/abadaoracle/e2e/gen/$(echo "$name" | tr -d -)" \
+    -module github.com/grpc-ecosystem/grpc-gateway/v2 -out . \
+    -plugin "$BIN/protoc-gen-go-$GATEWAY_TAG" \
+    -plugin "$BIN/protoc-gen-go-grpc-$PROTOC_GEN_GO_GRPC_VERSION" \
+    -plugin "$BIN/protoc-gen-grpc-gateway-$GATEWAY_TAG")
+done
+for rcases in "$ROOT"/conformance/cases/request-*.json; do
+  [ -e "$rcases" ] || continue
+  name="$(basename "$rcases" .json)"
+  name="${name#request-}"
+  rtmp="$(mktemp "$ROOT/conformance/vectors/.request-$name.XXXXXX")"
+  (cd "$WORK" && ABADA_GENERATOR="grpc-gateway $GATEWAY_TAG, protoc-gen-go-grpc $PROTOC_GEN_GO_GRPC_VERSION, $(go version | cut -d' ' -f3)" \
+    go run ./internal/abadaoracle/e2e "$ROOT/conformance/contracts/$name.binpb" "$(cat "$ROOT/conformance/contracts/$name.source")") \
+    < "$rcases" > "$rtmp"
+  rout="$ROOT/conformance/vectors/request-$name.json"
+  if [ "${1:-}" = "--check" ]; then
+    if ! diff <(grep -v '"generator"' "$rout") <(grep -v '"generator"' "$rtmp") > /dev/null; then
+      rm -f "$rtmp"
+      echo "$rout is stale: run scripts/regen-vectors.sh" >&2
+      exit 1
+    fi
+    rm -f "$rtmp"
+  else
+    mv "$rtmp" "$rout"
+    echo "wrote $rout"
   fi
 done
 

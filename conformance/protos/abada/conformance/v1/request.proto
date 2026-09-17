@@ -1,0 +1,252 @@
+// Kinds and shapes the delonix.node.v1 contract does not have, so that turning
+// an HTTP request into a gRPC request message can be measured for each of
+// them against the code protoc-gen-grpc-gateway generates. Not a real API.
+syntax = "proto3";
+
+package abada.conformance.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option go_package = "github.com/angolardevops/abada/conformance/gen/conformancev1;conformancev1";
+
+enum Color {
+  COLOR_UNSPECIFIED = 0;
+  RED = 1;
+  GREEN = 2;
+  EIGHT = 8;
+  TEN = 10;
+}
+
+message Everything {
+  double f_double = 1;
+  float f_float = 2;
+  int32 f_int32 = 3;
+  int64 f_int64 = 4;
+  uint32 f_uint32 = 5;
+  uint64 f_uint64 = 6;
+  sint32 f_sint32 = 7;
+  sint64 f_sint64 = 8;
+  fixed32 f_fixed32 = 9;
+  fixed64 f_fixed64 = 10;
+  sfixed32 f_sfixed32 = 11;
+  sfixed64 f_sfixed64 = 12;
+  bool f_bool = 13;
+  string f_string = 14;
+  bytes f_bytes = 15;
+  Color f_enum = 16;
+
+  repeated string r_string = 20;
+  repeated int32 r_int32 = 21;
+  repeated Color r_enum = 22;
+  repeated bytes r_bytes = 23;
+  repeated double r_double = 24;
+  repeated google.protobuf.Timestamp r_timestamp = 25;
+  repeated Everything items = 26;
+
+  map<string, string> m_str = 30;
+  map<int64, int32> m_int = 31;
+  map<bool, Color> m_enum = 32;
+  map<string, Everything> m_msg = 33;
+
+  google.protobuf.Timestamp f_timestamp = 40;
+  google.protobuf.Duration f_duration = 41;
+  google.protobuf.DoubleValue w_double = 42;
+  google.protobuf.FloatValue w_float = 43;
+  google.protobuf.Int64Value w_int64 = 44;
+  google.protobuf.UInt64Value w_uint64 = 45;
+  google.protobuf.Int32Value w_int32 = 46;
+  google.protobuf.UInt32Value w_uint32 = 47;
+  google.protobuf.BoolValue w_bool = 48;
+  google.protobuf.StringValue w_string = 49;
+  google.protobuf.BytesValue w_bytes = 50;
+  google.protobuf.FieldMask f_mask = 51;
+  google.protobuf.Struct f_struct = 52;
+  google.protobuf.Value f_value = 53;
+
+  oneof choice {
+    string o_str = 60;
+    int32 o_int = 61;
+    Everything o_msg = 62;
+  }
+
+  optional string opt_str = 70;
+  optional int32 opt_int = 71;
+
+  string renamed = 80 [json_name = "customName"];
+
+  Everything nested = 90;
+}
+
+// A request with exactly one FieldMask, not named update_mask.
+message PatchRequest {
+  string name = 1;
+  Everything item = 2;
+  google.protobuf.FieldMask paths_to_update = 3;
+  string note = 4;
+}
+
+// Two FieldMasks: the generated code computes neither.
+message PatchTwoMasksRequest {
+  string name = 1;
+  Everything item = 2;
+  google.protobuf.FieldMask first = 3;
+  google.protobuf.FieldMask second = 4;
+}
+
+service PathService {
+  // A path variable to a field of each kind at the top of the request: the
+  // generated code converts these with runtime.<Kind>.
+  rpc Top(Everything) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      get: "/v1/top/double/{f_double}"
+      additional_bindings { get: "/v1/top/float/{f_float}" }
+      additional_bindings { get: "/v1/top/int32/{f_int32}" }
+      additional_bindings { get: "/v1/top/int64/{f_int64}" }
+      additional_bindings { get: "/v1/top/uint32/{f_uint32}" }
+      additional_bindings { get: "/v1/top/uint64/{f_uint64}" }
+      additional_bindings { get: "/v1/top/sint32/{f_sint32}" }
+      additional_bindings { get: "/v1/top/sint64/{f_sint64}" }
+      additional_bindings { get: "/v1/top/fixed32/{f_fixed32}" }
+      additional_bindings { get: "/v1/top/fixed64/{f_fixed64}" }
+      additional_bindings { get: "/v1/top/sfixed32/{f_sfixed32}" }
+      additional_bindings { get: "/v1/top/sfixed64/{f_sfixed64}" }
+      additional_bindings { get: "/v1/top/bool/{f_bool}" }
+      additional_bindings { get: "/v1/top/string/{f_string}" }
+      additional_bindings { get: "/v1/top/bytes/{f_bytes}" }
+      additional_bindings { get: "/v1/top/enum/{f_enum}" }
+      additional_bindings { get: "/v1/top/rstring/{r_string}" }
+      additional_bindings { get: "/v1/top/rint32/{r_int32}" }
+      additional_bindings { get: "/v1/top/renum/{r_enum}" }
+      additional_bindings { get: "/v1/top/rbytes/{r_bytes}" }
+      additional_bindings { get: "/v1/top/rdouble/{r_double}" }
+      additional_bindings { get: "/v1/top/timestamp/{f_timestamp}" }
+      additional_bindings { get: "/v1/top/duration/{f_duration}" }
+      additional_bindings { get: "/v1/top/wdouble/{w_double}" }
+      additional_bindings { get: "/v1/top/wfloat/{w_float}" }
+      additional_bindings { get: "/v1/top/wint64/{w_int64}" }
+      additional_bindings { get: "/v1/top/wuint64/{w_uint64}" }
+      additional_bindings { get: "/v1/top/wint32/{w_int32}" }
+      additional_bindings { get: "/v1/top/wuint32/{w_uint32}" }
+      additional_bindings { get: "/v1/top/wbool/{w_bool}" }
+      additional_bindings { get: "/v1/top/wstring/{w_string}" }
+      additional_bindings { get: "/v1/top/wbytes/{w_bytes}" }
+      additional_bindings { get: "/v1/top/oneof/{o_str}" }
+      additional_bindings { get: "/v1/top/renamed/{renamed}" }
+      additional_bindings { get: "/v1/top/two/{f_string}/{f_int32}" }
+      additional_bindings { get: "/v1/top/{f_string=projects/*/locations/**}:list" }
+    };
+  }
+
+  // The same through a message: the generated code calls
+  // runtime.PopulateFieldFromPath, which parses differently. Maps, messages
+  // and the well-known types without a runtime converter (FieldMask, Struct,
+  // Value) are refused as path parameters by the generator.
+  rpc Nested(Everything) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      get: "/v1/nested/double/{nested.f_double}"
+      additional_bindings { get: "/v1/nested/float/{nested.f_float}" }
+      additional_bindings { get: "/v1/nested/int32/{nested.f_int32}" }
+      additional_bindings { get: "/v1/nested/int64/{nested.f_int64}" }
+      additional_bindings { get: "/v1/nested/uint32/{nested.f_uint32}" }
+      additional_bindings { get: "/v1/nested/uint64/{nested.f_uint64}" }
+      additional_bindings { get: "/v1/nested/sint64/{nested.f_sint64}" }
+      additional_bindings { get: "/v1/nested/fixed64/{nested.f_fixed64}" }
+      additional_bindings { get: "/v1/nested/bool/{nested.f_bool}" }
+      additional_bindings { get: "/v1/nested/string/{nested.f_string}" }
+      additional_bindings { get: "/v1/nested/bytes/{nested.f_bytes}" }
+      additional_bindings { get: "/v1/nested/enum/{nested.f_enum}" }
+      additional_bindings { get: "/v1/nested/rstring/{nested.r_string}" }
+      additional_bindings { get: "/v1/nested/renum/{nested.r_enum}" }
+      additional_bindings { get: "/v1/nested/timestamp/{nested.f_timestamp}" }
+      additional_bindings { get: "/v1/nested/duration/{nested.f_duration}" }
+      additional_bindings { get: "/v1/nested/wint64/{nested.w_int64}" }
+      additional_bindings { get: "/v1/nested/wbool/{nested.w_bool}" }
+      additional_bindings { get: "/v1/nested/wbytes/{nested.w_bytes}" }
+      additional_bindings { get: "/v1/nested/oneof/{nested.o_str}" }
+      additional_bindings { get: "/v1/nested/oneofmsg/{o_msg.f_string}" }
+      additional_bindings { get: "/v1/nested/deep/{nested.nested.f_string}/{nested.f_int32}" }
+      additional_bindings { get: "/v1/nested/renamed/{nested.renamed}" }
+      additional_bindings { get: "/v1/nested/{nested.f_string=a/*}/{f_string=b/**}" }
+    };
+  }
+}
+
+service QueryService {
+  rpc Query(Everything) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      get: "/v1/query"
+      additional_bindings { get: "/v1/query/{f_string}" }
+      additional_bindings { get: "/v1/query/nested/{nested.f_string}" }
+      additional_bindings { post: "/v1/query/nobody" }
+      additional_bindings { delete: "/v1/query/{f_string}" }
+    };
+  }
+
+  rpc Stream(Everything) returns (stream google.protobuf.Empty) {
+    option (google.api.http) = {
+      get: "/v1/stream/{f_string}"
+    };
+  }
+}
+
+service BodyService {
+  rpc Body(Everything) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/body/star/{f_string}"
+      body: "*"
+      additional_bindings { post: "/v1/body/star" body: "*" }
+      additional_bindings { put: "/v1/body/star/{f_string}" body: "*" }
+      additional_bindings { post: "/v1/body/nested/{f_string}" body: "nested" }
+      additional_bindings { post: "/v1/body/int64" body: "f_int64" }
+      additional_bindings { post: "/v1/body/string" body: "f_string" }
+      additional_bindings { post: "/v1/body/bool" body: "f_bool" }
+      additional_bindings { post: "/v1/body/double" body: "f_double" }
+      additional_bindings { post: "/v1/body/bytes" body: "f_bytes" }
+      additional_bindings { post: "/v1/body/enum" body: "f_enum" }
+      additional_bindings { post: "/v1/body/rstring" body: "r_string" }
+      additional_bindings { post: "/v1/body/rint32" body: "r_int32" }
+      additional_bindings { post: "/v1/body/renum" body: "r_enum" }
+      additional_bindings { post: "/v1/body/items" body: "items" }
+      additional_bindings { post: "/v1/body/mstr" body: "m_str" }
+      additional_bindings { post: "/v1/body/mint" body: "m_int" }
+      additional_bindings { post: "/v1/body/mmsg" body: "m_msg" }
+      additional_bindings { post: "/v1/body/timestamp" body: "f_timestamp" }
+      additional_bindings { post: "/v1/body/wint64" body: "w_int64" }
+      additional_bindings { post: "/v1/body/struct" body: "f_struct" }
+      additional_bindings { post: "/v1/body/oneofmsg" body: "o_msg" }
+      additional_bindings { post: "/v1/body/optstr" body: "opt_str" }
+    };
+  }
+
+  // response_body selects what the response writer encodes; the request side
+  // is the same as without it.
+  rpc Response(Everything) returns (Everything) {
+    option (google.api.http) = {
+      get: "/v1/response/{f_string}"
+      response_body: "nested"
+      additional_bindings { post: "/v1/response" body: "*" response_body: "r_string" }
+    };
+  }
+
+  rpc Patch(PatchRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      patch: "/v1/patch/{name}"
+      body: "item"
+      additional_bindings { patch: "/v1/patch/star/{name}" body: "*" }
+      additional_bindings { put: "/v1/patch/put/{name}" body: "item" }
+    };
+  }
+
+  rpc PatchTwoMasks(PatchTwoMasksRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      patch: "/v1/patchtwo/{name}"
+      body: "item"
+    };
+  }
+}
