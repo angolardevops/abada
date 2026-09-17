@@ -32,7 +32,8 @@ explicitly and say which one you used.
 4. **Vectors.** `conformance/vectors/` changes must be explained by a case or
    oracle change in the same diff. Run `git diff --stat` on them; a large
    unexplained change is a finding. If Go is available, run
-   `flock ~/.cache/abada-ref/.lock scripts/regen-vectors.sh --check` and
+   `scripts/check.sh` (or just
+   `flock "${ABADA_REF_DIR:-$HOME/.cache/abada-ref}/.lock" scripts/regen-vectors.sh --check`) and
    report the output verbatim.
 5. **Replay completeness.** The Rust test compares every field the vector
    records (status, headers, body, trailers, bindings, received message…).

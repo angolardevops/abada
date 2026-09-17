@@ -4,7 +4,7 @@
 - every relative Markdown link in the harness and docs resolves;
 - skills and reviewer agents have frontmatter whose name matches the file;
 - AGENTS.md lists every workspace member, skill, reviewer and ADR, and nothing
-  that does not exist;
+  that does not exist, and every normal dependency is in its crate's allow-list;
 - the guard hook refuses and allows what scripts/harness/guard_cases.json says.
 """
 import json
@@ -68,6 +68,19 @@ def main() -> int:
         name = tomllib.loads((ROOT / m / "Cargo.toml").read_text())["package"]["name"]
         if f"| `{name}` |" not in agents_md:
             err(f"AGENTS.md §2: workspace member `{name}` ({m}) is not in the crate table")
+    # "May depend on" column: the allow-list for normal dependencies
+    rows = {m.group(1): m.group(2) for m in
+            re.finditer(r"^\| `([a-z0-9-]+)` \|[^|]*\|([^|]*)\|", agents_md, re.M)}
+    for m in members:
+        manifest = tomllib.loads((ROOT / m / "Cargo.toml").read_text())
+        name = manifest["package"]["name"]
+        allowed_text = rows.get(name, "")
+        if "anything" in allowed_text:
+            continue
+        allowed = set(re.findall(r"`([a-z0-9_-]+)`", allowed_text.split("never")[0]))
+        for dep in manifest.get("dependencies", {}):
+            if dep not in allowed:
+                err(f"{m}/Cargo.toml: dependency `{dep}` is not in the AGENTS.md §2 allow-list for `{name}`")
     listed = set(re.findall(r"^\| `([a-z0-9-]+)` \|", agents_md, re.M))
     names = {tomllib.loads((ROOT / m / "Cargo.toml").read_text())["package"]["name"] for m in members}
     for n in listed - names:
@@ -111,6 +124,8 @@ def main() -> int:
                             text=True, capture_output=True).returncode
         if (rc == 2) != want:
             err(f"guard: {'allowed' if rc != 2 else 'refused'} {json.dumps(case['tool_input'])}")
+    if not (ROOT / "scripts/harness/install-git-hooks.sh").exists():
+        err("scripts/harness/install-git-hooks.sh: missing")
     settings = json.loads((ROOT / ".claude/settings.json").read_text())
     if "scripts/harness/guard.py" not in json.dumps(settings):
         err(".claude/settings.json: guard hook not installed")

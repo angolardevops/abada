@@ -2,7 +2,8 @@
 
 `abada` is a Rust equivalent of Go's [grpc-gateway]: it reads the
 `google.api.http` annotations of a `.proto` and produces a REST/JSON front for a
-tonic gRPC service. Status: **proposed**, nothing implemented yet.
+tonic gRPC service. Status: **pre-release** — the Progress table below says what
+is implemented and how it is proven.
 
 [grpc-gateway]: https://github.com/grpc-ecosystem/grpc-gateway
 

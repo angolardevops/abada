@@ -14,7 +14,7 @@ its evidence, so the next contributor does not re-open it by preference.
 - a dependency of weight enters `abada` (runtime), or `unsafe` does;
 - one of the four properties in DESIGN.md is weakened or reinterpreted;
 - an item of the v0.1 In/Out scope moves;
-- an "Open decision" in DESIGN.md is settled;
+- a decision DESIGN.md leaves open is settled;
 - a deliberate, permanent deviation from grpc-gateway is chosen (a small
   deviation forced by a Rust type is written in DESIGN.md instead).
 
@@ -67,7 +67,7 @@ Explicitly.
 
 ## After accepting
 
-- DESIGN.md: replace the open decision with a pointer; update Progress.
+- DESIGN.md: replace the open question with a pointer to the ADR; update Progress.
 - AGENTS.md §6: add a row (`scripts/check-harness.py` fails otherwise).
 - If a skill's rules change because of it, update the skill in the same PR.
 
