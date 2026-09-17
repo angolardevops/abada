@@ -7,14 +7,20 @@
 //! them. Framing headers (`content-length`, `transfer-encoding`, `date`) are
 //! the HTTP server's business and are not set here.
 //!
-//! Details are the one part that needs a type registry: protojson renders an
-//! `Any` by resolving its type, and when it cannot, grpc-gateway answers `500`
-//! with a fixed body. abada has no registry yet (the JSON transcoding decision
-//! is open), so every detail except an empty `Any` takes that path — see
-//! `docs/DESIGN.md`.
+//! The body is `google.rpc.Status` through [`crate::json::Marshaler`], so
+//! details are rendered the way protojson renders an `Any`: by resolving the
+//! type URL in the marshaler's [`TypeRegistry`](crate::json::TypeRegistry).
+//! When a detail cannot be rendered (unknown type, bytes that do not decode,
+//! a value without a type), grpc-gateway answers `500` with a fixed body, and
+//! so does abada. Which types resolve depends on the registry, as in Go it
+//! depends on what the binary links — see `docs/DESIGN.md`.
+
+use std::sync::OnceLock;
 
 use http::{HeaderMap, HeaderName, HeaderValue, StatusCode, header};
+use prost_reflect::{DynamicMessage, Value};
 
+use crate::json::Marshaler;
 use crate::path::RouteOutcome;
 
 /// `google.protobuf.Any`, still encoded.
@@ -132,10 +138,28 @@ fn go_to_lower(s: &[u8]) -> Vec<u8> {
     out
 }
 
+fn default_marshaler() -> &'static Marshaler {
+    static DEFAULT: OnceLock<Marshaler> = OnceLock::new();
+    DEFAULT.get_or_init(Marshaler::default)
+}
+
 impl ErrorResponse {
-    /// `DefaultHTTPErrorHandler` for a status returned by an RPC. `metadata`
-    /// is `None` when the call produced none.
+    /// `DefaultHTTPErrorHandler` for a status returned by an RPC, with the
+    /// default marshaler: details resolve against the well-known types and
+    /// `google.rpc.Status` only. `metadata` is `None` when the call produced
+    /// none.
     pub fn from_status(
+        status: &Status,
+        metadata: Option<&ServerMetadata>,
+        accepts_trailers: bool,
+    ) -> Self {
+        Self::from_status_with(default_marshaler(), status, metadata, accepts_trailers)
+    }
+
+    /// `DefaultHTTPErrorHandler` with the marshaler of the request, whose
+    /// registry decides which details can be rendered.
+    pub fn from_status_with(
+        marshaler: &Marshaler,
         status: &Status,
         metadata: Option<&ServerMetadata>,
         accepts_trailers: bool,
@@ -161,7 +185,7 @@ impl ErrorResponse {
             }
         }
 
-        let Some(body) = marshal_status(status) else {
+        let Some(body) = marshal_status(marshaler, status) else {
             return Self {
                 status: StatusCode::INTERNAL_SERVER_ERROR,
                 headers,
@@ -297,55 +321,27 @@ fn canonical_mime_header_key(key: &str) -> String {
         .collect()
 }
 
-/// `google.rpc.Status` through protojson with `EmitUnpopulated`, without the
-/// random spaces. `None` where protojson fails: any detail that needs a type
-/// to be resolved.
-fn marshal_status(status: &Status) -> Option<Vec<u8>> {
-    let mut out = Vec::with_capacity(48 + status.message.len());
-    out.extend_from_slice(b"{\"code\":");
-    out.extend_from_slice(status.code.to_string().as_bytes());
-    out.extend_from_slice(b",\"message\":");
-    json_string(&status.message, &mut out);
-    out.extend_from_slice(b",\"details\":[");
-    for (i, any) in status.details.iter().enumerate() {
-        if i > 0 {
-            out.push(b',');
-        }
-        if !any.type_url.is_empty() || !any.value.is_empty() {
-            return None;
-        }
-        out.extend_from_slice(b"{}");
-    }
-    out.extend_from_slice(b"]}");
-    Some(out)
-}
-
-/// protojson's string encoding: only `"`, `\` and control characters are
-/// escaped; `<`, `>`, `&`, DEL and U+2028 are written as they are.
-fn json_string(s: &str, out: &mut Vec<u8>) {
-    const HEX: &[u8; 16] = b"0123456789abcdef";
-    out.push(b'"');
-    for &b in s.as_bytes() {
-        match b {
-            b'"' => out.extend_from_slice(b"\\\""),
-            b'\\' => out.extend_from_slice(b"\\\\"),
-            0x08 => out.extend_from_slice(b"\\b"),
-            0x0c => out.extend_from_slice(b"\\f"),
-            b'\n' => out.extend_from_slice(b"\\n"),
-            b'\r' => out.extend_from_slice(b"\\r"),
-            b'\t' => out.extend_from_slice(b"\\t"),
-            b if b < 0x20 => out.extend_from_slice(&[
-                b'\\',
-                b'u',
-                b'0',
-                b'0',
-                HEX[(b >> 4) as usize],
-                HEX[(b & 15) as usize],
-            ]),
-            b => out.push(b),
-        }
-    }
-    out.push(b'"');
+/// `google.rpc.Status` through the marshaler. `None` where protojson fails:
+/// a detail it cannot render.
+fn marshal_status(marshaler: &Marshaler, status: &Status) -> Option<Vec<u8>> {
+    let pool = marshaler.registry().pool();
+    let status_desc = pool.get_message_by_name("google.rpc.Status")?;
+    let any_desc = pool.get_message_by_name("google.protobuf.Any")?;
+    let mut msg = DynamicMessage::new(status_desc);
+    msg.set_field_by_number(1, Value::I32(status.code));
+    msg.set_field_by_number(2, Value::String(status.message.clone()));
+    let details = status
+        .details
+        .iter()
+        .map(|d| {
+            let mut any = DynamicMessage::new(any_desc.clone());
+            any.set_field_by_number(1, Value::String(d.type_url.clone()));
+            any.set_field_by_number(2, Value::Bytes(d.value.clone().into()));
+            Value::Message(any)
+        })
+        .collect();
+    msg.set_field_by_number(3, Value::List(details));
+    marshaler.encode(&msg).ok()
 }
 
 /// Runes in U+0080..U+07FF that `strconv.IsPrint` rejects, as inclusive
