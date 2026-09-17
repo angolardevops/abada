@@ -19,6 +19,11 @@ use prost_types::{
 #[derive(Clone, Debug)]
 pub struct TypeRegistry {
     pool: DescriptorPool,
+    /// The pool as given, before completion: the user's messages come from it.
+    given: DescriptorPool,
+    /// Whether any message of `pool` has a required field; when none has,
+    /// `proto.CheckInitialized` has nothing to find.
+    has_required: bool,
 }
 
 impl Default for TypeRegistry {
@@ -34,6 +39,7 @@ impl TypeRegistry {
     /// A registry over `pool`, completed with the well-known types and
     /// `google.rpc.Status` when it does not define them.
     pub fn new(pool: DescriptorPool) -> Result<Self, DescriptorError> {
+        let given = pool.clone();
         let mut pool = pool;
         let wkt = DescriptorPool::global();
         let missing: Vec<FileDescriptorProto> = wkt
@@ -49,7 +55,19 @@ impl TypeRegistry {
         {
             pool.add_file_descriptor_proto(status_file())?;
         }
-        Ok(Self { pool })
+        let has_required = pool
+            .all_messages()
+            .any(|m| m.fields().any(|f| f.is_required()));
+        Ok(Self {
+            pool,
+            given,
+            has_required,
+        })
+    }
+
+    /// Whether messages of `pool` can be missing a required field.
+    pub(crate) fn may_miss_required(&self, pool: &DescriptorPool) -> bool {
+        self.has_required || (*pool != self.pool && *pool != self.given)
     }
 
     /// A registry over an encoded `FileDescriptorSet`.

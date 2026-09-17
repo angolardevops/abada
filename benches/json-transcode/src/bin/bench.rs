@@ -237,7 +237,6 @@ fn main() {
     let file: File = serde_json::from_str(&std::fs::read_to_string(path).unwrap()).unwrap();
     let only = std::env::args().nth(1);
 
-    let pool = reflect::pool();
     let abada = abada_codec::marshaler(Mode::Emit);
     if only.as_deref().is_none_or(|o| o == "descriptor") {
         one_time();
@@ -247,7 +246,14 @@ fn main() {
             continue;
         }
         let body = abada_json_bench::expand(case.input.get(), case.repeat);
-        let desc = pool.get_message_by_name(&case.message).unwrap();
+        // The descriptor comes from the marshaler's registry, as generated
+        // code would hand it over (abada skips the required-field walk for a
+        // pool without required fields it knows); (a) uses the same one.
+        let desc = abada
+            .registry()
+            .pool()
+            .get_message_by_name(&case.message)
+            .unwrap();
         let ops = with_type!(emit, case.message.as_str(), ops_for(&desc, &body, &abada)).unwrap();
         measure(&case.name, body.len(), ops);
     }

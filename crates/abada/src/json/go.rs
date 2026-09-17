@@ -302,7 +302,27 @@ pub(crate) fn append_encoding_json_string(out: &mut Vec<u8>, s: &str) {
 }
 
 const STD: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-const URL: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+const INVALID: u8 = 0xff;
+const STD_VALUES: [u8; 256] = values(b'+', b'/');
+const URL_VALUES: [u8; 256] = values(b'-', b'_');
+
+const fn values(c62: u8, c63: u8) -> [u8; 256] {
+    let mut t = [INVALID; 256];
+    let mut i = 0;
+    while i < 26 {
+        t[(b'A' + i) as usize] = i;
+        t[(b'a' + i) as usize] = 26 + i;
+        i += 1;
+    }
+    let mut d = 0;
+    while d < 10 {
+        t[(b'0' + d) as usize] = 52 + d;
+        d += 1;
+    }
+    t[c62 as usize] = 62;
+    t[c63 as usize] = 63;
+    t
+}
 
 /// `base64.StdEncoding.EncodeToString`.
 pub(crate) fn append_base64(out: &mut Vec<u8>, data: &[u8]) {
@@ -332,16 +352,36 @@ pub(crate) struct Base64 {
 }
 
 impl Base64 {
+    fn table(self) -> &'static [u8; 256] {
+        if self.url { &URL_VALUES } else { &STD_VALUES }
+    }
+
     fn value(self, c: u8) -> Option<u8> {
-        let alphabet = if self.url { URL } else { STD };
-        alphabet.iter().position(|&a| a == c).map(|p| p as u8)
+        let v = self.table()[c as usize];
+        (v != INVALID).then_some(v)
     }
 
     /// `Encoding.DecodeString`, not strict: `\r` and `\n` are skipped
     /// anywhere, and non-zero trailing bits are accepted.
     pub(crate) fn decode(self, src: &[u8]) -> Option<Vec<u8>> {
-        let mut out = Vec::with_capacity(src.len() * 3 / 4);
+        let mut out = Vec::with_capacity(src.len() / 4 * 3 + 3);
+        let table = self.table();
         let mut si = 0;
+        // Whole quanta of alphabet characters, as Go's `assemble32` path.
+        while si + 4 <= src.len() {
+            let q = [
+                table[src[si] as usize],
+                table[src[si + 1] as usize],
+                table[src[si + 2] as usize],
+                table[src[si + 3] as usize],
+            ];
+            if q.contains(&INVALID) {
+                break;
+            }
+            let val = (q[0] as u32) << 18 | (q[1] as u32) << 12 | (q[2] as u32) << 6 | q[3] as u32;
+            out.extend_from_slice(&[(val >> 16) as u8, (val >> 8) as u8, val as u8]);
+            si += 4;
+        }
         while si < src.len() {
             let mut dbuf = [0u8; 4];
             let mut dlen = 4;

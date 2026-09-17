@@ -19,7 +19,13 @@ pub(crate) fn marshal(
     out: &mut Vec<u8>,
 ) -> Result<(), JsonError> {
     Encoder { marshaler, out }.message(msg, None)?;
-    check_initialized(msg)
+    if marshaler
+        .registry()
+        .may_miss_required(msg.descriptor().parent_pool())
+    {
+        check_initialized(msg)?;
+    }
+    Ok(())
 }
 
 pub(crate) struct Encoder<'m, 'o> {

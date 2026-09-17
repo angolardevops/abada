@@ -228,10 +228,17 @@ impl Marshaler {
     /// first value are ignored, as `encoding/json`'s `Decoder` does. On error
     /// the message may be partly written.
     pub fn decode_into(&self, msg: &mut DynamicMessage, body: &[u8]) -> Result<(), JsonError> {
-        let Some(value) = stream::first_value(body)? else {
-            return Ok(());
-        };
-        self.unmarshal_into(msg, value)
+        let start = body
+            .iter()
+            .position(|c| !matches!(c, b' ' | b'\t' | b'\r' | b'\n'));
+        match start {
+            None => Ok(()),
+            Some(i) if body[i] == b'{' => decode::unmarshal(self, msg, &body[i..], false),
+            Some(_) => {
+                let value = stream::first_value(body)?.expect("not blank");
+                decode::unmarshal(self, msg, value, true)
+            }
+        }
     }
 
     /// `marshaler.NewDecoder(body).Decode(&protoReq.<Field>)` for a
@@ -250,7 +257,7 @@ impl Marshaler {
     /// `protojson.UnmarshalOptions.Unmarshal`: `json` must be exactly one
     /// JSON value; the message is reset first.
     pub fn unmarshal_into(&self, msg: &mut DynamicMessage, json: &[u8]) -> Result<(), JsonError> {
-        decode::unmarshal(self, msg, json)
+        decode::unmarshal(self, msg, json, true)
     }
 
     /// `JSONPb.Marshal` of a message: protojson, compact.

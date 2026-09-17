@@ -5,7 +5,9 @@
 //! `runtime/marshal_jsonpb.go`). Those depend on the Go type protoc-gen-go
 //! generates for the field, which is derived here from the descriptor.
 
-use prost_reflect::{DynamicMessage, FieldDescriptor, Kind, MapKey, MessageDescriptor, Value};
+use prost_reflect::{
+    DynamicMessage, FieldDescriptor, Kind, MapKey, MessageDescriptor, ReflectMessage, Value,
+};
 
 use super::encode::{Encoder, enum_name};
 use super::{JsonError, Marshaler, go, go_has};
@@ -670,7 +672,13 @@ fn marshal_elem(
         Value::Message(m) => {
             let mut enc = Encoder { marshaler, out };
             enc.message(m, None)?;
-            super::decode::check_initialized(m)
+            if marshaler
+                .registry()
+                .may_miss_required(m.descriptor().parent_pool())
+            {
+                super::decode::check_initialized(m)?;
+            }
+            Ok(())
         }
         Value::EnumNumber(n) => {
             if marshaler.marshal.use_enum_numbers {

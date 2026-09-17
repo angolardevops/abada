@@ -62,6 +62,9 @@ pub(crate) struct Decoder<'a> {
     last: Result<Token<'a>, JsonError>,
     last_kind: Option<Kind>,
     open: Vec<Kind>,
+    /// Reject the one number spelling protojson reads and `encoding/json`
+    /// does not: an exponent without digits (`1e`, `1e+`).
+    strict_numbers: bool,
 }
 
 fn is_not_delim(c: u8) -> bool {
@@ -139,6 +142,15 @@ impl<'a> Decoder<'a> {
             last: Ok(Token::new(Kind::Eof, 0, b"")),
             last_kind: None,
             open: Vec::new(),
+            strict_numbers: false,
+        }
+    }
+
+    /// A tokenizer for a request body that `encoding/json` has not checked.
+    pub(crate) fn new_strict(input: &'a [u8]) -> Self {
+        Self {
+            strict_numbers: true,
+            ..Self::new(input)
         }
     }
 
@@ -154,10 +166,22 @@ impl<'a> Decoder<'a> {
         self.last.clone()
     }
 
+    /// The kind of the next token, without cloning it.
+    pub(crate) fn peek_kind(&mut self) -> Result<Kind, JsonError> {
+        if !self.last_peek {
+            self.last = self.read_inner();
+        }
+        self.last_peek = true;
+        match &self.last {
+            Ok(t) => Ok(t.kind),
+            Err(e) => Err(e.clone()),
+        }
+    }
+
     pub(crate) fn read(&mut self) -> Result<Token<'a>, JsonError> {
         if self.last_peek {
             self.last_peek = false;
-            return self.last.clone();
+            return std::mem::replace(&mut self.last, Ok(Token::new(Kind::Eof, 0, b"")));
         }
         self.read_inner()
     }
@@ -280,7 +304,10 @@ impl<'a> Decoder<'a> {
             b'f' if with_delim(b"false") => return Ok(self.token(Kind::Bool, 5)),
             b'-' | b'0'..=b'9' => {
                 if let Some(n) = parse_number(input) {
-                    return Ok(self.token(Kind::Number, n));
+                    let exponent_without_digits = matches!(input[n - 1], b'e' | b'E' | b'+' | b'-');
+                    if !(self.strict_numbers && exponent_without_digits) {
+                        return Ok(self.token(Kind::Number, n));
+                    }
                 }
             }
             b'"' => {
@@ -407,6 +434,16 @@ fn hex4(s: Option<&[u8]>) -> Result<Option<u32>, JsonError> {
     Ok(Some(v))
 }
 
+/// A number token that `normalizeToIntString` would return unchanged: an
+/// optional `-`, then `0` or digits without a leading zero, and nothing else.
+fn plain_integer(raw: &[u8]) -> bool {
+    let digits = raw.strip_prefix(b"-").unwrap_or(raw);
+    !digits.is_empty()
+        && digits.iter().all(u8::is_ascii_digit)
+        && (digits[0] != b'0' || digits.len() == 1)
+        && raw != b"-0"
+}
+
 /// Parts of a number token, for integer conversion (`parseNumberParts`).
 struct NumberParts<'a> {
     neg: bool,
@@ -513,6 +550,10 @@ impl Token<'_> {
         if self.kind != Kind::Number {
             return None;
         }
+        // Plain digits are already in normal form.
+        if plain_integer(self.raw) {
+            return super::go::parse_int(self.raw, 10, bits);
+        }
         let s = normalize_to_int_string(&number_parts(self.raw)?)?;
         super::go::parse_int(&s, 10, bits)
     }
@@ -521,6 +562,9 @@ impl Token<'_> {
     pub(crate) fn uint(&self, bits: u32) -> Option<u64> {
         if self.kind != Kind::Number {
             return None;
+        }
+        if plain_integer(self.raw) {
+            return super::go::parse_uint(self.raw, 10, bits);
         }
         let s = normalize_to_int_string(&number_parts(self.raw)?)?;
         super::go::parse_uint(&s, 10, bits)

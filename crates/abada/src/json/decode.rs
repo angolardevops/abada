@@ -11,24 +11,42 @@ use super::token::{Decoder as Tokens, Kind as Tok, Token};
 use super::{Field, JsonError, Marshaler, Wkt, go, is_known_value, is_null_value, wire, wkt};
 
 /// `UnmarshalOptions.unmarshal`: reset, decode one value, require the end.
+///
+/// With `whole: false` the input only has to start with one JSON value, and
+/// what follows it is not read: `encoding/json`'s `Decoder` would have cut the
+/// value out first, and for an object protojson's own tokenizer rejects every
+/// input that scanner rejects, so the extra pass is skipped.
 pub(crate) fn unmarshal(
     marshaler: &Marshaler,
     msg: &mut DynamicMessage,
     json: &[u8],
+    whole: bool,
 ) -> Result<(), JsonError> {
     msg.clear();
     let mut d = Decoder {
-        tokens: Tokens::new(json),
+        tokens: if whole {
+            Tokens::new(json)
+        } else {
+            Tokens::new_strict(json)
+        },
         marshaler,
         discard_unknown: marshaler.unmarshal.discard_unknown,
     };
     let limit = marshaler.unmarshal.recursion_limit as i64;
     d.message(msg, false, limit)?;
-    let tok = d.tokens.read()?;
-    if tok.kind != Tok::Eof {
-        return Err(unexpected(&tok));
+    if whole {
+        let tok = d.tokens.read()?;
+        if tok.kind != Tok::Eof {
+            return Err(unexpected(&tok));
+        }
     }
-    check_initialized(msg)
+    if marshaler
+        .registry()
+        .may_miss_required(msg.descriptor().parent_pool())
+    {
+        check_initialized(msg)?;
+    }
+    Ok(())
 }
 
 fn unexpected(tok: &Token) -> JsonError {
@@ -70,7 +88,7 @@ impl<'a> Decoder<'a, '_> {
         if tok.kind != Tok::ObjectOpen {
             return Err(unexpected(&tok));
         }
-        let mut seen_numbers: Vec<u32> = Vec::new();
+        let mut seen = SeenNumbers::default();
         let mut seen_oneofs: Vec<OneofDescriptor> = Vec::new();
         loop {
             let tok = self.tokens.read()?;
@@ -102,16 +120,15 @@ impl<'a> Decoder<'a, '_> {
                 ));
             };
             let number = field.number();
-            if seen_numbers.contains(&number) {
+            if !seen.insert(number) {
                 return Err(invalid(
                     &tok,
                     format_args!("duplicate field {}", tok.raw_str()),
                 ));
             }
-            seen_numbers.push(number);
 
             let kind = field.kind();
-            if self.tokens.peek().is_ok_and(|t| t.kind == Tok::Null)
+            if self.tokens.peek_kind().is_ok_and(|k| k == Tok::Null)
                 && !is_known_value(&kind)
                 && !is_null_value(&kind)
             {
@@ -156,7 +173,7 @@ impl<'a> Decoder<'a, '_> {
                         self.message(&mut sub, false, limit)?;
                         Some(Value::Message(sub))
                     }
-                    _ => self.scalar(&kind, &field_json_name(&field))?,
+                    _ => self.scalar(&kind, Some(&field))?,
                 };
                 if let Some(value) = value {
                     set(m, &field, value);
@@ -199,10 +216,11 @@ impl<'a> Decoder<'a, '_> {
     }
 
     /// `unmarshalScalar`: `None` for an unknown enum name that is discarded.
+    /// `field` names the field in the error message.
     pub(crate) fn scalar(
         &mut self,
         kind: &Kind,
-        json_name: &str,
+        field: Option<&Field>,
     ) -> Result<Option<Value>, JsonError> {
         let tok = self.tokens.read()?;
         let value = match kind {
@@ -238,7 +256,7 @@ impl<'a> Decoder<'a, '_> {
                 format_args!(
                     "invalid value for {} field {}: {}",
                     kind_name(kind),
-                    json_name,
+                    field.map(field_json_name).unwrap_or_default(),
                     tok.raw_str()
                 ),
             )),
@@ -252,7 +270,7 @@ impl<'a> Decoder<'a, '_> {
             return Err(unexpected(&tok));
         }
         loop {
-            if self.tokens.peek()?.kind == Tok::ArrayClose {
+            if self.tokens.peek_kind()? == Tok::ArrayClose {
                 self.tokens.read()?;
                 return Ok(());
             }
@@ -263,7 +281,7 @@ impl<'a> Decoder<'a, '_> {
                     items.push(Value::Message(item));
                 }
                 _ => {
-                    if let Some(v) = self.scalar(kind, "")? {
+                    if let Some(v) = self.scalar(kind, None)? {
                         items.push(v);
                     }
                 }
@@ -304,7 +322,7 @@ impl<'a> Decoder<'a, '_> {
                     self.message(&mut item, false, limit)?;
                     Some(Value::Message(item))
                 }
-                _ => self.scalar(&value_kind, "")?,
+                _ => self.scalar(&value_kind, None)?,
             };
             if let Some(value) = value {
                 map.insert(key, value);
@@ -484,7 +502,7 @@ impl<'a> Decoder<'a, '_> {
     /// `unmarshalWrapperType`.
     fn wrapper(&mut self, m: &mut DynamicMessage) -> Result<(), JsonError> {
         let fd = m.descriptor().get_field(1).expect("wrapper value");
-        if let Some(v) = self.scalar(&fd.kind(), fd.json_name())? {
+        if let Some(v) = self.scalar(&fd.kind(), None)? {
             m.set_field(&fd, v);
         }
         Ok(())
@@ -686,6 +704,31 @@ impl<'a> Decoder<'a, '_> {
             .expect("list")
             .extend(paths);
         Ok(())
+    }
+}
+
+/// Field numbers already read in an object: a bit set for the small ones,
+/// which is every field of most messages, without allocating.
+#[derive(Default)]
+struct SeenNumbers {
+    low: u128,
+    high: Vec<u32>,
+}
+
+impl SeenNumbers {
+    /// `false` when `n` was already there.
+    fn insert(&mut self, n: u32) -> bool {
+        if n < 128 {
+            let bit = 1u128 << n;
+            let fresh = self.low & bit == 0;
+            self.low |= bit;
+            fresh
+        } else if self.high.contains(&n) {
+            false
+        } else {
+            self.high.push(n);
+            true
+        }
     }
 }
 
