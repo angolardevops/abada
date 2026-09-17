@@ -56,7 +56,7 @@ impl From<ParseError> for PatternError {
 pub enum MatchError {
     NoMatch,
     /// A `%` not followed by two hex digits; grpc-gateway answers 400.
-    MalformedEscape(String),
+    MalformedEscape(Vec<u8>),
 }
 
 /// A compiled template, ready to match.
@@ -275,9 +275,7 @@ fn unescape(s: &[u8], mode: UnescapingMode, multisegment: bool) -> Result<Vec<u8
             escapes += 1;
             if i + 2 >= s.len() || !s[i + 1].is_ascii_hexdigit() || !s[i + 2].is_ascii_hexdigit() {
                 let bad = &s[i..s.len().min(i + 3)];
-                return Err(MatchError::MalformedEscape(
-                    String::from_utf8_lossy(bad).into_owned(),
-                ));
+                return Err(MatchError::MalformedEscape(bad.to_vec()));
             }
             i += 3;
         } else {
@@ -353,7 +351,7 @@ mod tests {
         let p = Pattern::new("/v1/{name}").unwrap();
         assert_eq!(
             p.match_components(&comps("v1/a%zz"), b"", UnescapingMode::AllCharacters),
-            Err(MatchError::MalformedEscape("%zz".into()))
+            Err(MatchError::MalformedEscape(b"%zz".to_vec()))
         );
     }
 }

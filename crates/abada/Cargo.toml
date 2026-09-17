@@ -9,6 +9,9 @@ repository.workspace = true
 keywords.workspace = true
 categories.workspace = true
 
+[dependencies]
+http.workspace = true
+
 [dev-dependencies]
 serde.workspace = true
 serde_json.workspace = true

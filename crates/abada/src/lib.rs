@@ -2,4 +2,5 @@
 //!
 //! Status: pre-release. The design lives in `docs/DESIGN.md`.
 
+pub mod error;
 pub mod path;

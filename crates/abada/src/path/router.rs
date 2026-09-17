@@ -129,8 +129,15 @@ pub enum RouteOutcome<'a, T> {
     /// The path matches under another method. grpc-gateway's default error
     /// handler answers this with `501 Unimplemented`.
     MethodNotAllowed,
-    /// A candidate held a malformed escape.
-    BadRequest(String),
+    /// Candidates held malformed escapes. grpc-gateway writes a `400` error
+    /// body for each one, in the order it tried them, and keeps routing:
+    /// `then` is where routing ended, and its answer is appended to the same
+    /// response.
+    BadRequest {
+        /// The malformed sequences, as `runtime.MalformedSequenceError` holds them.
+        escapes: Vec<Vec<u8>>,
+        then: Box<RouteOutcome<'a, T>>,
+    },
 }
 
 /// Handlers by method, tried most-recently-registered first.
@@ -175,9 +182,9 @@ impl<T> Router<T> {
             .last()
             .expect("split yields at least one component");
 
-        // grpc-gateway writes a 400 for a malformed escape and keeps looking;
-        // whatever it writes afterwards cannot change the status any more.
-        let mut bad_request: Option<String> = None;
+        // grpc-gateway writes a 400 for each malformed escape and keeps
+        // looking; whatever it writes afterwards cannot change the status.
+        let mut bad_request: Vec<Vec<u8>> = Vec::new();
 
         for (m, handlers) in &self.methods {
             if m != method {
@@ -194,7 +201,7 @@ impl<T> Router<T> {
                         return finish(RouteOutcome::Matched { handler, params }, bad_request);
                     }
                     Err(MatchError::MalformedEscape(seq)) => {
-                        bad_request.get_or_insert(seq);
+                        bad_request.push(seq);
                     }
                     Err(MatchError::NoMatch) => {}
                 }
@@ -213,7 +220,7 @@ impl<T> Router<T> {
                 match pattern.match_components(&comps, &verb, self.mode) {
                     Ok(_) => return finish(RouteOutcome::MethodNotAllowed, bad_request),
                     Err(MatchError::MalformedEscape(seq)) => {
-                        bad_request.get_or_insert(seq);
+                        bad_request.push(seq);
                     }
                     Err(MatchError::NoMatch) => {}
                 }
@@ -223,10 +230,14 @@ impl<T> Router<T> {
     }
 }
 
-fn finish<T>(outcome: RouteOutcome<'_, T>, bad_request: Option<String>) -> RouteOutcome<'_, T> {
-    match bad_request {
-        Some(seq) => RouteOutcome::BadRequest(seq),
-        None => outcome,
+fn finish<T>(outcome: RouteOutcome<'_, T>, escapes: Vec<Vec<u8>>) -> RouteOutcome<'_, T> {
+    if escapes.is_empty() {
+        outcome
+    } else {
+        RouteOutcome::BadRequest {
+            escapes,
+            then: Box::new(outcome),
+        }
     }
 }
 
