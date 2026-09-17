@@ -80,6 +80,10 @@ func main() {
 		runInventory(os.Args[2])
 		return
 	}
+	if len(os.Args) == 2 && os.Args[1] == "errors" {
+		runErrors()
+		return
+	}
 	if len(os.Args) == 4 && os.Args[1] == "contract" {
 		runContract(os.Args[2], os.Args[3])
 		return
