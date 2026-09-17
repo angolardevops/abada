@@ -1,0 +1,13 @@
+[package]
+name = "protoc-gen-abada"
+description = "protoc / buf plugin that generates abada REST gateways from google.api.http annotations"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+abada-codegen.workspace = true

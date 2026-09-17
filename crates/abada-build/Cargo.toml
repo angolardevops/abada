@@ -1,0 +1,13 @@
+[package]
+name = "abada-build"
+description = "build.rs API to generate abada REST gateways from .proto files"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+abada-codegen.workspace = true

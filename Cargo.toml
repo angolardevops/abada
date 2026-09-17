@@ -1,0 +1,16 @@
+[workspace]
+resolver = "2"
+members = ["crates/abada", "crates/abada-codegen", "crates/abada-build", "crates/protoc-gen-abada"]
+
+[workspace.package]
+version = "0.0.1"
+edition = "2024"
+rust-version = "1.85"
+license = "Apache-2.0"
+repository = "https://github.com/angolardevops/abada"
+keywords = ["grpc", "gateway", "rest", "tonic", "protobuf"]
+categories = ["network-programming", "web-programming::http-server"]
+
+[workspace.dependencies]
+abada = { path = "crates/abada", version = "0.0.1" }
+abada-codegen = { path = "crates/abada-codegen", version = "0.0.1" }

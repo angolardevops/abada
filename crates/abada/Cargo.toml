@@ -1,0 +1,10 @@
+[package]
+name = "abada"
+description = "Runtime for REST/JSON gateways generated from google.api.http annotations over tonic gRPC services"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true

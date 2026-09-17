@@ -1,0 +1,10 @@
+[package]
+name = "abada-codegen"
+description = "Code generation core shared by protoc-gen-abada and abada-build"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
