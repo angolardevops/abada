@@ -1,0 +1,635 @@
+{
+ "cases": [
+  {
+   "name": "GetOperation",
+   "method": "GET",
+   "target": "/v1/operations/op-123"
+  },
+  {
+   "name": "ListOperations",
+   "method": "GET",
+   "target": "/v1/operations?page.pageSize=50&page.page_token=abc&activeOnly=true"
+  },
+  {
+   "name": "WatchOperation",
+   "method": "GET",
+   "target": "/v1/operations/op-123:watch"
+  },
+  {
+   "name": "CancelOperation",
+   "method": "POST",
+   "target": "/v1/operations/op-123:cancel",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{}"
+  },
+  {
+   "name": "CreateContainer",
+   "method": "POST",
+   "target": "/v1/namespaces/default/containers",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"name\": \"web\", \"labels\": {\"app\": \"web\"}, \"annotations\": {\"owner\": \"team-a\"}, \"spec\": {\"image\": \"docker.io/library/nginx:1.27\", \"entrypoint\": [\"/docker-entrypoint.sh\"], \"command\": [\"nginx\", \"-g\", \"daemon off;\"], \"env\": {\"A\": \"1\", \"B\": \"two\"}, \"secrets\": [{\"secret\": \"db\", \"key\": \"password\", \"delivery\": \"SECRET_DELIVERY_FILE\"}], \"workdir\": \"/\", \"user\": \"101:101\", \"hostname\": \"web\", \"resources\": {\"memoryLimitBytes\": \"268435456\", \"cpuLimitMillis\": \"500\", \"pidsLimit\": \"256\"}, \"mounts\": [{\"volume\": \"data\", \"target\": \"/usr/share/nginx/html\", \"readOnly\": true}, {\"hostPath\": \"/etc/localtime\", \"target\": \"/etc/localtime\"}], \"networks\": [{\"network\": \"frontend\", \"ipv4Address\": \"10.0.0.5\", \"aliases\": [\"web\"]}], \"ports\": [{\"hostIp\": \"127.0.0.1\", \"hostPort\": 8080, \"containerPort\": 80, \"protocol\": \"PROTOCOL_TCP\"}], \"security\": {\"capDrop\": [\"ALL\"], \"noNewPrivileges\": true}, \"restart\": {\"mode\": \"RESTART_MODE_ON_FAILURE\", \"maxRetries\": 3}, \"healthCheck\": {\"command\": [\"curl\", \"-f\", \"http://localhost/\"], \"interval\": \"30s\", \"timeout\": \"5s\", \"retries\": 3, \"startPeriod\": \"10s\"}, \"tmpfs\": [\"/tmp\"], \"readOnlyRootfs\": true, \"sysctls\": {\"net.core.somaxconn\": \"1024\"}, \"logFormat\": \"json\"}, \"requestId\": \"req-1\", \"start\": true}"
+  },
+  {
+   "name": "CreateContainer-namespace-from-path",
+   "method": "POST",
+   "target": "/v1/namespaces/default/containers",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"namespace\": \"other\", \"name\": \"web\"}"
+  },
+  {
+   "name": "CreateContainer-bad-body",
+   "method": "POST",
+   "target": "/v1/namespaces/default/containers",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"name\": 5}"
+  },
+  {
+   "name": "GetContainer",
+   "method": "GET",
+   "target": "/v1/namespaces/default/containers/web"
+  },
+  {
+   "name": "ListContainers",
+   "method": "GET",
+   "target": "/v1/namespaces/default/containers?labelSelector=app%3Dweb&page.pageSize=20"
+  },
+  {
+   "name": "ListContainers-page-size-bad",
+   "method": "GET",
+   "target": "/v1/namespaces/default/containers?page.pageSize=twenty"
+  },
+  {
+   "name": "ListContainers-namespace-query-ignored",
+   "method": "GET",
+   "target": "/v1/namespaces/default/containers?namespace=other"
+  },
+  {
+   "name": "UpdateContainer",
+   "method": "PATCH",
+   "target": "/v1/namespaces/default/containers/web",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"spec\": {\"env\": {\"A\": \"2\"}, \"resources\": {\"memoryLimitBytes\": \"536870912\"}}}"
+  },
+  {
+   "name": "UpdateContainer-explicit-mask",
+   "method": "PATCH",
+   "target": "/v1/namespaces/default/containers/web?updateMask=spec.env",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"spec\": {\"env\": {\"A\": \"2\"}, \"image\": \"x\"}}"
+  },
+  {
+   "name": "UpdateContainer-meta-labels",
+   "method": "PATCH",
+   "target": "/v1/namespaces/default/containers/web",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"meta\": {\"labels\": {\"tier\": \"gold\"}}, \"spec\": {\"restart\": {\"mode\": \"RESTART_MODE_ALWAYS\"}}}"
+  },
+  {
+   "name": "UpdateContainer-unknown-field",
+   "method": "PATCH",
+   "target": "/v1/namespaces/default/containers/web",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"spec\":{\"imagee\":\"x\"}}"
+  },
+  {
+   "name": "UpdateContainer-empty",
+   "method": "PATCH",
+   "target": "/v1/namespaces/default/containers/web",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "DeleteContainer",
+   "method": "DELETE",
+   "target": "/v1/namespaces/default/containers/web?etag=%22abc%22&force=true&requestId=req-2"
+  },
+  {
+   "name": "DeleteContainer-force-bad",
+   "method": "DELETE",
+   "target": "/v1/namespaces/default/containers/web?force=yes"
+  },
+  {
+   "name": "StartContainer",
+   "method": "POST",
+   "target": "/v1/namespaces/default/containers/web:start",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{}"
+  },
+  {
+   "name": "StopContainer",
+   "method": "POST",
+   "target": "/v1/namespaces/default/containers/web:stop",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"gracePeriod\":\"10s\"}"
+  },
+  {
+   "name": "KillContainer",
+   "method": "POST",
+   "target": "/v1/namespaces/default/containers/web:kill",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"signal\":\"SIGKILL\"}"
+  },
+  {
+   "name": "WaitContainer",
+   "method": "POST",
+   "target": "/v1/namespaces/default/containers/web:wait",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": ""
+  },
+  {
+   "name": "Logs",
+   "method": "GET",
+   "target": "/v1/namespaces/default/containers/web/logs?follow=true&tailLines=100&since=5m&timestamps=1"
+  },
+  {
+   "name": "Logs-since-bad",
+   "method": "GET",
+   "target": "/v1/namespaces/default/containers/web/logs?since=5"
+  },
+  {
+   "name": "Logs-tail-lines-range",
+   "method": "GET",
+   "target": "/v1/namespaces/default/containers/web/logs?tail_lines=9223372036854775808"
+  },
+  {
+   "name": "Stats",
+   "method": "GET",
+   "target": "/v1/namespaces/default/containers/web/stats"
+  },
+  {
+   "name": "CreatePod",
+   "method": "POST",
+   "target": "/v1/namespaces/default/pods",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"name\": \"p\", \"labels\": {\"app\": \"p\"}, \"spec\": {\"containers\": [{\"name\": \"a\", \"spec\": {\"image\": \"busybox\"}}], \"shareProcessNamespace\": true, \"ports\": [{\"containerPort\": 53, \"protocol\": \"PROTOCOL_UDP\"}]}}"
+  },
+  {
+   "name": "GetPod",
+   "method": "GET",
+   "target": "/v1/namespaces/default/pods/p"
+  },
+  {
+   "name": "ListPods",
+   "method": "GET",
+   "target": "/v1/namespaces/default/pods?label_selector=app%3Dp"
+  },
+  {
+   "name": "DeletePod",
+   "method": "DELETE",
+   "target": "/v1/namespaces/default/pods/p?force=false"
+  },
+  {
+   "name": "CreateVirtualMachine",
+   "method": "POST",
+   "target": "/v1/namespaces/default/virtualmachines",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"name\": \"vm1\", \"spec\": {\"image\": \"debian-12\", \"vcpus\": 2, \"memoryBytes\": \"2147483648\", \"diskBytes\": \"21474836480\", \"networks\": [{\"network\": \"frontend\"}], \"cloudInit\": {\"hostname\": \"vm1\", \"sshAuthorizedKeys\": [\"ssh-ed25519 AAAA\"]}, \"provider\": \"libvirt\", \"requiredCapabilities\": [\"kvm\"], \"extensions\": {\"byProvider\": {\"libvirt\": {\"machine\": \"q35\", \"hugepages\": true}}}, \"restart\": \"RESTART_MODE_ALWAYS\"}, \"waitUntilReachable\": true}"
+  },
+  {
+   "name": "GetVirtualMachine",
+   "method": "GET",
+   "target": "/v1/namespaces/default/virtualmachines/vm1"
+  },
+  {
+   "name": "ListVirtualMachines",
+   "method": "GET",
+   "target": "/v1/namespaces/default/virtualmachines?page.pageToken=t"
+  },
+  {
+   "name": "DeleteVirtualMachine",
+   "method": "DELETE",
+   "target": "/v1/namespaces/default/virtualmachines/vm1?requestId=r"
+  },
+  {
+   "name": "StartVirtualMachine",
+   "method": "POST",
+   "target": "/v1/namespaces/default/virtualmachines/vm1:start",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"requestId\":\"r-start\"}"
+  },
+  {
+   "name": "StopVirtualMachine",
+   "method": "POST",
+   "target": "/v1/namespaces/default/virtualmachines/vm1:stop",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"requestId\":\"r-stop\"}"
+  },
+  {
+   "name": "PauseVirtualMachine",
+   "method": "POST",
+   "target": "/v1/namespaces/default/virtualmachines/vm1:pause",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"requestId\":\"r-pause\"}"
+  },
+  {
+   "name": "ResumeVirtualMachine",
+   "method": "POST",
+   "target": "/v1/namespaces/default/virtualmachines/vm1:resume",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"requestId\":\"r-resume\"}"
+  },
+  {
+   "name": "CreateSnapshot",
+   "method": "POST",
+   "target": "/v1/namespaces/default/virtualmachines/vm1/snapshots",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"snapshot\":\"s1\"}"
+  },
+  {
+   "name": "ListSnapshots",
+   "method": "GET",
+   "target": "/v1/namespaces/default/virtualmachines/vm1/snapshots"
+  },
+  {
+   "name": "RestoreSnapshot",
+   "method": "POST",
+   "target": "/v1/namespaces/default/virtualmachines/vm1/snapshots/s1:restore",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"requestId\":\"r\"}"
+  },
+  {
+   "name": "DeleteSnapshot",
+   "method": "DELETE",
+   "target": "/v1/namespaces/default/virtualmachines/vm1/snapshots/s1?requestId=r"
+  },
+  {
+   "name": "CreateNetwork",
+   "method": "POST",
+   "target": "/v1/namespaces/default/networks",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"name\": \"n\", \"spec\": {\"topology\": \"NETWORK_TOPOLOGY_OVERLAY\", \"ipv4Cidr\": \"10.1.0.0/24\", \"overlay\": {\"vni\": 4242, \"encrypted\": true, \"peers\": [{\"nodeIp\": \"192.0.2.1\", \"publicKey\": \"k\", \"tunnelIp\": \"10.255.0.1\"}]}}}"
+  },
+  {
+   "name": "GetNetwork",
+   "method": "GET",
+   "target": "/v1/namespaces/default/networks/n"
+  },
+  {
+   "name": "ListNetworks",
+   "method": "GET",
+   "target": "/v1/namespaces/default/networks?page.pageSize=5"
+  },
+  {
+   "name": "DeleteNetwork",
+   "method": "DELETE",
+   "target": "/v1/namespaces/default/networks/n?etag=e"
+  },
+  {
+   "name": "ConnectContainer",
+   "method": "POST",
+   "target": "/v1/namespaces/default/networks/n:connect",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"container\":\"web\",\"ipv4Address\":\"10.1.0.9\"}"
+  },
+  {
+   "name": "DisconnectContainer",
+   "method": "POST",
+   "target": "/v1/namespaces/default/networks/n:disconnect",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"container\":\"web\"}"
+  },
+  {
+   "name": "CreateVolume",
+   "method": "POST",
+   "target": "/v1/namespaces/default/volumes",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"name\": \"v\", \"spec\": {\"remote\": {\"protocol\": \"REMOTE_PROTOCOL_NFS\", \"server\": \"nas\", \"share\": \"/export\", \"readOnly\": true}, \"quotaBytes\": \"1073741824\", \"alertPercent\": 80}}"
+  },
+  {
+   "name": "GetVolume",
+   "method": "GET",
+   "target": "/v1/namespaces/default/volumes/v"
+  },
+  {
+   "name": "ListVolumes",
+   "method": "GET",
+   "target": "/v1/namespaces/default/volumes"
+  },
+  {
+   "name": "DeleteVolume",
+   "method": "DELETE",
+   "target": "/v1/namespaces/default/volumes/v?destroyRemote=true"
+  },
+  {
+   "name": "PullImage",
+   "method": "POST",
+   "target": "/v1/images:pull",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"reference\":\"docker.io/library/alpine:3.20\",\"platform\":\"linux/amd64\",\"credentialsSecret\":\"reg\"}"
+  },
+  {
+   "name": "GetImage",
+   "method": "GET",
+   "target": "/v1/images:get?reference=docker.io%2Flibrary%2Falpine%3A3.20"
+  },
+  {
+   "name": "GetImage-plus-in-reference",
+   "method": "GET",
+   "target": "/v1/images:get?reference=a+b"
+  },
+  {
+   "name": "ListImages",
+   "method": "GET",
+   "target": "/v1/images?referencePrefix=docker.io/&page.pageSize=10"
+  },
+  {
+   "name": "DeleteImage",
+   "method": "POST",
+   "target": "/v1/images:delete",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"reference\":\"alpine\"}"
+  },
+  {
+   "name": "PushImage",
+   "method": "POST",
+   "target": "/v1/images:push",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"reference\":\"alpine\",\"destination\":\"registry.local/alpine\"}"
+  },
+  {
+   "name": "BuildImage",
+   "method": "POST",
+   "target": "/v1/images:build",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"contextPath\": \"/src\", \"file\": \"Containerfile\", \"tags\": [\"a:1\", \"a:latest\"], \"targetStage\": \"final\", \"buildArgs\": {\"V\": \"1\"}, \"secretRefs\": [\"npm\"], \"noCache\": true}"
+  },
+  {
+   "name": "ScanImage",
+   "method": "POST",
+   "target": "/v1/images:scan",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"reference\":\"alpine\"}"
+  },
+  {
+   "name": "PlanStack",
+   "method": "POST",
+   "target": "/v1/stacks/web:plan",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"manifest\":\"c2VydmljZXM6IHt9Cg==\",\"prune\":true}"
+  },
+  {
+   "name": "ApplyStack",
+   "method": "POST",
+   "target": "/v1/stacks/web:apply",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"manifest\":\"c2VydmljZXM6IHt9Cg==\",\"replace\":[\"svc/a\"],\"requestId\":\"r\"}"
+  },
+  {
+   "name": "DestroyStack",
+   "method": "POST",
+   "target": "/v1/stacks/web:destroy",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{\"requestId\":\"r\"}"
+  },
+  {
+   "name": "GetNodeInfo",
+   "method": "GET",
+   "target": "/v1/node"
+  },
+  {
+   "name": "GetHealth",
+   "method": "GET",
+   "target": "/v1/node/health"
+  },
+  {
+   "name": "GetCapacity",
+   "method": "GET",
+   "target": "/v1/node/capacity"
+  },
+  {
+   "name": "ListProviders",
+   "method": "GET",
+   "target": "/v1/providers?kind=vm"
+  },
+  {
+   "name": "WatchEvents",
+   "method": "GET",
+   "target": "/v1/events:watch?since=2026-09-17T10:00:00Z&kinds=container&kinds=vm&namespace=default"
+  },
+  {
+   "name": "WatchEvents-since-offset",
+   "method": "GET",
+   "target": "/v1/events:watch?since=2026-09-17T10:00:00%2B01:00"
+  },
+  {
+   "name": "WatchEvents-since-bad",
+   "method": "GET",
+   "target": "/v1/events:watch?since=yesterday"
+  },
+  {
+   "name": "GetOperation-watch-order",
+   "method": "GET",
+   "target": "/v1/operations/op:watch"
+  },
+  {
+   "name": "ListOperations-form-fallback",
+   "method": "POST",
+   "target": "/v1/operations",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ]
+   ],
+   "body": "activeOnly=true&page.pageSize=3"
+  },
+  {
+   "name": "DeleteContainer-override",
+   "method": "POST",
+   "target": "/v1/namespaces/default/containers/web",
+   "headers": [
+    [
+     "Content-Type",
+     "application/x-www-form-urlencoded"
+    ],
+    [
+     "X-HTTP-Method-Override",
+     "DELETE"
+    ]
+   ],
+   "body": "force=true"
+  },
+  {
+   "name": "GetContainer-escaped-name",
+   "method": "GET",
+   "target": "/v1/namespaces/default/containers/we%20b"
+  },
+  {
+   "name": "CreateContainer-trailing-slash",
+   "method": "POST",
+   "target": "/v1/namespaces/default/containers/",
+   "headers": [
+    [
+     "Content-Type",
+     "application/json"
+    ]
+   ],
+   "body": "{}"
+  }
+ ]
+}
