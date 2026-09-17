@@ -5,10 +5,12 @@ contract? Measured on 2026-09-17 against
 `angolardevops/delonix-runtime@964f6a4f` (`proto/delonix/node/v1`, the
 descriptor set is committed as `conformance/contracts/delonix-node-v1.binpb`).
 
-**Verdict: not yet.** Reading the contract's HTTP rules and choosing the RPC
-for a request are done and proven equal to grpc-gateway, and so is the error
-response (status, body, headers) once a gRPC status is in hand. Everything that
-turns a request into a gRPC call and back is not started.
+**Verdict: not yet.** Reading the contract's HTTP rules, choosing the RPC for
+a request, and turning the request into the gRPC request message are done and
+proven equal to grpc-gateway, and so is the error response (status, body,
+headers) once a gRPC status is in hand. The JSON codec inside the body step is
+still an interim one, and calling the RPC and writing its response are not
+started.
 
 ## What the contract asks for, and where abada stands
 
@@ -16,10 +18,10 @@ turns a request into a gRPC call and back is not started.
 |---|---|---|---|
 | Read `google.api.http` from the descriptor set | 58 RPCs, 56 bindings | **done** | same 56 bindings, same order, as grpc-gateway's `protodesc` + `proto.GetExtension` |
 | Route a request to its RPC | 56 bindings, all registered together | **done** | 728 requests, two unescaping modes, identical outcome, RPC and path values; one canonical request per binding reaches its own RPC |
-| Put path values into typed request fields | 56 bindings | not started | — |
-| Query parameters | 18 RPCs (every `List*`, `Delete*`, `GetImage`, `Logs`, `WatchEvents`, …) | not started | — |
-| `body: "*"` | 26 `POST` | not started | — |
-| `body: <field>` with a `FieldMask` | 1 `PATCH` (`UpdateContainer`) | not started | — |
+| Put path values into typed request fields | 56 bindings | **done** | `conformance/vectors/request-delonix-node-v1.json`: a request per binding reaches the same RPC with the same message as the code `protoc-gen-grpc-gateway` generates for this contract; 259 more over the test proto for kinds the contract lacks |
+| Query parameters | 18 RPCs (every `List*`, `Delete*`, `GetImage`, `Logs`, `WatchEvents`, …) | **done** | same vectors: `page.pageSize`, `since` as `Duration` and `Timestamp`, repeated `kinds`, errors with grpc-gateway's text; `?` ignored where the generated handler never reads it |
+| `body: "*"` | 26 `POST` | **done, through an interim JSON decoder** | same vectors; the decoder is replaced by `abada::json` |
+| `body: <field>` with a `FieldMask` | 1 `PATCH` (`UpdateContainer`) | **done** | same vectors: `update_mask` computed from the body (`spec.env,spec.resources.memory_limit_bytes`), overridden by `?updateMask=`, 400 for an unknown key |
 | Canonical proto3 JSON | 64-bit ints ×28, maps ×20, enums ×13, oneofs ×13, bytes ×9, `optional` ×3; `Any`, `Struct`, `FieldMask`, `Timestamp`, `Duration` | not started — library chosen: prost-reflect ([ADR 0001](../adr/0001-transcodificacao-json.md)), with five known deviations | 29 bodies compared with grpc-gateway's default marshaler |
 | `google.rpc.Status` errors with grpc-gateway's HTTP codes | every RPC | **done, except details of a registered type** (needs the JSON decision); not yet wired to a tonic call | `conformance/vectors/errors.json`: 25 codes, 64 statuses, 29 routing errors, same status, headers, body and trailers as grpc-gateway on the wire; one written deviation for header values with control bytes |
 | Server streaming | `WatchOperation`, `Logs`, `WatchEvents` | not started | — |
@@ -63,6 +65,9 @@ services the order depends on the order the server calls each `Register*Handler`
 This is a property of the contract, reported to its owner, not changed here.
 
 ## Not validated
+
+- The body step with the real JSON codec: the request vectors ran through
+  `InterimSerdeDecoder`, and the text of decoder errors is not compared.
 
 - Error `details` whose type grpc-gateway's registry resolves (abada answers
   the 500 fallback), and errors in the middle of a server stream.
