@@ -71,7 +71,8 @@ four properties together, and each one is a test, not a claim:
 | Rule extraction from a descriptor set (`abada_codegen::bindings`) | done | the `delonix.node.v1` contract: same 56 bindings as grpc-gateway, and 728 requests routed identically with all of them registered — see `docs/readiness/delonix-node-v1.md` |
 | POST → GET path-length fallback (`X-HTTP-Method-Override`) | not started | — |
 | Error responses: code → HTTP status, `google.rpc.Status` body, `WWW-Authenticate`, `Grpc-Metadata-*`/`Grpc-Trailer-*`, routing 404/501/400 (`abada::error`) | done, except details of a registered type | `conformance/vectors/errors.json`: 25 codes, 64 statuses and 29 routing errors answered by grpc-gateway's handlers behind a real `net/http` server, compared on the wire — see "Errors" below |
-| Query parameters, body, JSON, request metadata, streaming | not started | — |
+| JSON transcoding: choice of library | decided: `prost-reflect` | [ADR 0001](adr/0001-transcodificacao-json.md) — 29 bodies over the contract compared with grpc-gateway's default marshaler (`benches/json-transcode`), both directions timed |
+| Query parameters, body, JSON in the runtime, request metadata, streaming | not started | — |
 
 The conformance suite (`crates/abada/tests/conformance.rs`) was checked by
 breaking the code on purpose: dropping the `/` quirk of the parser, the
@@ -132,7 +133,7 @@ What the vectors fix, some of it against intuition:
 **Known gap: details of a registered type.** protojson renders an `Any` by
 looking its type up in the binary's registry (the host part of the type URL
 is ignored), and fails — hence the fallback above — when it cannot. abada has
-no registry until the JSON transcoding decision below is taken, so it renders
+no registry yet — the library is now decided (see below) but not wired in — so it renders
 an empty `Any` as `{}` and treats every other detail as unresolvable. That is
 exact for types the Go binary does not link, and wrong for types it does:
 `google.protobuf.Duration` or `google.rpc.Status` in `details` come out as
@@ -149,15 +150,19 @@ framing, request targets `net/http` rejects before the mux (control bytes,
 bad escapes), and invalid UTF-8 in a message (unreachable from a Rust
 `String`; protojson would fall back).
 
-## Open decision: how JSON is transcoded
+## Decision: how JSON is transcoded
+
+Settled by [ADR 0001](adr/0001-transcodificacao-json.md): **`prost-reflect`
+`DynamicMessage`**, driven by the descriptor. `pbjson` was 2–21× cheaper per
+operation on the `delonix.node.v1` bodies, but cannot read or write `Any` or
+`FieldMask` as grpc-gateway does, and fails to encode unknown enum numbers.
+Measured against grpc-gateway's default marshaler, not by preference; five
+deviations of `prost-reflect` remain to be closed (see the ADR).
 
 | Option | For | Against |
 |---|---|---|
-| `prost-reflect` `DynamicMessage` at runtime | Works with any prost types, no serde derive on user code; mapping is driven by the descriptor, which is what grpc-gateway does | Runtime descriptor lookup cost; one extra decode/encode step |
+| `prost-reflect` `DynamicMessage` at runtime (**chosen**) | Works with any prost types, no serde derive on user code; mapping is driven by the descriptor, which is what grpc-gateway does | Runtime descriptor lookup cost; one extra decode/encode step |
 | `pbjson`-generated serde impls | Static, fast | Forces a second codegen step on the user's types; fields must match exactly |
-
-Settle with a benchmark on a realistic message before the first release, not by
-preference.
 
 ## First consumer
 
