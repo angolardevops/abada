@@ -70,9 +70,10 @@ four properties together, and each one is a test, not a claim:
 | Request target → `Path`/`RawPath` (`RequestPath`) | done | the bytes `net/url` leaves unescaped are measured from Go, not transcribed |
 | Rule extraction from a descriptor set (`abada_codegen::bindings`) | done | the `delonix.node.v1` contract: same 56 bindings as grpc-gateway, and 728 requests routed identically with all of them registered — see `docs/readiness/delonix-node-v1.md` |
 | POST → GET path-length fallback (`X-HTTP-Method-Override`) | not started | — |
-| Error responses: code → HTTP status, `google.rpc.Status` body, `WWW-Authenticate`, `Grpc-Metadata-*`/`Grpc-Trailer-*`, routing 404/501/400 (`abada::error`) | done, except details of a registered type | `conformance/vectors/errors.json`: 25 codes, 64 statuses and 29 routing errors answered by grpc-gateway's handlers behind a real `net/http` server, compared on the wire — see "Errors" below |
-| JSON transcoding: choice of library | decided: `prost-reflect` | [ADR 0001](adr/0001-transcodificacao-json.md) — 29 bodies over the contract compared with grpc-gateway's default marshaler (`benches/json-transcode`), both directions timed |
-| Query parameters, body, JSON in the runtime, request metadata, streaming | not started | — |
+| Error responses: code → HTTP status, `google.rpc.Status` body, `WWW-Authenticate`, `Grpc-Metadata-*`/`Grpc-Trailer-*`, routing 404/501/400, details through a type registry (`abada::error`) | done | `conformance/vectors/errors.json`: 25 codes, 64 statuses (4 with details of a registered type) and 29 routing errors answered by grpc-gateway's handlers behind a real `net/http` server, compared on the wire — see "Errors" below |
+| JSON transcoding: choice of library | decided: `prost-reflect` | [ADR 0001](adr/0001-transcodificacao-json.md) — 28 bodies over the contract compared with grpc-gateway's default marshaler (`benches/json-transcode`), both directions timed |
+| JSON codec (`abada::json::Marshaler`): `body: "*"`, `body: "<field>"`, `response_body`, well-known types, `Any` through a `TypeRegistry` | done; one written deviation (nesting limit) | 868 cases over `conformance/protos` (every scalar kind, maps with every key kind, oneofs, proto3 `optional`, proto2 with required fields and extensions, all well-known types) and the 28 contract bodies: accept/reject, the decoded message byte for byte, and the output byte for byte with and without `EmitUnpopulated` — see "JSON" below |
+| Query parameters, path values into the request, request metadata, streaming | not started | — |
 
 The conformance suite (`crates/abada/tests/conformance.rs`) was checked by
 breaking the code on purpose: dropping the `/` quirk of the parser, the
@@ -91,10 +92,10 @@ compared after Go's JSON encoding, which replaces invalid UTF-8.
 and `DefaultRoutingErrorHandler` put on an HTTP/1.1 connection, read from
 `runtime/errors.go`, `runtime/handler.go` and `runtime/mux.go` and measured by
 `abadaoracle errors`. It depends on `http` (for `StatusCode`, `HeaderMap`,
-`HeaderValue`) and nothing else: the tower service will speak `http` anyway,
-and the header rules below are about what an `http` value can hold. There is
-no `tonic` dependency yet; `Status`/`Any`/`ServerMetadata` are plain structs
-the service layer will fill from a `tonic::Status`.
+`HeaderValue`) and on `abada::json` for the body: the tower service will speak
+`http` anyway, and the header rules below are about what an `http` value can
+hold. There is no `tonic` dependency yet; `Status`/`Any`/`ServerMetadata` are
+plain structs the service layer will fill from a `tonic::Status`.
 
 What the vectors fix, some of it against intuition:
 
@@ -130,18 +131,20 @@ What the vectors fix, some of it against intuition:
   `{"code": 13, "message": "failed to marshal error message"}` with 500 and
   no metadata; `WWW-Authenticate` is still set for code 16.
 
-**Known gap: details of a registered type.** protojson renders an `Any` by
-looking its type up in the binary's registry (the host part of the type URL
-is ignored), and fails — hence the fallback above — when it cannot. abada has
-no registry yet — the library is now decided (see below) but not wired in — so it renders
-an empty `Any` as `{}` and treats every other detail as unresolvable. That is
-exact for types the Go binary does not link, and wrong for types it does:
-`google.protobuf.Duration` or `google.rpc.Status` in `details` come out as
-the 500 fallback instead of `{"@type":…,…}`. The four vectors that show it
-are named in `crates/abada/tests/errors.rs`, which checks abada still falls
-back on them so that closing the gap has to update the list. What the Go
-registry contains depends on what the gateway binary links; the oracle's is
-not a user's.
+**Details.** protojson renders an `Any` by looking its type up in a
+registry (the host part of the type URL is ignored) and fails — hence the
+fallback above — when it cannot. abada renders the body through
+`abada::json::Marshaler`, so what resolves is what its `TypeRegistry` holds:
+the descriptor pool it was given, plus the well-known types and
+`google.rpc.Status`. `ErrorResponse::from_status` uses the default registry
+(well-known types and `google.rpc.Status` only); `from_status_with` takes the
+marshaler of the service, whose registry holds the user's types. In Go the
+registry is whatever the gateway binary links, so the two agree on the
+user's types, the well-known types and `google.rpc.Status`, and can differ on
+a type a Go binary links for another reason (`google.protobuf.FileDescriptorProto`
+is resolvable in the oracle, not in abada's default registry). The test
+checks, detail by detail, that the oracle's registry and abada's default one
+resolve the same type URLs in the vectors.
 
 Not validated: streaming errors (`HTTPStreamError`, `{"error": …}` chunks),
 `HTTPStatusError` from a user's routing handler, custom error handlers,
@@ -150,14 +153,100 @@ framing, request targets `net/http` rejects before the mux (control bytes,
 bad escapes), and invalid UTF-8 in a message (unreachable from a Rust
 `String`; protojson would fall back).
 
+## JSON
+
+`abada::json::Marshaler` is grpc-gateway's `runtime.JSONPb` as a
+`runtime.ServeMux` builds it (`EmitUnpopulated: true`, `DiscardUnknown:
+true`), over `prost-reflect`'s `DynamicMessage` without its serde support:
+protojson's tokenizer, decoder and encoder (v1.36.10) and the parts of Go's
+`encoding/json`, `strconv`, `encoding/base64` and `time` that reach the
+bytes, ported function by function. The API the request and response layers
+use:
+
+```rust
+impl Marshaler {
+    pub fn new(registry: TypeRegistry) -> Self; // the ServeMux default
+    pub fn decode(&self, desc: &MessageDescriptor, body: &[u8]) -> Result<DynamicMessage, JsonError>;
+    pub fn decode_into(&self, msg: &mut DynamicMessage, body: &[u8]) -> Result<(), JsonError>;          // body: "*"
+    pub fn decode_field(&self, msg: &mut DynamicMessage, field: &FieldDescriptor, body: &[u8]) -> Result<(), JsonError>; // body: "<field>"
+    pub fn unmarshal_into(&self, msg: &mut DynamicMessage, json: &[u8]) -> Result<(), JsonError>;       // protojson.Unmarshal
+    pub fn encode(&self, msg: &DynamicMessage) -> Result<Vec<u8>, JsonError>;
+    pub fn encode_field(&self, msg: &DynamicMessage, field: &FieldDescriptor) -> Result<Vec<u8>, JsonError>; // response_body
+}
+```
+
+What the vectors fix, some of it against intuition:
+
+- **Order of body and path.** `protojson.Unmarshal` resets the message. The
+  generated handler decodes the body first and then copies path and query
+  values in; populating a request in the other order loses the path values.
+  An empty (or blank) body leaves the message untouched; bytes after the
+  first JSON value are ignored (`encoding/json`'s `Decoder`).
+- **`body: "<field>"` is not protojson.** grpc-gateway decodes into the Go
+  field with `encoding/json` unless the field is a message: an `int64` must be
+  a JSON number, an enum must be a number (`1.9` is 1, `3e9` is
+  `-2147483648` on amd64), bytes are padded standard base64 or an array of
+  numbers, map keys go through `strconv` with base 0 (`0x10`, `1_000`). A
+  message field is replaced; a list is replaced unless the body is `null`; a
+  map is merged; a proto3 `optional` or proto2 field is set by an empty body
+  and unset by `null`.
+- **`response_body` is not protojson either** for non-messages: `int64` is a
+  number, `<>&` are escaped, a nil `bytes` is `[]`, an unset message field is
+  written as an empty message (so an unset `Timestamp` is `1970-01-01T00:00:00Z`
+  and an unset `Value` fails).
+- **Output.** Fields in declaration order, extensions after them by full
+  name; map keys sorted (numbers numerically); `EmitUnpopulated` writes
+  `null` for unset messages and proto2 scalars, but nothing for unset oneof
+  members **and proto3 `optional` fields**; floats in Go's shortest form
+  (`1e+21`, `1e-7`, `-0`, `0` for a whole `Struct` number); `Any` payloads
+  decoded the way Go's generated types decode them (a known field with the
+  wrong wire type is unknown, not an error).
+- **Input.** Duplicate fields, a field given by both names, a duplicate map
+  key and a oneof given twice are rejected — including after an unknown enum
+  name was discarded for the first member. An integer may be written
+  `1e3`, `"1e3"`, `100e-2`, and a number inside a string stops at the first
+  delimiter (`"1,"` is 1). `Timestamp` goes through `time.Parse`, whose layout
+  fallback accepts a one-digit hour, a comma before the fraction and a
+  `+24:00` offset. Unknown enum names are discarded, unknown numbers kept.
+- **Binary form of `Any.value`** built from JSON is Go's deterministic
+  encoding (map entries sorted, oneof members last), compared byte for byte.
+
+Written deviation: messages nest at most 100 levels (prost's own limit for
+the binary form the request is sent in), where grpc-gateway allows 10 000; a
+deeper body is rejected instead of risking the stack. `depth_101` is the
+vector that shows it.
+
+Every behaviour above was checked by breaking the code on purpose: 42
+mutations (the null for unset messages, the oneof and `optional` skip,
+duplicate rejection, exponent integers, float spelling, key sorting,
+declaration order, escapes, base64 alphabets, the `time.Parse` fallback,
+duration and `FieldMask` rules, `Any` with well-known types, enum discard,
+the `encoding/json` paths of `body` and `response_body`, binary field order,
+`NaN` bits, type URL hosts, the nesting limit, required fields and the
+shortcut that skips them, extensions, wire-type leniency, the object-body
+fast path, error details) each make `tests/json.rs` or `tests/errors.rs`
+fail. One of them — oneof members written twice in binary — makes the tests
+run away instead of failing (the payload doubles at every nested `Value`);
+its tamer variant, oneof members first, fails cleanly.
+
+Not validated: the typed hop into a tonic service (`DynamicMessage` →
+prost type) — prost-reflect's binary encoder drops `-0.0` from a proto3
+`double`, which the Go gateway sends (read in its code, not run); `body`/`response_body` on a oneof
+member or a nested field path (abada returns `Unsupported`); group fields;
+`UseProtoNames`, `UseEnumNumbers` and `EmitDefaultValues` beyond reading the
+code; a float-to-enum conversion on non-amd64 Go; nesting between 101 and
+10 000 levels; invalid UTF-8 inside a proto2 string (abada cannot hold it);
+error message text (protojson's is randomised per build and not compared).
+
 ## Decision: how JSON is transcoded
 
 Settled by [ADR 0001](adr/0001-transcodificacao-json.md): **`prost-reflect`
 `DynamicMessage`**, driven by the descriptor. `pbjson` was 2–21× cheaper per
 operation on the `delonix.node.v1` bodies, but cannot read or write `Any` or
 `FieldMask` as grpc-gateway does, and fails to encode unknown enum numbers.
-Measured against grpc-gateway's default marshaler, not by preference; five
-deviations of `prost-reflect` remain to be closed (see the ADR).
+Measured against grpc-gateway's default marshaler, not by preference. The
+five deviations of `prost-reflect`'s serde support are closed by not using
+it: see "JSON" below and the ADR's follow-up.
 
 | Option | For | Against |
 |---|---|---|

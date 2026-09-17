@@ -6,9 +6,10 @@ contract? Measured on 2026-09-17 against
 descriptor set is committed as `conformance/contracts/delonix-node-v1.binpb`).
 
 **Verdict: not yet.** Reading the contract's HTTP rules and choosing the RPC
-for a request are done and proven equal to grpc-gateway, and so is the error
-response (status, body, headers) once a gRPC status is in hand. Everything that
-turns a request into a gRPC call and back is not started.
+for a request are done and proven equal to grpc-gateway, and so are the error
+response (status, body, headers) once a gRPC status is in hand and the JSON
+codec for bodies and responses. Putting path and query values into the
+request, the call itself and streaming are not started.
 
 ## What the contract asks for, and where abada stands
 
@@ -18,10 +19,10 @@ turns a request into a gRPC call and back is not started.
 | Route a request to its RPC | 56 bindings, all registered together | **done** | 728 requests, two unescaping modes, identical outcome, RPC and path values; one canonical request per binding reaches its own RPC |
 | Put path values into typed request fields | 56 bindings | not started | — |
 | Query parameters | 18 RPCs (every `List*`, `Delete*`, `GetImage`, `Logs`, `WatchEvents`, …) | not started | — |
-| `body: "*"` | 26 `POST` | not started | — |
-| `body: <field>` with a `FieldMask` | 1 `PATCH` (`UpdateContainer`) | not started | — |
-| Canonical proto3 JSON | 64-bit ints ×28, maps ×20, enums ×13, oneofs ×13, bytes ×9, `optional` ×3; `Any`, `Struct`, `FieldMask`, `Timestamp`, `Duration` | not started — library chosen: prost-reflect ([ADR 0001](../adr/0001-transcodificacao-json.md)), with five known deviations | 29 bodies compared with grpc-gateway's default marshaler |
-| `google.rpc.Status` errors with grpc-gateway's HTTP codes | every RPC | **done, except details of a registered type** (needs the JSON decision); not yet wired to a tonic call | `conformance/vectors/errors.json`: 25 codes, 64 statuses, 29 routing errors, same status, headers, body and trailers as grpc-gateway on the wire; one written deviation for header values with control bytes |
+| `body: "*"` | 26 `POST` | JSON decoding **done** (`Marshaler::decode_into`); not yet wired into a request | see canonical JSON below |
+| `body: <field>` with a `FieldMask` | 1 `PATCH` (`UpdateContainer`) | decoding into the field **done** (`Marshaler::decode_field`, grpc-gateway's `encoding/json` rules); filling `update_mask` from the body when it is empty (`runtime.FieldMaskFromRequestBody`) not started | 178 `body: "<field>"` vectors over `conformance/protos` |
+| Canonical proto3 JSON | 64-bit ints ×28, maps ×20, enums ×13, oneofs ×13, bytes ×9, `optional` ×3; `Any`, `Struct`, `FieldMask`, `Timestamp`, `Duration` | **done** (`abada::json`), one written deviation: at most 100 nested messages | the 28 contract bodies: same accept/reject, same decoded message and the same output bytes as grpc-gateway, with and without `EmitUnpopulated`; plus 868 cases over `conformance/protos` covering every shape the contract uses and the ones it does not |
+| `google.rpc.Status` errors with grpc-gateway's HTTP codes | every RPC | **done**, details rendered through the type registry; not yet wired to a tonic call | `conformance/vectors/errors.json`: 25 codes, 64 statuses (4 with registered detail types), 29 routing errors, same status, headers, body and trailers as grpc-gateway on the wire; one written deviation for header values with control bytes |
 | Server streaming | `WatchOperation`, `Logs`, `WatchEvents` | not started | — |
 | `Exec`, `Console` (bidirectional, no mapping; WebSocket per ADR-0040 D4) | 2 RPCs | out of v0.1 scope | — |
 | Serve gRPC and HTTP/JSON on one unix socket | the node API's shape | not started | — |
@@ -64,8 +65,11 @@ This is a property of the contract, reported to its owner, not changed here.
 
 ## Not validated
 
-- Error `details` whose type grpc-gateway's registry resolves (abada answers
-  the 500 fallback), and errors in the middle of a server stream.
+- Error `details` of a type a Go gateway binary links but abada's registry
+  does not hold (abada's holds the contract, the well-known types and
+  `google.rpc.Status`), and errors in the middle of a server stream.
+- The JSON of a real request end to end: the codec is measured on bodies and
+  messages, not behind a tonic call (the typed hop is not written).
 - The 405 fallback visits other methods in a Go map order; abada uses
   registration order and the oracle drops any request whose answer depends on
   it (none were dropped for this contract).

@@ -209,3 +209,80 @@ for this contract, and correctness is the requirement while cost is a budget:
 - Versions other than prost-reflect 0.16.5, pbjson/pbjson-build/pbjson-types
   0.9.0, serde_json 1.0.151, grpc-gateway v2.27.3 with google.golang.org/protobuf
   v1.36.10.
+
+## Follow-up (2026-09-17): the deviations are closed
+
+The decision stands — `prost-reflect`'s `DynamicMessage`, driven by the
+descriptor — but not its serde support. The five deviations, and what the
+body comparison did not look at, were closed by `abada::json::Marshaler`,
+a port of protojson (v1.36.10) and of the parts of Go's `encoding/json`,
+`strconv`, `encoding/base64` and `time` that reach grpc-gateway's bytes, over
+`DynamicMessage`. No serde, no `serde_json`: a duplicate key cannot be seen
+through serde's map visitor, and protojson's own tokenizer is what decides
+what a body may contain.
+
+The count above was wrong: `conformance/cases/json-delonix-node-v1.json` has
+**28** bodies, not 29.
+
+| Deviation (Consequences, above) | Closed by | Evidence |
+|---|---|---|
+| 1. no `null` for unset messages under `EmitUnpopulated` | protojson's `unpopulatedFieldRanger`: `null` for unset messages and proto2 scalars, nothing for unset oneof members **or proto3 `optional` fields** (a synthetic oneof) | contract bodies with unset messages; `optionals_empty` writes `{}` |
+| 2. duplicate keys and a field given by both names accepted | a per-object set of field numbers; also duplicate map keys and a oneof given twice | `duplicate_key`, `proto_and_json_name_both`, `dup_*`, `map_key_duplicate*`, `oneof_*twice` |
+| 3. 64-bit integers in exponent form rejected | `normalizeToIntString`, including numbers inside strings, which stop at the first delimiter (`"1,"` is 1) | `int64_exponent`, `i32_*exponent*`, `i32_string_trailing_*` |
+| 4. `Struct` numbers written `0.0` | `strconv.AppendFloat` shortest form with protojson's `e`/`f` rule | contract VM body; `struct_*`, `dbl_*`, `flt_*`, `enc_float*` |
+| 5. map keys in `HashMap` order, key order not compared | `order.GenericKeyOrder` (numbers numerically, strings by bytes); outputs are now compared **byte for byte** | `map_all_key_kinds`, `enc_many_map_keys`; every output vector |
+
+Measured in `benches/json-transcode` as a third column: on the 28 contract
+bodies abada decodes to the same message as grpc-gateway (19 accepted, 9
+rejected by both) and writes the same **bytes** with and without
+`EmitUnpopulated` (`expected.txt`, `abada ... same-bytes`). Beyond the
+contract, `conformance/vectors/json-abada-conformance-v1.json` holds 868
+cases over `conformance/protos` — every scalar kind, maps with every key
+kind, oneofs with well-known types, proto3 `optional`, proto2 with defaults,
+required fields and extensions, every well-known type — answered by
+grpc-gateway linked with protoc-gen-go's types: 506 bodies (199 rejected),
+97 messages built in prototext that no body can produce (30 of them fail to
+marshal: NaN in a `Value`, out-of-range `Timestamp`/`Duration`, irreversible
+`FieldMask` paths, `Any` with bytes that do not decode), 178
+`body: "<field>"` decodes and 87 `response_body` encodes (11 of which fail to
+marshal, as in Go).
+
+Found on the way, against intuition, and now fixed in the vectors:
+`body: "<field>"` and `response_body` for a non-message field do not use
+protojson at all but `encoding/json` over the Go field type (an `int64` field
+body must be a number, enums are numbers, map keys go through `strconv` with
+base 0, `<>&` are escaped on the way out); `time.Parse` accepts a one-digit
+hour, a comma before the fraction and a `+24:00` offset; Go's generated types
+write oneof members last in binary; `math.NaN()` has a payload bit that
+reaches `Any.value`.
+
+One written deviation remains: messages nest at most 100 levels (prost's
+limit for the binary form the request travels in), where grpc-gateway allows
+10 000 (vector `depth_101`).
+
+Cost, same harness and host, three unpinned runs at load average ~10
+(14:04–14:06), median of run medians, µs/op, abada against (a) in the same
+runs:
+
+| body | decode abada / (a) | encode abada / (a) |
+|---|---|---|
+| `CreateContainerRequest` | 27.9 / 20.0 (1.40×) | 15.1 / 12.2 (1.24×) |
+| `CreateVirtualMachineRequest` | 18.6 / 16.4 (1.13×) | 10.0 / 16.3 (0.61×) |
+| `ListContainersResponse`, 50 items | 738 / 568 (1.30×) | 553 / 460 (1.20×) |
+| `Operation` with `Any` | 13.6 / 10.3 (1.32×) | 11.5 / 10.9 (1.05×) |
+| `LogChunk` | 1.32 / 0.88 (1.50×) | 0.67 / 0.58 (1.16×) |
+
+abada decodes with fewer allocations than (a) (93 against 139 for
+`CreateContainerRequest`) and stays well under (a)'s typed path, which is
+what a request pays anyway. It is slower than (a)'s serde step by the price
+of doing protojson's work (two tokens where serde has one, duplicate
+detection, Go's number grammar); the run-to-run spread was up to 50 %, so
+only "same order, at most 1.5× the dynamic step" is claimed. pbjson remains
+2–12× cheaper than abada and remains ruled out on correctness.
+
+Not validated by this follow-up: the typed hop (`DynamicMessage` → prost
+type; prost-reflect's encoder drops `-0.0` in a proto3 `double`, read in its
+code), `body`/`response_body` on oneof members and nested field paths, group
+fields, `UseProtoNames`/`UseEnumNumbers`/`EmitDefaultValues` (implemented,
+not measured), float-to-enum conversion on non-amd64 Go, protojson error
+texts (randomised per build), a quiet host.
