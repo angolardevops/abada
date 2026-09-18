@@ -37,7 +37,7 @@ A change that weakens one of these is not a feature; it needs an ADR (§6).
 
 | Crate | Role | May depend on |
 |---|---|---|
-| `abada` | runtime used by generated code: routing, transcoding, errors, streaming | `http`; `prost-reflect`, `serde`, `serde_json` (ADR 0001); `tower`, `prost` (property 4, when the service lands) — never `axum`, never `abada-codegen` |
+| `abada` | runtime used by generated code: routing, transcoding, errors, streaming | `http`; `prost-reflect`, `prost-types`, `serde`, `serde_json` (ADR 0001); `tower`, `prost` (property 4, when the service lands) — never `axum`, never `abada-codegen` |
 | `abada-codegen` | `FileDescriptorSet` → `HttpRule`s → Rust code; pure, no I/O besides what it is handed | `abada`, `prost` |
 | `abada-build` | `build.rs` API in the style of `tonic-build` | `abada-codegen` |
 | `protoc-gen-abada` | protoc/buf plugin: `CodeGeneratorRequest` on stdin, response on stdout | `abada-codegen` |
