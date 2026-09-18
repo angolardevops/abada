@@ -216,12 +216,12 @@ impl RequestBinding {
         for name in template.fields() {
             let fields = resolve(&input, name, true)?;
             let target = fields.last().expect("a field path has a field");
-            if let Kind::Message(m) = target.kind()
-                && !has_runtime_converter(m.full_name())
-            {
-                return Err(BindingError::MessageInPath {
-                    path: name.to_string(),
-                });
+            if let Kind::Message(m) = target.kind() {
+                if !has_runtime_converter(m.full_name()) {
+                    return Err(BindingError::MessageInPath {
+                        path: name.to_string(),
+                    });
+                }
             }
             let conv = if fields.len() == 1 {
                 // `runtime.Timestamp` assigned to a repeated field: the
@@ -472,16 +472,17 @@ impl RequestBinding {
                 } else {
                     runtime_convert(ctx, &kind, val).map_err(|e| mismatch(&e))?
                 };
-                if let Some(oneof) = fd.containing_oneof()
-                    && !oneof.is_synthetic()
-                    && let Some(other) = oneof.fields().find(|f| f != fd && msg.has_field(f))
-                {
-                    return Err(RequestError::invalid(format!(
-                        "expect type: *{}_{}, but: {}\n",
-                        msg.descriptor().name(),
-                        fd.name(),
-                        other.name()
-                    )));
+                if let Some(oneof) = fd.containing_oneof() {
+                    if !oneof.is_synthetic() {
+                        if let Some(other) = oneof.fields().find(|f| f != fd && msg.has_field(f)) {
+                            return Err(RequestError::invalid(format!(
+                                "expect type: *{}_{}, but: {}\n",
+                                msg.descriptor().name(),
+                                fd.name(),
+                                other.name()
+                            )));
+                        }
+                    }
                 }
                 msg.set_field(fd, value);
             }

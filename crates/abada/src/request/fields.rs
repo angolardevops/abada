@@ -218,15 +218,17 @@ pub(crate) fn populate_field_value_from_path(
     let Some(fd) = lookup(&msg.descriptor(), name) else {
         return Ok(());
     };
-    if let Some(oneof) = fd.containing_oneof()
-        && !oneof.is_synthetic()
-        && let Some(set) = oneof.fields().find(|f| msg.has_field(f))
-        && (!is_message(&fd) || fd.full_name() != set.full_name())
-    {
-        return Err(FieldError::gateway(format!(
-            "field already set for oneof {}",
-            quote(oneof.name().as_bytes())
-        )));
+    if let Some(oneof) = fd.containing_oneof() {
+        if !oneof.is_synthetic() {
+            if let Some(set) = oneof.fields().find(|f| msg.has_field(f)) {
+                if !is_message(&fd) || fd.full_name() != set.full_name() {
+                    return Err(FieldError::gateway(format!(
+                        "field already set for oneof {}",
+                        quote(oneof.name().as_bytes())
+                    )));
+                }
+            }
+        }
     }
     if path.len() > 1 {
         if !is_message(&fd) || fd.is_list() || fd.is_map() {

@@ -290,11 +290,11 @@ pub(crate) fn parse_duration(orig: &[u8]) -> Result<i64, String> {
     let mut s = orig;
     let mut d: u64 = 0;
     let mut neg = false;
-    if let Some(&c) = s.first()
-        && (c == b'-' || c == b'+')
-    {
-        neg = c == b'-';
-        s = &s[1..];
+    if let Some(&c) = s.first() {
+        if c == b'-' || c == b'+' {
+            neg = c == b'-';
+            s = &s[1..];
+        }
     }
     if s == b"0" {
         return Ok(0);
@@ -472,11 +472,10 @@ pub(crate) fn runtime_timestamp(val: &[u8]) -> Result<Instant, String> {
     }
     let dot = s.iter().rposition(|&c| c == b'.');
     let zone = s.iter().rposition(|&c| matches!(c, b'Z' | b'-' | b'+'));
-    if let (Some(i), Some(j)) = (dot, zone)
-        && j >= i
-        && j - i > ".999999999".len()
-    {
-        return Err(invalid());
+    if let (Some(i), Some(j)) = (dot, zone) {
+        if j >= i && j - i > ".999999999".len() {
+            return Err(invalid());
+        }
     }
     Ok(t)
 }

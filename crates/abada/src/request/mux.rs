@@ -89,23 +89,22 @@ pub fn dispatch<'a, T>(
     let mut method = incoming.method.to_string();
     let mut form: Option<Form> = None;
 
-    if let Some(ov) = incoming.method_override
-        && !ov.is_empty()
-        && path_length_fallback(&method)
-    {
-        let (parsed, err) = parse_form(&method, incoming.content_type, query, incoming.body);
-        if let Some(e) = err {
-            return Dispatch {
-                method,
-                outcome: DispatchOutcome::FormError {
-                    escapes: Vec::new(),
-                    error: RequestError::invalid(e),
-                },
-                form: None,
-            };
+    if let Some(ov) = incoming.method_override {
+        if !ov.is_empty() && path_length_fallback(&method) {
+            let (parsed, err) = parse_form(&method, incoming.content_type, query, incoming.body);
+            if let Some(e) = err {
+                return Dispatch {
+                    method,
+                    outcome: DispatchOutcome::FormError {
+                        escapes: Vec::new(),
+                        error: RequestError::invalid(e),
+                    },
+                    form: None,
+                };
+            }
+            form = Some(parsed);
+            method = go_to_upper(ov);
         }
-        form = Some(parsed);
-        method = go_to_upper(ov);
     }
 
     let (outcome, fell_back) =
