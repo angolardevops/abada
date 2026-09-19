@@ -368,18 +368,23 @@ recursion aborts in `tests/security.rs` (debug and release) and in
 in debug only (in release it fails by assertion: 101 levels answer 200) and in
 `tests/request.rs` in both; limit 101, the leaf level not counted and a
 `path.len()` check up front fail the vectors above; without the descriptor scan
-the three `not-a-message` vectors fail; counting a map's entry as a level failed
-`-100-map-scalar-leaf` (it did, until a review found it).
+the three `not-a-message` vectors fail; counting a map's entry as a level fails
+`-100-map-scalar-leaf` when maps of scalars are counted too (that was the
+defect a review found) and `-99-map-msg-leaf` when only maps of messages are;
+treating every map as scalar fails `-100-map-msg-leaf`.
 
 Three consequences. A path variable `{a.b.c…}` of 101 or more components, which
 grpc-gateway serves, answers 400 on every request (found by reading, not
-measured). A `Struct` or `Value` last field is filled by the JSON codec, and a
-JSON object level is two message levels for prost: a deep one is refused by the
-backend's decoder from about 50 levels of JSON, wherever the field sits
-(measured: a `fValue` of 50 nested arrays at level 1 is 200 and at level 51 is
-400; no crash). And a query is bounded in depth, not in cost — see the parity
-report, S5, where the amplification (about 90×, and reachable through a form
-`POST` body as well as a URI) is a FAIL.
+measured). A `Struct` or `Value` last field is filled by the JSON codec, and
+for prost an object level is three messages (`Value`, `Struct`, the map entry)
+and an array level two: `prost_types::Value` decodes at most 33 levels of object
+or 50 of array (measured in review), fewer the deeper the field sits, and past
+that the backend's decoder answers 400 (measured through the gateway with
+arrays: a `fValue` of 50 at level 1 is 200, at level 51 is 400; with 10 or 49
+arrays at level 99 it is 400, and from 100 levels of JSON the codec's own 400
+answers first). No crash. And a query is bounded in depth, not in cost — see the parity
+report, S5, where the amplification (90× to 125× by construction, and reachable
+through a form `POST` body as well as a URI) is a FAIL.
 
 **The body decoder seam.** Messages are decoded through
 `abada::request::BodyDecoder` (`protojson.Unmarshal` with `DiscardUnknown`),

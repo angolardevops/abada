@@ -85,7 +85,13 @@ The limit makes the cost of a query finite, not small: each key that diverges
 from the others builds about 100 messages of its own, while keys sharing a
 prefix share them. `GET /v1/query/x?` with 94 keys of 99 components each
 (65 558 B in, about what a URI can hold) peaks at 92× the input, 195× in total,
-about 35 ms in release; one key is 130×. grpc-gateway has no depth limit and its
+26–35 ms in release (load average 6–20, so an order of magnitude and nothing
+finer); one 100-component key of the corpus is 106× (an earlier run, one key of
+702 B, read 130×). The worst input found by review keeps the first eight
+components divergent and every other one `oMsg`, which is 2 bytes shorter per
+level: 130 keys, 65 042 B, 125× (120× as a form `POST` body of 672 139 B); the
+ratchet of 150× still covers it, the corpus entry uses the `nested` suffix and
+reads 92×. grpc-gateway has no depth limit and its
 figure was **not measured**, so the comparison the skill asks for is open. The
 corpus entry `query: 94 divergent 100-deep keys` ratchets it at 150× (`RATCHET`,
 Go's column NaN). The first version of that entry, 93 keys, was 700 bytes under
