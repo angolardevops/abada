@@ -148,6 +148,7 @@ touched.
 | ADR | Decision |
 |---|---|
 | [0001](docs/adr/0001-transcodificacao-json.md) | JSON is transcoded with `prost-reflect` `DynamicMessage`; five deviations to close before claiming JSON compatibility |
+| [0002](docs/adr/0002-chamada-do-rpc-in-process-e-proxy.md) | in-process and proxy calls are one code path, `tonic::client::Grpc<S: GrpcService>`, over a descriptor-driven codec; abada's MSRV vs `tonic-prost-build` is a blocking open question before `tonic` enters `abada`'s own dependencies |
 
 An ADR is superseded by another ADR, never by an edit to a skill or to this
 file.

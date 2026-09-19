@@ -1,10 +1,13 @@
-//! The two JSON transcoding candidates, side by side, over the
-//! `delonix.node.v1` contract, and the comparison of both against
-//! grpc-gateway's own answers. See `docs/adr/0001-transcodificacao-json.md`.
+//! The two JSON transcoding candidates of ADR 0001, and the codec abada
+//! built on the chosen one, side by side over the `delonix.node.v1`
+//! contract, compared with grpc-gateway's own answers. See
+//! `docs/adr/0001-transcodificacao-json.md`.
 //!
-//! - (a) `prost-reflect`: the body becomes a `DynamicMessage` driven by the
-//!   descriptor, and reaches the user's prost type through the binary encoding.
+//! - (a) `prost-reflect`: the body becomes a `DynamicMessage` through
+//!   prost-reflect's serde support, and reaches the user's prost type through
+//!   the binary encoding.
 //! - (b) `pbjson`: serde impls generated for the user's prost types.
+//! - `abada`: `abada::json::Marshaler`, a `DynamicMessage` too, without serde.
 
 use prost::Message;
 use prost_reflect::{
@@ -123,6 +126,33 @@ pub mod reflect {
     }
 }
 
+/// `abada::json`, the codec built on (a).
+pub mod abada_codec {
+    use super::*;
+    use abada::json::{Marshaler, TypeRegistry};
+
+    /// The default marshaler for a mode, over the contract.
+    pub fn marshaler(mode: Mode) -> Marshaler {
+        let mut m = Marshaler::new(TypeRegistry::decode(DESCRIPTOR_SET).expect("descriptor set"));
+        m.marshal.emit_unpopulated = matches!(mode, Mode::Emit);
+        m
+    }
+
+    /// Request path: JSON body into a dynamic message, as for `body: "*"`.
+    pub fn decode(
+        m: &Marshaler,
+        desc: &MessageDescriptor,
+        body: &[u8],
+    ) -> Result<DynamicMessage, String> {
+        m.decode(desc, body).map_err(|e| e.to_string())
+    }
+
+    /// Response path: dynamic message into a JSON body.
+    pub fn encode(m: &Marshaler, msg: &DynamicMessage) -> Result<Vec<u8>, String> {
+        m.encode(msg).map_err(|e| e.to_string())
+    }
+}
+
 /// Candidate (b): `pbjson`.
 pub mod pbjson {
     use super::*;
@@ -234,6 +264,12 @@ pub enum Verdict {
     /// map keys come out in a different order on every run, where Go sorts
     /// them. Decode: the same message.
     Identical,
+    /// Encode, for abada only: the same bytes as grpc-gateway's compacted
+    /// output, key order and number spelling included.
+    SameBytes,
+    /// Encode, for abada only: the same JSON value as `Identical` means it,
+    /// but not the same bytes.
+    OtherBytes,
     /// The same JSON value, but a number is spelled differently (`0` vs `0.0`).
     SameValue,
     /// Accepted by both, different answer; the first differing path, with
@@ -254,7 +290,7 @@ pub enum Verdict {
 pub struct Finding {
     /// Case name.
     pub case: String,
-    /// `prost-reflect` or `pbjson`.
+    /// `prost-reflect`, `pbjson` or `abada`.
     pub candidate: &'static str,
     /// Decoding: accepted/rejected like grpc-gateway, and the same message.
     pub decode: Verdict,
@@ -336,6 +372,18 @@ fn compare_output(expected: &str, got: Result<Vec<u8>, String>) -> Verdict {
     }
 }
 
+/// Like `compare_output`, then byte for byte.
+fn compare_output_exact(expected: &str, got: Result<Vec<u8>, String>) -> Verdict {
+    match got {
+        Ok(bytes) if bytes == expected.as_bytes() => Verdict::SameBytes,
+        Ok(bytes) => match compare_output(expected, Ok(bytes)) {
+            Verdict::Identical => Verdict::OtherBytes,
+            other => other,
+        },
+        Err(e) => Verdict::EncodeFails(e),
+    }
+}
+
 fn compare_decode(
     desc: &MessageDescriptor,
     accepted: bool,
@@ -385,6 +433,8 @@ fn pbjson_encode_from_proto<M: Message + Default + Serialize>(
 pub fn compare() -> Vec<Finding> {
     use base64::Engine;
     let pool = reflect::pool();
+    let abada_emit = abada_codec::marshaler(Mode::Emit);
+    let abada_omit = abada_codec::marshaler(Mode::Omit);
     let mut out = Vec::new();
     for v in vectors() {
         let desc = pool.get_message_by_name(&v.message).expect("message");
@@ -406,6 +456,27 @@ pub fn compare() -> Vec<Finding> {
         out.push(Finding {
             case: v.name.clone(),
             candidate: "prost-reflect",
+            decode: compare_decode(&desc, v.accepted, decoded, &go_proto),
+            encode_emit: emit,
+            encode_omit: omit,
+        });
+
+        let decoded = abada_codec::decode(&abada_emit, &desc, body).map(|m| m.encode_to_vec());
+        let (emit, omit) = if v.accepted {
+            let m = DynamicMessage::decode(desc.clone(), go_proto.as_slice()).unwrap();
+            (
+                compare_output_exact(&v.output, abada_codec::encode(&abada_emit, &m)),
+                compare_output_exact(
+                    &v.output_omit_unpopulated,
+                    abada_codec::encode(&abada_omit, &m),
+                ),
+            )
+        } else {
+            (Verdict::BothReject, Verdict::BothReject)
+        };
+        out.push(Finding {
+            case: v.name.clone(),
+            candidate: "abada",
             decode: compare_decode(&desc, v.accepted, decoded, &go_proto),
             encode_emit: emit,
             encode_omit: omit,
@@ -442,6 +513,8 @@ impl Verdict {
     fn render(&self) -> String {
         match self {
             Verdict::Identical => "identical".into(),
+            Verdict::SameBytes => "same-bytes".into(),
+            Verdict::OtherBytes => "other-bytes".into(),
             Verdict::SameValue => "number-spelling".into(),
             Verdict::Differs(d) => format!("differs[{d}]"),
             // The candidate's error text belongs to the library, not to the finding.

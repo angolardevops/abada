@@ -47,7 +47,7 @@ abada-build ──────┘
 | `error` | `google.rpc.Status` responses, code → HTTP status, routing errors, error headers/trailers |
 | `json` (in progress) | proto3 JSON as grpc-gateway's default marshaler (ADR 0001: `prost-reflect`) |
 | `request` (in progress) | path values, query parameters, body selection, `FieldMask` for PATCH |
-| service / streaming (planned) | the `tower::Service`, metadata in/out, NDJSON streaming |
+| `service` (in progress) | metadata in (`metadata::incoming`) and a successful response out (`response::Response::success`), both done; the call itself (ADR 0002), the `tower::Service`, NDJSON streaming (all planned) |
 
 One module owns one concern. A module does not re-implement another's job
 (e.g. JSON escaping lives in one place; `error` calls it).

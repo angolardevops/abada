@@ -84,6 +84,14 @@ func main() {
 		runErrors()
 		return
 	}
+	if len(os.Args) == 2 && os.Args[1] == "metadata" {
+		runMetadata()
+		return
+	}
+	if len(os.Args) == 2 && os.Args[1] == "response" {
+		runResponse()
+		return
+	}
 	if len(os.Args) == 4 && os.Args[1] == "json" {
 		runJSON(os.Args[2], os.Args[3])
 		return

@@ -1,0 +1,28 @@
+// proto2 shapes for the JSON conformance vectors: explicit presence on
+// scalars, defaults, required fields and extensions.
+syntax = "proto2";
+
+package abada.conformance.v1;
+
+option go_package = "github.com/grpc-ecosystem/grpc-gateway/v2/internal/abadaoracle/abadapb;abadapb";
+
+message Proto2 {
+  optional int32 i32 = 1 [default = 7];
+  optional string str = 2 [default = "x"];
+  optional Proto2Required inner = 3;
+  repeated Proto2Required items = 4;
+  map<string, Proto2Required> by_name = 5;
+  optional bytes byt = 6;
+  extensions 100 to 199;
+}
+
+message Proto2Required {
+  required string id = 1;
+  optional int32 n = 2;
+}
+
+extend Proto2 {
+  optional string ext_str = 100;
+  repeated int32 ext_i32 = 101;
+  optional Proto2Required ext_msg = 102;
+}

@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = ["crates/abada", "crates/abada-codegen", "crates/abada-build", "crates/protoc-gen-abada", "benches/json-transcode"]
+exclude = ["benches/tonic-call-proto"]
 
 [workspace.package]
 version = "0.0.1"

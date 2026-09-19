@@ -1,0 +1,173 @@
+// Messages for the JSON conformance vectors: every field shape protojson
+// treats differently, including the ones no real contract of abada uses yet.
+// Compiled by conformance/protos/generate.sh; not a public API.
+syntax = "proto3";
+
+package abada.conformance.v1;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option go_package = "github.com/grpc-ecosystem/grpc-gateway/v2/internal/abadaoracle/abadapb;abadapb";
+
+enum Color {
+  COLOR_UNSPECIFIED = 0;
+  COLOR_RED = 1;
+  COLOR_GREEN = 2;
+  COLOR_NEGATIVE = -1;
+}
+
+enum Alias {
+  option allow_alias = true;
+  ALIAS_ZERO = 0;
+  ALIAS_ONE = 1;
+  ALIAS_UNO = 1;
+}
+
+message Nested {
+  string name = 1;
+  Nested child = 2;
+  int32 value = 3;
+}
+
+// Every scalar kind, singular, without presence. Declared out of number order
+// on purpose: protojson writes fields in declaration order.
+message Scalars {
+  string late_declared_low_number = 99;
+  int32 i32 = 1;
+  int64 i64 = 2;
+  uint32 u32 = 3;
+  uint64 u64 = 4;
+  sint32 s32 = 5;
+  sint64 s64 = 6;
+  fixed32 fx32 = 7;
+  fixed64 fx64 = 8;
+  sfixed32 sfx32 = 9;
+  sfixed64 sfx64 = 10;
+  float flt = 11;
+  double dbl = 12;
+  bool flag = 13;
+  string str = 14;
+  bytes byt = 15;
+  Color color = 16;
+  Alias alias = 17;
+  string custom = 18 [json_name = "renamed"];
+  string snake_case_name = 19;
+  string name_1a = 20;
+  string x_ = 21;
+  Nested nested = 22;
+}
+
+message Repeated {
+  repeated int32 i32 = 1;
+  repeated int64 i64 = 2;
+  repeated uint32 u32 = 3;
+  repeated uint64 u64 = 4;
+  repeated sint32 s32 = 5;
+  repeated sint64 s64 = 6;
+  repeated fixed32 fx32 = 7;
+  repeated fixed64 fx64 = 8;
+  repeated sfixed32 sfx32 = 9;
+  repeated sfixed64 sfx64 = 10;
+  repeated float flt = 11;
+  repeated double dbl = 12;
+  repeated bool flag = 13;
+  repeated string str = 14;
+  repeated bytes byt = 15;
+  repeated Color color = 16;
+  repeated Nested nested = 17;
+  repeated google.protobuf.Timestamp ts = 18;
+  repeated google.protobuf.Any any = 19;
+  repeated google.protobuf.Value value = 20;
+  repeated google.protobuf.Int64Value i64_wrapper = 21;
+  repeated google.protobuf.NullValue null = 22;
+  repeated google.protobuf.Struct st = 23;
+}
+
+message Optionals {
+  optional int32 i32 = 1;
+  optional int64 i64 = 2;
+  optional uint32 u32 = 3;
+  optional uint64 u64 = 4;
+  optional float flt = 11;
+  optional double dbl = 12;
+  optional bool flag = 13;
+  optional string str = 14;
+  optional bytes byt = 15;
+  optional Color color = 16;
+}
+
+message Maps {
+  map<int32, string> i32 = 1;
+  map<int64, string> i64 = 2;
+  map<uint32, string> u32 = 3;
+  map<uint64, string> u64 = 4;
+  map<sint32, string> s32 = 5;
+  map<sint64, string> s64 = 6;
+  map<fixed32, string> fx32 = 7;
+  map<fixed64, string> fx64 = 8;
+  map<sfixed32, string> sfx32 = 9;
+  map<sfixed64, string> sfx64 = 10;
+  map<bool, string> flag = 11;
+  map<string, string> str = 12;
+  map<string, bytes> byt = 13;
+  map<string, Color> color = 14;
+  map<string, Nested> nested = 15;
+  map<string, double> dbl = 16;
+  map<string, int64> i64_value = 17;
+  map<string, google.protobuf.Value> value = 18;
+  map<string, google.protobuf.Timestamp> ts = 19;
+  map<string, google.protobuf.StringValue> str_wrapper = 20;
+  map<string, float> flt = 21;
+  map<string, bool> flag_value = 22;
+  map<string, uint32> u32_value = 23;
+  map<int32, Maps> recursive = 24;
+}
+
+message Oneofs {
+  oneof kind {
+    string str = 1;
+    int64 i64 = 2;
+    Color color = 3;
+    Nested nested = 4;
+    google.protobuf.Timestamp ts = 5;
+    google.protobuf.Any any = 6;
+    google.protobuf.Value value = 7;
+    google.protobuf.NullValue null = 8;
+    google.protobuf.Int32Value i32_wrapper = 9;
+    bytes byt = 10;
+    google.protobuf.Empty empty = 11;
+    double dbl = 12;
+  }
+  string after = 20;
+  oneof second {
+    bool flag = 21;
+    google.protobuf.Struct st = 22;
+  }
+}
+
+message WellKnown {
+  google.protobuf.Any any = 1;
+  google.protobuf.Timestamp ts = 2;
+  google.protobuf.Duration dur = 3;
+  google.protobuf.FieldMask mask = 4;
+  google.protobuf.Struct st = 5;
+  google.protobuf.Value value = 6;
+  google.protobuf.ListValue list = 7;
+  google.protobuf.NullValue null = 8;
+  google.protobuf.Empty empty = 9;
+  google.protobuf.BoolValue bool_wrapper = 10;
+  google.protobuf.Int32Value i32_wrapper = 11;
+  google.protobuf.Int64Value i64_wrapper = 12;
+  google.protobuf.UInt32Value u32_wrapper = 13;
+  google.protobuf.UInt64Value u64_wrapper = 14;
+  google.protobuf.FloatValue flt_wrapper = 15;
+  google.protobuf.DoubleValue dbl_wrapper = 16;
+  google.protobuf.StringValue str_wrapper = 17;
+  google.protobuf.BytesValue byt_wrapper = 18;
+}

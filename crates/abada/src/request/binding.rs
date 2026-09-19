@@ -10,14 +10,14 @@ use prost_reflect::{
     Syntax, Value,
 };
 
-use super::body::{decode_field, decode_whole};
+use super::RequestError;
 use super::field_mask;
 use super::fields::{
     Ctx, has_runtime_converter, is_message, populate_field_value_from_path, runtime_convert,
     runtime_enum, wkt_message,
 };
 use super::form::{Form, parse_form};
-use super::{BodyDecoder, RequestError};
+use crate::json::Marshaler;
 use crate::path::{PathParams, PathTemplate};
 
 /// Generator options that change the request step, with
@@ -366,15 +366,19 @@ impl RequestBinding {
         self.patch_mask.as_ref()
     }
 
-    /// Builds the request message.
+    /// Builds the request message: the body through `marshaler` (the
+    /// `runtime.ServeMux`'s inbound marshaler, [`Marshaler::default`] unless
+    /// the gateway registered another registry), then the path variables,
+    /// then the query — the generated handler's order, which matters because
+    /// decoding a body resets the message.
     pub fn decode(
         &self,
         request: &HttpRequest<'_>,
         params: &PathParams,
-        decoder: &dyn BodyDecoder,
+        marshaler: &Marshaler,
     ) -> Result<DynamicMessage, RequestError> {
         let mut ctx = Ctx {
-            decoder,
+            marshaler,
             invalid_utf8: false,
         };
         let mut msg = DynamicMessage::new(self.method.input());
@@ -386,9 +390,13 @@ impl RequestBinding {
 
         match &self.body {
             BodySelector::None => {}
-            BodySelector::Whole => decode_whole(&ctx, &mut msg, body)?,
+            BodySelector::Whole => marshaler
+                .decode_into(&mut msg, body)
+                .map_err(RequestError::codec)?,
             BodySelector::Field(fd) => {
-                decode_field(&mut ctx, &mut msg, fd, body)?;
+                marshaler
+                    .decode_field(&mut msg, fd, body)
+                    .map_err(RequestError::codec)?;
                 if let Some(mask_fd) = &self.patch_mask {
                     let empty = match msg.get_field(mask_fd).as_ref() {
                         Value::Message(m) if msg.has_field(mask_fd) => m

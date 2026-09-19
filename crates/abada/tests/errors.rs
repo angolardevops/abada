@@ -5,6 +5,7 @@
 use abada::error::{
     self, Any, ErrorResponse, RoutingError, ServerMetadata, Status, http_status_from_code,
 };
+use abada::json::Marshaler;
 use abada::path::{Pattern, RequestPath, Router, UnescapingMode};
 use http::HeaderValue;
 use serde::Deserialize;
@@ -84,9 +85,9 @@ struct RouteVector {
 /// `http::HeaderValue` cannot hold one, so abada drops that header.
 const DROPPED_HEADER_VALUES: &[&str] = &["unauth-control", "md-header-control"];
 
-/// Vectors with a detail grpc-gateway's registry resolves. abada has no
-/// registry yet and answers them as if the type were unknown.
-const DETAILS_GAP: &[&str] = &[
+/// Vectors with a detail grpc-gateway's registry resolves: abada's default
+/// registry must resolve the same ones, and render them the same way.
+const REGISTERED_DETAILS: &[&str] = &[
     "details-registered-duration",
     "details-registered-status",
     "details-registered-bad-value",
@@ -200,7 +201,7 @@ fn codes_map_to_http_status_like_grpc_gateway() {
 fn statuses_are_written_like_grpc_gateway() {
     let v = vectors();
     let mut failures = Vec::new();
-    let mut gaps = Vec::new();
+    let mut registered = Vec::new();
     let mut dropped_in = Vec::new();
     for s in &v.statuses {
         let status = Status {
@@ -232,15 +233,22 @@ fn statuses_are_written_like_grpc_gateway() {
         );
 
         if s.registered.iter().any(|&r| r) {
-            gaps.push(s.name.as_str());
-            if got.status != 500 || !got.body.starts_with(br#"{"code": 13, "#) {
+            registered.push(s.name.as_str());
+        }
+        // The oracle's registry is its binary's; abada's default registry
+        // must agree on every type the vectors name.
+        for (d, &go_resolves) in s.details.iter().zip(&s.registered) {
+            let resolves = !d.type_url.is_empty()
+                && Marshaler::default()
+                    .registry()
+                    .find_message_by_url(&d.type_url)
+                    .is_some();
+            if resolves != go_resolves {
                 failures.push(format!(
-                    "{}: a detail with a registered type should still fall back, got {:?}",
-                    s.name,
-                    seen(&got)
+                    "{}: {} resolves in grpc-gateway: {go_resolves}, in abada: {resolves}",
+                    s.name, d.type_url
                 ));
             }
-            continue;
         }
 
         let (want, dropped) = expected(&s.wire);
@@ -252,7 +260,10 @@ fn statuses_are_written_like_grpc_gateway() {
             failures.push(format!("{}: got {:?}\n    want {:?}", s.name, got, want));
         }
     }
-    assert_eq!(gaps, DETAILS_GAP, "vectors in the details gap");
+    assert_eq!(
+        registered, REGISTERED_DETAILS,
+        "vectors with registered details"
+    );
     assert_eq!(
         dropped_in, DROPPED_HEADER_VALUES,
         "vectors with dropped values"
