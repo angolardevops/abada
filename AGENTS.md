@@ -37,7 +37,7 @@ A change that weakens one of these is not a feature; it needs an ADR (§6).
 
 | Crate | Role | May depend on |
 |---|---|---|
-| `abada` | runtime used by generated code: routing, transcoding, errors, streaming | `http`; `prost-reflect`, `prost-types`, `serde`, `serde_json` (ADR 0001); `prost`, `bytes` (property 4); `tonic` pinned `=0.14.5`, `default-features = false`, `features = ["codegen"]` only (ADR 0002 — never `tonic-build`, `tonic-prost-build`, `tonic-prost`, and never a `tonic` version whose own MSRV is measured above 1.85); `tower` as a **dev-dependency only** (`features = ["util"]`, to hand-write a test double server — becomes a normal dependency, still `tower`, once something in this crate actually implements `tower::Service`) — never `axum`, never `abada-codegen` |
+| `abada` | runtime used by generated code: routing, transcoding, errors, streaming | `http`; `prost-reflect`, `prost-types`, `serde`, `serde_json` (ADR 0001); `prost`, `bytes`, `tower` (`features = ["util"]` — `Gateway` implements it, tests use `service_fn` to build a codegen-free double), `http-body`, `http-body-util` (property 4 — `Gateway`'s `tower::Service` reads/writes bodies); `tonic` pinned `=0.14.5`, `default-features = false`, `features = ["codegen"]` only (ADR 0002 — never `tonic-build`, `tonic-prost-build`, `tonic-prost`, and never a `tonic` version whose own MSRV is measured above 1.85) — never `axum`, never `abada-codegen` |
 | `abada-codegen` | `FileDescriptorSet` → `HttpRule`s → Rust code; pure, no I/O besides what it is handed | `abada`, `prost` |
 | `abada-build` | `build.rs` API in the style of `tonic-build` | `abada-codegen` |
 | `protoc-gen-abada` | protoc/buf plugin: `CodeGeneratorRequest` on stdin, response on stdout | `abada-codegen` |
@@ -174,6 +174,17 @@ file.
   HTTP/1.1; abada drops the header (written deviation).
 - **A benchmark on a loaded host proves an order of magnitude and nothing
   finer.** Pinning to a core that is not reserved made results worse.
+- **A server-side `Codec` swaps encode/decode relative to the client's**:
+  the server encodes the response and decodes the request. Getting this
+  backwards only fails when request and response are different message
+  types — with the same type (as one test's fixture happened to use) it
+  silently works, for the wrong reason.
+- **`-> impl Trait` does not, by itself, prove an associated type of that
+  trait is `Send`**, even when the concrete type's really is. A function
+  returning a hand-written `impl GrpcService<...>` needs the bound written
+  as `Future: Send` inside the `impl Trait` (an associated-type bound), not
+  left implicit, or a caller requiring `S::Future: Send` (as `Gateway`'s
+  `tower::Service` impl does) gets an opaque, hard-to-place `Send` error.
 
 ## 8. Skills and reviewers
 

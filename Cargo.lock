@@ -9,6 +9,8 @@ dependencies = [
  "base64",
  "bytes",
  "http",
+ "http-body",
+ "http-body-util",
  "prost",
  "prost-reflect",
  "prost-types",

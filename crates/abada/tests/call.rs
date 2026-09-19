@@ -83,7 +83,12 @@ fn fake_server(
 > + Clone
 + use<> {
     service_fn(move |req: http::Request<tonic::body::Body>| {
-        let codec = DynamicCodec::new(request_desc.clone(), response_desc.clone());
+        // The server encodes the response and decodes the request — the
+        // opposite order from the client's codec below, which is why this
+        // test's request and response happened to share one type: with two
+        // different ones, getting this backwards fails a debug_assert in
+        // DynamicEncoder::encode (see the gateway.rs test, which caught it).
+        let codec = DynamicCodec::new(response_desc.clone(), request_desc.clone());
         async move {
             let mut server = tonic::server::Grpc::new(codec);
             let response = server.unary(service_fn(fake_rpc), req).await;
