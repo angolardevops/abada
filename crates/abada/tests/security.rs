@@ -181,6 +181,24 @@ fn nested_struct(depth: usize) -> Vec<u8> {
     s.into_bytes()
 }
 
+/// `keys` query keys, each 99 components of `nested` and a scalar, that diverge
+/// at once (`oMsg` where a bit of the key number is set): each builds about a
+/// hundred messages of its own, where keys that share a prefix share them.
+fn divergent_deep_query(keys: usize) -> String {
+    let bits = usize::BITS - keys.next_power_of_two().leading_zeros();
+    let mut q = Vec::new();
+    for i in 0..keys {
+        let mut path: Vec<&str> = vec!["nested"; 99];
+        for l in 0..(bits as usize).min(99) {
+            if i >> l & 1 == 1 {
+                path[l] = "oMsg";
+            }
+        }
+        q.push(format!("{}.fString=1", path.join(".")));
+    }
+    format!("/v1/query/x?{}", q.join("&"))
+}
+
 fn corpus() -> Vec<Case> {
     let star = "/v1/body/star/x";
     let mut c = vec![
@@ -232,6 +250,12 @@ fn corpus() -> Vec<Case> {
             "query: 9000-deep field path (54 KB)",
             "GET",
             &format!("/v1/query/x?{}=1", vec!["nested"; 9000].join(".")),
+            vec![],
+        ),
+        case(
+            "query: 93 divergent 100-deep keys",
+            "GET",
+            &divergent_deep_query(93),
             vec![],
         ),
         case(
@@ -390,6 +414,9 @@ fn corpus() -> Vec<Case> {
 /// of 3 runs, host load ~17/32): the target the ceiling must reach.
 /// See docs/readiness/grpc-gateway-parity.md, S5.
 const RATCHET: &[(&str, f64, f64)] = &[
+    // Go's figure is not measured (NaN): it has no depth limit, so its cost per
+    // level is the open question. abada measured 93-130x at 64 keys, release.
+    ("query: 93 divergent 100-deep keys", 150.0, f64::NAN),
     ("body: 10^6 element array", 60.0, 39.1),
     ("body: 10^5 map entries", 18.0, 11.9),
 ];

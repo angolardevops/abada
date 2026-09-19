@@ -207,8 +207,10 @@ fn lookup(desc: &MessageDescriptor, name: &[u8]) -> Option<FieldDescriptor> {
 
 /// The deepest message nesting a request may be built with, the root counted:
 /// the same 100 the JSON codec allows (`abada::json::DEFAULT_RECURSION_LIMIT`).
-/// prost, which decodes what abada sends, accepts 101 (measured), so nothing
-/// abada builds is refused downstream for its depth.
+/// prost, which decodes what abada sends, accepts 101 (measured), so a request
+/// built from scalars and well-known types is never refused downstream for its
+/// depth. A `Struct` or `Value` last field is filled by the JSON codec with its
+/// own limit of 100 on top, so one at level 100 can still be refused by prost.
 ///
 /// grpc-gateway has no such limit: its walk is a loop, and Go's stack grows.
 /// Here a loop alone would not be enough — the message it built would be
@@ -220,11 +222,42 @@ fn too_deep() -> FieldError {
     FieldError::gateway("exceeded max recursion depth")
 }
 
+/// What the rest of a path past the limit would have answered in Go, told from
+/// the descriptors alone (nothing deeper is built, and a message Go creates
+/// there has no oneof set): a name that is not a singular message is still
+/// "is not a message"; everything else is the limit.
+fn past_the_limit(fd: &FieldDescriptor, rest: &[&[u8]]) -> FieldError {
+    let Kind::Message(mut desc) = fd.kind() else {
+        unreachable!("the walk only descends through message fields");
+    };
+    for (j, name) in rest.iter().enumerate() {
+        let Some(next) = lookup(&desc, name) else {
+            break;
+        };
+        if j == rest.len() - 1 {
+            break;
+        }
+        match next.kind() {
+            Kind::Message(m) if !next.is_list() && !next.is_map() => desc = m,
+            _ => {
+                return FieldError::gateway(format!(
+                    "invalid path: {} is not a message",
+                    quote(name)
+                ));
+            }
+        }
+    }
+    too_deep()
+}
+
 /// `runtime.populateFieldValueFromPath`: walk `path` (proto or JSON names),
 /// creating messages on the way, and set the last field from `values`. An
 /// unknown name ends the walk without an error. A walk that would nest the
-/// request deeper than [`MAX_MESSAGE_DEPTH`] fails; one that ends first, on an
-/// unknown name or an error, answers as grpc-gateway does.
+/// request deeper than [`MAX_MESSAGE_DEPTH`] fails. A path that ends before
+/// that, on an unknown name or an error, answers as grpc-gateway does. Past the
+/// limit a name that is not a message answers as grpc-gateway does too; an
+/// unknown name, or any error of the last field, is the limit's 400 (Go builds
+/// a message that deep first).
 pub(crate) fn populate_field_value_from_path(
     ctx: &mut Ctx<'_>,
     msg: &mut DynamicMessage,
@@ -240,14 +273,12 @@ pub(crate) fn populate_field_value_from_path(
     let mut msg = msg;
     // Levels of message so far: the root is the first.
     let mut level = 1;
-    let mut fd;
     let mut i = 0;
-    loop {
+    let fd = loop {
         let name = path[i];
-        let Some(found) = lookup(&msg.descriptor(), name) else {
+        let Some(fd) = lookup(&msg.descriptor(), name) else {
             return Ok(());
         };
-        fd = found;
         if let Some(oneof) = fd.containing_oneof() {
             if !oneof.is_synthetic() {
                 if let Some(set) = oneof.fields().find(|f| msg.has_field(f)) {
@@ -261,7 +292,7 @@ pub(crate) fn populate_field_value_from_path(
             }
         }
         if i == path.len() - 1 {
-            break;
+            break fd;
         }
         if !is_message(&fd) || fd.is_list() || fd.is_map() {
             return Err(FieldError::gateway(format!(
@@ -271,14 +302,14 @@ pub(crate) fn populate_field_value_from_path(
         }
         level += 1;
         if level > MAX_MESSAGE_DEPTH {
-            return Err(too_deep());
+            return Err(past_the_limit(&fd, &path[i + 1..]));
         }
         let Value::Message(child) = msg.get_field_mut(&fd) else {
             unreachable!("a singular message field holds a message");
         };
         msg = child;
         i += 1;
-    }
+    };
     // A message-typed last field (a well-known type) is one level more.
     if is_message(&fd) && level + 1 > MAX_MESSAGE_DEPTH {
         return Err(too_deep());
