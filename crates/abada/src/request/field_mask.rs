@@ -96,43 +96,42 @@ pub(crate) fn from_request_body(
                         Kind::Message(m) => Some(m),
                         _ => None,
                     };
-                    if let Some(m) = &field_msg
-                        && is_dynamic(m)
-                    {
-                        for p in paths_blindly(fd.name(), v) {
-                            let path = if item.path.is_empty() {
-                                p
-                            } else {
-                                format!("{}.{p}", item.path)
-                            };
+                    if let Some(m) = &field_msg {
+                        if is_dynamic(m) {
+                            for p in paths_blindly(fd.name(), v) {
+                                let path = if item.path.is_empty() {
+                                    p
+                                } else {
+                                    format!("{}.{p}", item.path)
+                                };
+                                queue.push_back(Item {
+                                    path,
+                                    node: None,
+                                    msg: None,
+                                });
+                            }
+                            continue;
+                        }
+                    }
+                    if let Some(m) = &field_msg {
+                        if m.full_name() == "google.protobuf.Any" && !fd.is_list() {
+                            let has_type = matches!(&v.json, Json::Object(members) if members.iter().any(|(k, _)| k == "@type"));
+                            if !has_type {
+                                return Err(format!(
+                                    "could not find field @type in {} in message {}",
+                                    quote(k.as_bytes()),
+                                    quote(desc.full_name().as_bytes())
+                                ));
+                            }
+                            // grpc-gateway keeps the key as written and drops the
+                            // parent path here.
                             queue.push_back(Item {
-                                path,
+                                path: k.clone(),
                                 node: None,
                                 msg: None,
                             });
+                            continue;
                         }
-                        continue;
-                    }
-                    if let Some(m) = &field_msg
-                        && m.full_name() == "google.protobuf.Any"
-                        && !fd.is_list()
-                    {
-                        let has_type = matches!(&v.json, Json::Object(members) if members.iter().any(|(k, _)| k == "@type"));
-                        if !has_type {
-                            return Err(format!(
-                                "could not find field @type in {} in message {}",
-                                quote(k.as_bytes()),
-                                quote(desc.full_name().as_bytes())
-                            ));
-                        }
-                        // grpc-gateway keeps the key as written and drops the
-                        // parent path here.
-                        queue.push_back(Item {
-                            path: k.clone(),
-                            node: None,
-                            msg: None,
-                        });
-                        continue;
                     }
                     let path = if item.path.is_empty() {
                         fd.name().to_string()
