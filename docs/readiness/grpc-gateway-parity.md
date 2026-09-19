@@ -10,7 +10,7 @@ number here is exploratory**). The gates are defined in
 
 **Verdict: not at grpc-gateway's level; the blocking finding of the first run
 is closed.** That run found that a single `GET` aborted the process (below, S2);
-it is fixed and pinned. 43 hostile inputs (39 reach abada; 4 were refused by the
+it is fixed and pinned. 44 hostile inputs (40 reach abada; 4 were refused by the
 `http` crate when the request was built) produce no panic, no abort and no
 cross-request state, and nesting 200 000 in a JSON body answers 400. One row is
 still a measured FAIL against grpc-gateway (memory amplification of large
@@ -38,7 +38,9 @@ debug `tests/security.rs` and in release `tests/request.rs`). The limit bounds
 those. grpc-gateway answers 200 at 1 000 and 5 000 levels (vectors), so this is
 a **written deviation**: DESIGN.md, "Query field paths", five vectors pinned by
 name. Answers grpc-gateway gives before the limit is reached (unknown name,
-"is not a message") are kept, also on 5 000-component paths.
+"is not a message") are kept, also on 5 000-component paths; past it, "is not a
+message" is kept too and an unknown name is the limit's 400 (found in review,
+now vectors).
 
 Reproduce the old behaviour by reverting `fields.rs` to the parent commit:
 `cargo test -p abada --test security` aborts in debug and in `--release`.
@@ -48,10 +50,10 @@ Reproduce the old behaviour by reverting `fields.rs` to the parent commit:
 | # | Row | Verdict | Evidence |
 |---|---|---|---|
 | S1 | Path and routing | **NOT VALIDATED** as a hostile corpus | The well-formed-and-ugly cases of `path.json`/`request-*.json` already match grpc-gateway (see the Progress table). No `conformance/cases/security-path.json` exists: `%2f` in `**`, 64 KiB paths and `//` are not differentially tested. The property test fed 8 path cases (truncated/bad escapes, NUL, `%2f`, `..`, overlong UTF-8, int overflow): all answered 400/404, no panic |
-| S2 | Request population | **PASS, one written deviation** | The abort is closed (above). Differential: 10 new vectors (`query-depth-*`, depths 99–5 000, scalar and `Timestamp` leaves, an unknown name and a non-message at the third component of a 5 000-component path) — 5 deviate by design, 5 agree with grpc-gateway. Property: the corpus now holds 4 000- and 9 000-component paths, and `a_deep_query_field_path_is_refused_past_100_levels` fixes 99/100 → 200 and 101/4 000/9 000 → 400 through the `Gateway`. `?fString=evil` on a route that binds `fString` from the path is 200, ignored as grpc-gateway does (`request-*.json`). Not validated: other recursion reachable from a request that this walk does not bound (an `Any` inside a `Struct` query value was not attacked separately; the JSON codec's own limit covers bodies), and stack use on a thread smaller than tokio's 2 MiB |
+| S2 | Request population | **PASS WITH DEVIATION** | The abort is closed (above). Differential: 16 `query-depth-*` vectors, depths 99–5 000 — 7 deviate by design (named in `tests/request.rs`), 9 agree with grpc-gateway. Property: 4 000- and 9 000-component paths in the corpus, and `a_deep_query_field_path_is_refused_past_100_levels` fixes 99/100 → 200 and 101/4 000/9 000 → 400 through the `Gateway`. Stack at 100 levels, whole gateway including drop and encode, measured by the security review: overflows at 64 KiB (release) and 256 KiB (debug), so the default 2 MiB thread has about 20× and 5× margin. Not validated: a backend returning a nested `Any`, a real remote tonic backend, a `Struct`/`Value` query leaf at level 100 (refused downstream, see DESIGN.md) |
 | S3 | JSON | **PARTIAL** | 868 JSON vectors match protojson, with one written deviation (100-message nesting limit, safer than Go's). Hostile shapes through the property test: BOM, invalid UTF-8, `1e999999999`, duplicate keys, lone surrogate, unregistered `Any`, nesting 99/101/10 000/200 000 all answered without panic or stack use scaling with input. Not differential: no vectors for these |
 | S4 | Headers and metadata | **NOT VALIDATED** | 1 000 `Grpc-Metadata-*`, a 64 KiB value, bad `-bin` base64, `X-HTTP-Method-Override` garbage, `TE` lists: all answered, no panic. Injection in either direction and the response headers were not attacked; a control byte cannot even be built as an `http::HeaderValue` |
-| S5 | Resource bounds | **FAIL** (relative to grpc-gateway) | table below |
+| S5 | Resource bounds | **FAIL** (relative to grpc-gateway) | table below, and the query-key case after it |
 | S6 | Supply chain | **PASS, partly** | `cargo deny check advisories bans sources`: ok (no `deny.toml`, so **licences not checked**); zero `unsafe` in `crates/*/src`; `cargo audit` not installed (the RustSec DB is what `deny` used); `Cargo.lock` is committed |
 
 ### S5: memory amplification, same body through both
@@ -77,6 +79,17 @@ per-element cost is ~114 B; a growth-doubled `Vec` or an intermediate value tree
 are the candidates, not proven). The test **ratchets** these two cases at
 today's value (60× and 18×) with Go's figure next to them in `RATCHET`; the
 ceiling may only go down.
+
+**Divergent deep query keys** (found by the security review of the depth fix).
+The limit makes the cost of a query finite, not small: each key that diverges
+from the others builds about 100 messages of its own, while keys sharing a
+prefix share them. `GET /v1/query/x?` with 93 keys of 99 components each
+(64 842 B in, the most a URI can hold) peaks at 92× the input, 195× in total,
+362 ms in release; one key is 130×. grpc-gateway has no depth limit and its
+figure was **not measured**, so the comparison the skill asks for is open. The
+corpus entry `query: 93 divergent 100-deep keys` ratchets it at 150×
+(`RATCHET`, Go's column NaN). A 4 000-component key costs 12× because it builds
+99 levels before it is refused.
 
 Observations from the same run, not findings against abada:
 
