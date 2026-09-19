@@ -79,7 +79,8 @@ four properties together, and each one is a test, not a claim:
 | Body: `"*"` / `"<field>"` / absent, and its order against path and query | done, through an interim decoder | 90 vectors; the proto3 JSON codec behind it is `abada::json`'s (see "Requests") |
 | `PATCH` field mask from the body (`FieldMaskFromRequestBody`) | done | 23 vectors |
 | `response_body` selection | exposed (`RequestBinding::response_body`), not written | resolved against the response type; the writer (`Marshaler::encode_field`) is done; wiring it into a response is a later phase |
-| Request metadata, calling the RPC, streaming | not started | — |
+| Calling the RPC: one call path for in-process and proxy | decided: `tonic::client::Grpc<S: GrpcService>` | [ADR 0002](adr/0002-chamada-do-rpc-in-process-e-proxy.md) — proven identical for a unary call in-process and over a real loopback proxy, `benches/tonic-call-proto` |
+| Request metadata (errors, trailers), the `service` module itself, streaming | not started | — |
 
 The conformance suite (`crates/abada/tests/conformance.rs`) was checked by
 breaking the code on purpose: dropping the `/` quirk of the parser, the

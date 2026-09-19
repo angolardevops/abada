@@ -37,7 +37,7 @@ A change that weakens one of these is not a feature; it needs an ADR (§6).
 
 | Crate | Role | May depend on |
 |---|---|---|
-| `abada` | runtime used by generated code: routing, transcoding, errors, streaming | `http`; `prost-reflect`, `serde`, `serde_json` (ADR 0001); `tower`, `prost` (property 4, when the service lands) — never `axum`, never `abada-codegen` |
+| `abada` | runtime used by generated code: routing, transcoding, errors, streaming | `http`; `prost-reflect`, `prost-types`, `serde`, `serde_json` (ADR 0001); `tower`, `prost` (property 4, when the service lands) — never `axum`, never `abada-codegen` |
 | `abada-codegen` | `FileDescriptorSet` → `HttpRule`s → Rust code; pure, no I/O besides what it is handed | `abada`, `prost` |
 | `abada-build` | `build.rs` API in the style of `tonic-build` | `abada-codegen` |
 | `protoc-gen-abada` | protoc/buf plugin: `CodeGeneratorRequest` on stdin, response on stdout | `abada-codegen` |
@@ -148,6 +148,7 @@ touched.
 | ADR | Decision |
 |---|---|
 | [0001](docs/adr/0001-transcodificacao-json.md) | JSON is transcoded with `prost-reflect` `DynamicMessage`; five deviations to close before claiming JSON compatibility |
+| [0002](docs/adr/0002-chamada-do-rpc-in-process-e-proxy.md) | in-process and proxy calls are one code path, `tonic::client::Grpc<S: GrpcService>`, over a descriptor-driven codec; abada's MSRV vs `tonic-prost-build` is a blocking open question before `tonic` enters `abada`'s own dependencies |
 
 An ADR is superseded by another ADR, never by an edit to a skill or to this
 file.
