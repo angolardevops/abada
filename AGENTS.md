@@ -197,12 +197,16 @@ Any tool can read them as plain Markdown.
 | [`abada-conformance`](.claude/skills/abada-conformance/SKILL.md) | implementing or changing any behaviour grpc-gateway also has |
 | [`abada-adr`](.claude/skills/abada-adr/SKILL.md) | a change touches a boundary, a dependency of weight, the four properties or the v0.1 scope |
 | [`abada-measure`](.claude/skills/abada-measure/SKILL.md) | benchmarking, or writing/updating a readiness report for a consumer |
+| [`abada-security`](.claude/skills/abada-security/SKILL.md) | anything that parses bytes from a request or a descriptor, a release, or "is abada as safe as grpc-gateway?" (gate S1–S6) |
+| [`abada-performance`](.claude/skills/abada-performance/SKILL.md) | the request hot path, any speed claim, a release, or "is abada as fast as grpc-gateway?" (gate P1–P6) |
 
 | Reviewer | Checks |
 |---|---|
 | [`abada-conformance-reviewer`](.claude/agents/abada-conformance-reviewer.md) | every claimed behaviour has vectors, a mutation check and written deviations |
 | [`abada-rust-reviewer`](.claude/agents/abada-rust-reviewer.md) | Rust correctness: panics on request paths, allocation in hot paths, API surface, MSRV, unsafe |
 | [`abada-design-guardian`](.claude/agents/abada-design-guardian.md) | crate boundaries, scope, ADR needed, docs moved with the code, both halves reported |
+| [`abada-security-reviewer`](.claude/agents/abada-security-reviewer.md) | hostile input: panics, amplification, parser differences from grpc-gateway, header injection, dependencies; the S1–S6 verdict |
+| [`abada-performance-reviewer`](.claude/agents/abada-performance-reviewer.md) | hot-path cost, comparable benchmarks, speed claims backed by numbers; the P1–P6 verdict |
 
 Before opening a PR, run the reviewers that match the diff. Their findings go
 in the PR or get fixed; they are not optional reading.
