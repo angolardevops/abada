@@ -8,44 +8,47 @@ number here is exploratory**). The gates are defined in
 [`abada-security`](../../.claude/skills/abada-security/SKILL.md) (S1–S6) and
 [`abada-performance`](../../.claude/skills/abada-performance/SKILL.md) (P1–P6).
 
-**Verdict: not at grpc-gateway's level, and there is one blocking finding.**
-A single `GET` aborts the process (below, S2). Apart from it, 41 hostile
-inputs (37 reached abada; 4 were refused by the `http` crate when the request
-was built) produced no panic and no cross-request state, and nesting 200 000 in a
-JSON body answers 400. A second row is a measured FAIL against grpc-gateway
-(memory amplification of large repeated fields and maps), and most rows have no
-evidence because the instrument for them does not exist yet. "At the level of
-grpc-gateway" may not be said about abada, for either axis.
+**Verdict: not at grpc-gateway's level; the blocking finding of the first run
+is closed.** That run found that a single `GET` aborted the process (below, S2);
+it is fixed and pinned. 43 hostile inputs (39 reach abada; 4 were refused by the
+`http` crate when the request was built) produce no panic, no abort and no
+cross-request state, and nesting 200 000 in a JSON body answers 400. One row is
+still a measured FAIL against grpc-gateway (memory amplification of large
+repeated fields and maps), and most rows have no evidence because the instrument
+for them does not exist yet. "At the level of grpc-gateway" may not be said
+about abada, for either axis.
 
-## Blocking finding: one GET aborts the process
+## Closed finding: one GET aborted the process
 
 `GET /v1/query/x?nested.nested.….nested=1` with N `nested` components. With
-N = 2 000 the answer is a normal 400; with N = 4 000 (and 9 000, a 54 KB URI,
-under hyper's default header limit) the worker thread overflows its 2 MiB stack
-and the **whole process aborts** (`SIGABRT`; nothing can catch it). In an
-unoptimised build the threshold is between 500 and 1 000 — a debug-built
-service or `cargo test` dies on a 7 KB request.
+N = 2 000 the answer was a normal 400; with N = 4 000 (and 9 000, a 54 KB URI,
+under hyper's default header limit) the worker thread overflowed its 2 MiB stack
+and the **whole process aborted** (`SIGABRT`; nothing can catch it). In an
+unoptimised build the threshold was between 500 and 1 000.
 
-Cause: `populate_field_value_from_path`
-([`request/fields.rs:211`](../../crates/abada/src/request/fields.rs)) is a faithful port of the Go
-function, which recurses once per path component. Go's stack grows to 1 GB, so
-grpc-gateway never notices; abada's does not grow. Other recursions the same
-input reaches (dropping and encoding a 4 000-deep message) were not separated
-out. `AGENTS.md` rule 7 (nothing a request controls may panic) is broken by
-design here, and the skill makes a remotely triggerable crash a merge blocker.
+Cause: `populate_field_value_from_path` was a faithful port of the Go function
+except that Go's is a loop and abada's recursed once per component. Go's stack
+grows to 1 GB, so grpc-gateway never notices; abada's does not grow.
 
-Reproduce: `ABADA_DEEP=4000 cargo test -p abada --test security --release -- --ignored`
-(`a_deep_query_field_path_must_not_abort_the_process`; ignored because it kills
-its own process — remove `#[ignore]` when fixed). The fix is a behaviour change
-against grpc-gateway (it would answer where abada now refuses at some depth),
-so it goes through `abada-conformance` as a named deviation, not into this PR.
+Fix: the walk is a loop, **and** the request may not nest past 100 levels
+(`MAX_MESSAGE_DEPTH`, the JSON codec's limit). The loop alone was not enough:
+the same test still aborted, because dropping and encoding the 4 000-deep
+message it built are recursive too (the mutation "loop, no limit" aborts in
+debug `tests/security.rs` and in release `tests/request.rs`). The limit bounds
+those. grpc-gateway answers 200 at 1 000 and 5 000 levels (vectors), so this is
+a **written deviation**: DESIGN.md, "Query field paths", five vectors pinned by
+name. Answers grpc-gateway gives before the limit is reached (unknown name,
+"is not a message") are kept, also on 5 000-component paths.
+
+Reproduce the old behaviour by reverting `fields.rs` to the parent commit:
+`cargo test -p abada --test security` aborts in debug and in `--release`.
 
 ## Security
 
 | # | Row | Verdict | Evidence |
 |---|---|---|---|
 | S1 | Path and routing | **NOT VALIDATED** as a hostile corpus | The well-formed-and-ugly cases of `path.json`/`request-*.json` already match grpc-gateway (see the Progress table). No `conformance/cases/security-path.json` exists: `%2f` in `**`, 64 KiB paths and `//` are not differentially tested. The property test fed 8 path cases (truncated/bad escapes, NUL, `%2f`, `..`, overlong UTF-8, int overflow): all answered 400/404, no panic |
-| S2 | Request population | **FAIL, blocking** (see above) | The property test sent `?fString=evil` on a route that binds `fString` from the path and got 200; that it is *ignored* as grpc-gateway does is what `request-*.json` proves, not this test. A 100-deep field path answered 400; deeper aborts the process |
+| S2 | Request population | **PASS, one written deviation** | The abort is closed (above). Differential: 10 new vectors (`query-depth-*`, depths 99–5 000, scalar and `Timestamp` leaves, an unknown name and a non-message at the third component of a 5 000-component path) — 5 deviate by design, 5 agree with grpc-gateway. Property: the corpus now holds 4 000- and 9 000-component paths, and `a_deep_query_field_path_is_refused_past_100_levels` fixes 99/100 → 200 and 101/4 000/9 000 → 400 through the `Gateway`. `?fString=evil` on a route that binds `fString` from the path is 200, ignored as grpc-gateway does (`request-*.json`). Not validated: other recursion reachable from a request that this walk does not bound (an `Any` inside a `Struct` query value was not attacked separately; the JSON codec's own limit covers bodies), and stack use on a thread smaller than tokio's 2 MiB |
 | S3 | JSON | **PARTIAL** | 868 JSON vectors match protojson, with one written deviation (100-message nesting limit, safer than Go's). Hostile shapes through the property test: BOM, invalid UTF-8, `1e999999999`, duplicate keys, lone surrogate, unregistered `Any`, nesting 99/101/10 000/200 000 all answered without panic or stack use scaling with input. Not differential: no vectors for these |
 | S4 | Headers and metadata | **NOT VALIDATED** | 1 000 `Grpc-Metadata-*`, a 64 KiB value, bad `-bin` base64, `X-HTTP-Method-Override` garbage, `TE` lists: all answered, no panic. Injection in either direction and the response headers were not attacked; a control byte cannot even be built as an `http::HeaderValue` |
 | S5 | Resource bounds | **FAIL** (relative to grpc-gateway) | table below |
@@ -136,6 +139,6 @@ that earlier table should not be compared with this one.
 
 In order: (1) find and remove the memory overhead on repeated scalars and maps
 until `RATCHET` reaches Go's column; (2) write the differential corpus for
-S1/S2/S4 in the oracle; (3) add the end-to-end Go server and a load generator so
+S1/S4 in the oracle (S2 has it for depth); (3) add the end-to-end Go server and a load generator so
 P1–P5 can be measured; (4) a `deny.toml` and a fuzz target per parser; (5) show
 `Limited` in the README. Each is its own PR with its own proof.

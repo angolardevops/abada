@@ -430,9 +430,10 @@ fn requests_become_the_messages_grpc_gateway_sends() {
             }
             let want = expected(&c, vector);
             if !agrees(&got, &want) {
+                let target: String = vector.target.chars().take(120).collect();
                 failures.push(format!(
-                    "{name}/{} [{} {}]:\n  abada:        {got:?}\n  grpc-gateway: {want:?}",
-                    vector.name, vector.method, vector.target
+                    "{name}/{} [{} {target}]:\n  abada:        {got:?}\n  grpc-gateway: {want:?}",
+                    vector.name, vector.method
                 ));
             }
             match &got {
