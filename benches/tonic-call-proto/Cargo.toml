@@ -1,0 +1,25 @@
+[workspace]
+
+[package]
+name = "tonic-call-proto"
+description = "Prototype: does tonic::client::Grpc<S: GrpcService> unify in-process and proxy unary calls, driven only by prost-reflect DynamicMessage (no per-RPC generated code)? Evidence for a future ADR on abada's service module. Not published. Deliberately its own Cargo workspace (see docs/DESIGN.md note): tonic-prost-build 0.14.6 declares rust-version 1.88, above abada's own 1.85 promise, and must never pull the main workspace's MSRV check down with it."
+version = "0.0.1"
+edition = "2024"
+publish = false
+
+[dependencies]
+prost = "0.14"
+prost-reflect = "0.16.5"
+tonic = "0.14"
+tonic-prost = "0.14"
+tower = "0.5"
+http = "1"
+http-body = "1"
+bytes = "1"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net"] }
+tokio-stream = { version = "0.1", features = ["net"] }
+
+[build-dependencies]
+tonic-prost-build = "0.14"

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package abada.protocall.v1;
+
+service Echo {
+  rpc Say(SayRequest) returns (SayResponse);
+}
+
+message SayRequest {
+  string id = 1;
+  int32 count = 2;
+  map<string, string> tags = 3;
+}
+
+message SayResponse {
+  string echoed = 1;
+  int32 count = 2;
+}
