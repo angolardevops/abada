@@ -209,8 +209,10 @@ fn lookup(desc: &MessageDescriptor, name: &[u8]) -> Option<FieldDescriptor> {
 /// the same 100 the JSON codec allows (`abada::json::DEFAULT_RECURSION_LIMIT`).
 /// prost, which decodes what abada sends, accepts 101 (measured), so a request
 /// built from scalars and well-known types is never refused downstream for its
-/// depth. A `Struct` or `Value` last field is filled by the JSON codec with its
-/// own limit of 100 on top, so one at level 100 can still be refused by prost.
+/// depth. A `Struct` or `Value` last field is the exception: the JSON codec
+/// fills it, a JSON object level is two message levels for prost (the map
+/// entry counts), and a deep one is refused downstream from about 50 levels of
+/// JSON wherever the field sits — a 400 from the backend's decoder, no crash.
 ///
 /// grpc-gateway has no such limit: its walk is a loop, and Go's stack grows.
 /// Here a loop alone would not be enough — the message it built would be

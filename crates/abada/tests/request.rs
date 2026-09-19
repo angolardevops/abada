@@ -92,6 +92,7 @@ const DEEPER_THAN_LIMIT: &[&str] = &[
     "query-depth-102",
     "query-depth-100-timestamp-leaf",
     "query-depth-100-repeated-timestamp-leaf",
+    "query-depth-100-map-msg-leaf",
     "query-depth-1000",
     "query-depth-5000",
     "query-depth-unknown-at-101",
@@ -419,13 +420,17 @@ fn requests_become_the_messages_grpc_gateway_sends() {
             let got = run(&c, vector);
             if DEEPER_THAN_LIMIT.contains(&vector.name.as_str()) {
                 deviating += 1;
-                let refused = matches!(&got, Got::Error { status: 400, errors }
+                // Go either builds the request, or fails with an error of its
+                // own that the limit's is not.
+                let deviates = vector.outcome == "request" || !agrees(&got, &expected(&c, vector));
+                let refused = deviates
+                    && matches!(&got, Got::Error { status: 400, errors }
                     if errors.len() == 1
                         && errors[0].0.code == 3
                         && errors[0].0.message == "exceeded max recursion depth");
-                if vector.outcome != "request" || !refused {
+                if !refused {
                     failures.push(format!(
-                        "{name}/{} should still deviate (grpc-gateway answers `request`, abada 400/3):\n  abada: {got:?}\n  vector: {}",
+                        "{name}/{} should still deviate (grpc-gateway answers `request` or an error of its own, abada 400/3):\n  abada: {got:?}\n  vector: {}",
                         vector.name, vector.outcome
                     ));
                 }

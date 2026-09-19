@@ -25,6 +25,10 @@ use http_body_util::{BodyExt, Full};
 use prost_reflect::{DescriptorPool, DynamicMessage, ReflectMessage};
 use tower::ServiceExt;
 
+/// The counting allocator is global: two tests at once would pollute each
+/// other's peak, so every test that measures takes this first.
+static SERIAL: tokio::sync::Mutex<()> = tokio::sync::Mutex::const_new(());
+
 struct Counting;
 static LIVE: AtomicUsize = AtomicUsize::new(0);
 static PEAK: AtomicUsize = AtomicUsize::new(0);
@@ -493,6 +497,7 @@ where
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn hostile_input_never_panics_and_costs_in_proportion() {
+    let _serial = SERIAL.lock().await;
     let gw = gateway();
     let mut failures = Vec::new();
     println!(
@@ -564,6 +569,14 @@ async fn hostile_input_never_panics_and_costs_in_proportion() {
             }
         }
     }
+    // A ratchet is matched by case name: one that names no case checks nothing.
+    let names: Vec<String> = corpus().into_iter().map(|c| c.name).collect();
+    for (name, _, _) in RATCHET {
+        assert!(
+            names.iter().any(|n| n == name),
+            "RATCHET names no case: {name}"
+        );
+    }
     // No cross-request state: the same request before and after the corpus.
     let probe = case("probe", "GET", "/v1/top/int32/7", vec![]);
     let o = run(gw.clone(), build(&probe).unwrap()).await.unwrap();
@@ -583,6 +596,7 @@ async fn hostile_input_never_panics_and_costs_in_proportion() {
 /// answers around the limit.
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn a_deep_query_field_path_is_refused_past_100_levels() {
+    let _serial = SERIAL.lock().await;
     let gw = gateway();
     for (components, status) in [(99, 200), (100, 200), (101, 400), (4000, 400), (9000, 400)] {
         let uri = format!(
