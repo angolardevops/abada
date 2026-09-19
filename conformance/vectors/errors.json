@@ -1,0 +1,2066 @@
+{
+  "generator": "grpc-gateway v2.27.3, go1.26.2",
+  "note": "Headers exclude date, content-length, connection and transfer-encoding, which net/http adds for framing; names are lower-cased and values of the trailer header sorted, because grpc-gateway announces trailers in Go map order. protojson inserts a random space after each comma, chosen per binary (internal/detrand); bodies are recorded without it. The two fallback bodies are constants in runtime/errors.go and are recorded byte for byte.",
+  "quote_not_printable_2byte": [
+    [
+      128,
+      160
+    ],
+    [
+      173,
+      173
+    ],
+    [
+      888,
+      889
+    ],
+    [
+      896,
+      899
+    ],
+    [
+      907,
+      907
+    ],
+    [
+      909,
+      909
+    ],
+    [
+      930,
+      930
+    ],
+    [
+      1328,
+      1328
+    ],
+    [
+      1367,
+      1368
+    ],
+    [
+      1419,
+      1420
+    ],
+    [
+      1424,
+      1424
+    ],
+    [
+      1480,
+      1487
+    ],
+    [
+      1515,
+      1518
+    ],
+    [
+      1525,
+      1541
+    ],
+    [
+      1564,
+      1564
+    ],
+    [
+      1757,
+      1757
+    ],
+    [
+      1806,
+      1807
+    ],
+    [
+      1867,
+      1868
+    ],
+    [
+      1970,
+      1983
+    ],
+    [
+      2043,
+      2044
+    ]
+  ],
+  "codes": [
+    {
+      "code": -1,
+      "status": 500
+    },
+    {
+      "code": 0,
+      "status": 200
+    },
+    {
+      "code": 1,
+      "status": 499
+    },
+    {
+      "code": 2,
+      "status": 500
+    },
+    {
+      "code": 3,
+      "status": 400
+    },
+    {
+      "code": 4,
+      "status": 504
+    },
+    {
+      "code": 5,
+      "status": 404
+    },
+    {
+      "code": 6,
+      "status": 409
+    },
+    {
+      "code": 7,
+      "status": 403
+    },
+    {
+      "code": 8,
+      "status": 429
+    },
+    {
+      "code": 9,
+      "status": 400
+    },
+    {
+      "code": 10,
+      "status": 409
+    },
+    {
+      "code": 11,
+      "status": 400
+    },
+    {
+      "code": 12,
+      "status": 501
+    },
+    {
+      "code": 13,
+      "status": 500
+    },
+    {
+      "code": 14,
+      "status": 503
+    },
+    {
+      "code": 15,
+      "status": 500
+    },
+    {
+      "code": 16,
+      "status": 401
+    },
+    {
+      "code": 17,
+      "status": 500
+    },
+    {
+      "code": 18,
+      "status": 500
+    },
+    {
+      "code": 19,
+      "status": 500
+    },
+    {
+      "code": 20,
+      "status": 500
+    },
+    {
+      "code": 100,
+      "status": 500
+    },
+    {
+      "code": 2147483647,
+      "status": 500
+    },
+    {
+      "code": -2147483648,
+      "status": 500
+    }
+  ],
+  "statuses": [
+    {
+      "name": "code-ok",
+      "code": 0,
+      "message": "boom",
+      "status": 200,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":0,\"message\":\"\",\"details\":[]}"
+    },
+    {
+      "name": "code-canceled",
+      "code": 1,
+      "message": "boom",
+      "status": 499,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":1,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-unknown",
+      "code": 2,
+      "message": "boom",
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-invalid_argument",
+      "code": 3,
+      "message": "boom",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":3,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-deadline_exceeded",
+      "code": 4,
+      "message": "boom",
+      "status": 504,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":4,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-not_found",
+      "code": 5,
+      "message": "boom",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-already_exists",
+      "code": 6,
+      "message": "boom",
+      "status": 409,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":6,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-permission_denied",
+      "code": 7,
+      "message": "boom",
+      "status": 403,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":7,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-resource_exhausted",
+      "code": 8,
+      "message": "boom",
+      "status": 429,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":8,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-failed_precondition",
+      "code": 9,
+      "message": "boom",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":9,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-aborted",
+      "code": 10,
+      "message": "boom",
+      "status": 409,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":10,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-out_of_range",
+      "code": 11,
+      "message": "boom",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":11,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-unimplemented",
+      "code": 12,
+      "message": "boom",
+      "status": 501,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":12,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-internal",
+      "code": 13,
+      "message": "boom",
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":13,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-unavailable",
+      "code": 14,
+      "message": "boom",
+      "status": 503,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":14,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-data_loss",
+      "code": 15,
+      "message": "boom",
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":15,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-unauthenticated",
+      "code": 16,
+      "message": "boom",
+      "status": 401,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "www-authenticate",
+          "boom"
+        ]
+      ],
+      "body": "{\"code\":16,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-out-of-range-17",
+      "code": 17,
+      "message": "boom",
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":17,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-out-of-range--1",
+      "code": -1,
+      "message": "boom",
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":-1,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-out-of-range-2147483647",
+      "code": 2147483647,
+      "message": "boom",
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2147483647,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-out-of-range--2147483648",
+      "code": -2147483648,
+      "message": "boom",
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":-2147483648,\"message\":\"boom\",\"details\":[]}"
+    },
+    {
+      "name": "code-ok-with-details",
+      "code": 0,
+      "message": "ignored",
+      "details": [
+        {
+          "type_url": "type.googleapis.com/does.not.Exist",
+          "value_hex": "08"
+        }
+      ],
+      "registered": [
+        false
+      ],
+      "status": 200,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":0,\"message\":\"\",\"details\":[]}"
+    },
+    {
+      "name": "code-ok-with-metadata",
+      "code": 0,
+      "message": "",
+      "metadata": true,
+      "header_md": [
+        [
+          "x-a",
+          "1"
+        ]
+      ],
+      "status": 200,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "grpc-metadata-x-a",
+          "1"
+        ]
+      ],
+      "body": "{\"code\":0,\"message\":\"\",\"details\":[]}"
+    },
+    {
+      "name": "message-empty",
+      "code": 5,
+      "message": "",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"\",\"details\":[]}"
+    },
+    {
+      "name": "message-quotes-backslash",
+      "code": 3,
+      "message": "say \"hi\" \\ \\n",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":3,\"message\":\"say \\\"hi\\\" \\\\ \\\\n\",\"details\":[]}"
+    },
+    {
+      "name": "message-control",
+      "code": 3,
+      "message": "a\u0000b\u0001c\bd\te\nf\fg\rh\u001fij",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":3,\"message\":\"a\\u0000b\\u0001c\\bd\\te\\nf\\fg\\rh\\u001fij\",\"details\":[]}"
+    },
+    {
+      "name": "message-html",
+      "code": 3,
+      "message": "<script>&amp;</script>",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":3,\"message\":\"<script>&amp;</script>\",\"details\":[]}"
+    },
+    {
+      "name": "message-unicode",
+      "code": 3,
+      "message": "ação 名前 😀 \u2028\u2029 � ­",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":3,\"message\":\"ação 名前 😀 \u2028\u2029 � ­\",\"details\":[]}"
+    },
+    {
+      "name": "message-slash",
+      "code": 3,
+      "message": "a/b",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":3,\"message\":\"a/b\",\"details\":[]}"
+    },
+    {
+      "name": "unauth-empty",
+      "code": 16,
+      "message": "",
+      "status": 401,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "www-authenticate",
+          ""
+        ]
+      ],
+      "body": "{\"code\":16,\"message\":\"\",\"details\":[]}"
+    },
+    {
+      "name": "unauth-bearer",
+      "code": 16,
+      "message": "Bearer realm=\"delonix\", error=\"invalid_token\"",
+      "status": 401,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "www-authenticate",
+          "Bearer realm=\"delonix\", error=\"invalid_token\""
+        ]
+      ],
+      "body": "{\"code\":16,\"message\":\"Bearer realm=\\\"delonix\\\", error=\\\"invalid_token\\\"\",\"details\":[]}"
+    },
+    {
+      "name": "unauth-newlines",
+      "code": 16,
+      "message": "line one\r\nline two\nthree\rfour",
+      "status": 401,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "www-authenticate",
+          "line one  line two three four"
+        ]
+      ],
+      "body": "{\"code\":16,\"message\":\"line one\\r\\nline two\\nthree\\rfour\",\"details\":[]}"
+    },
+    {
+      "name": "unauth-surrounding-space",
+      "code": 16,
+      "message": "  \t padded \t ",
+      "status": 401,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "www-authenticate",
+          "padded"
+        ]
+      ],
+      "body": "{\"code\":16,\"message\":\"  \\t padded \\t \",\"details\":[]}"
+    },
+    {
+      "name": "unauth-control",
+      "code": 16,
+      "message": "a\u0001b",
+      "status": 401,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "www-authenticate",
+          "a\u0001b"
+        ]
+      ],
+      "body": "{\"code\":16,\"message\":\"a\\u0001b\",\"details\":[]}"
+    },
+    {
+      "name": "unauth-unicode",
+      "code": 16,
+      "message": "conta inválida",
+      "status": 401,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "www-authenticate",
+          "conta inválida"
+        ]
+      ],
+      "body": "{\"code\":16,\"message\":\"conta inválida\",\"details\":[]}"
+    },
+    {
+      "name": "permission-denied-no-www-authenticate",
+      "code": 7,
+      "message": "Bearer",
+      "status": 403,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":7,\"message\":\"Bearer\",\"details\":[]}"
+    },
+    {
+      "name": "details-empty-any",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {}
+      ],
+      "registered": [
+        false
+      ],
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":3,\"message\":\"x\",\"details\":[{}]}"
+    },
+    {
+      "name": "details-two-empty-any",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {},
+        {}
+      ],
+      "registered": [
+        false,
+        false
+      ],
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":3,\"message\":\"x\",\"details\":[{},{}]}"
+    },
+    {
+      "name": "details-value-without-type",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "value_hex": "0801"
+        }
+      ],
+      "registered": [
+        false
+      ],
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\": 13, \"message\": \"failed to marshal error message\"}"
+    },
+    {
+      "name": "details-unregistered",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "type.googleapis.com/does.not.Exist",
+          "value_hex": "0801"
+        }
+      ],
+      "registered": [
+        false
+      ],
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\": 13, \"message\": \"failed to marshal error message\"}"
+    },
+    {
+      "name": "details-unregistered-no-value",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "type.googleapis.com/does.not.Exist"
+        }
+      ],
+      "registered": [
+        false
+      ],
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\": 13, \"message\": \"failed to marshal error message\"}"
+    },
+    {
+      "name": "details-no-slash",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "does.not.Exist"
+        }
+      ],
+      "registered": [
+        false
+      ],
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\": 13, \"message\": \"failed to marshal error message\"}"
+    },
+    {
+      "name": "details-empty-then-unregistered",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {},
+        {
+          "type_url": "example.com/x.Y"
+        }
+      ],
+      "registered": [
+        false,
+        false
+      ],
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\": 13, \"message\": \"failed to marshal error message\"}"
+    },
+    {
+      "name": "details-unauth-unregistered",
+      "code": 16,
+      "message": "who are you",
+      "details": [
+        {
+          "type_url": "example.com/x.Y"
+        }
+      ],
+      "registered": [
+        false
+      ],
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "www-authenticate",
+          "who are you"
+        ]
+      ],
+      "body": "{\"code\": 13, \"message\": \"failed to marshal error message\"}"
+    },
+    {
+      "name": "details-unregistered-with-metadata",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "example.com/x.Y"
+        }
+      ],
+      "metadata": true,
+      "header_md": [
+        [
+          "x-a",
+          "1"
+        ]
+      ],
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "te": "trailers",
+      "registered": [
+        false
+      ],
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\": 13, \"message\": \"failed to marshal error message\"}"
+    },
+    {
+      "name": "details-registered-duration",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "type.googleapis.com/google.protobuf.Duration",
+          "value_hex": "08011080cab5ee01"
+        }
+      ],
+      "registered": [
+        true
+      ],
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":3,\"message\":\"x\",\"details\":[{\"@type\":\"type.googleapis.com/google.protobuf.Duration\",\"value\":\"1.500s\"}]}"
+    },
+    {
+      "name": "details-registered-status",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "type.googleapis.com/google.rpc.Status",
+          "value_hex": "0805120178"
+        }
+      ],
+      "registered": [
+        true
+      ],
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":3,\"message\":\"x\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Status\",\"code\":5,\"message\":\"x\",\"details\":[]}]}"
+    },
+    {
+      "name": "details-registered-bad-value",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "type.googleapis.com/google.protobuf.Duration",
+          "value_hex": "ff"
+        }
+      ],
+      "registered": [
+        true
+      ],
+      "status": 500,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\": 13, \"message\": \"failed to marshal error message\"}"
+    },
+    {
+      "name": "details-registered-other-host",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "example.com/google.protobuf.Duration",
+          "value_hex": "0801"
+        }
+      ],
+      "registered": [
+        true
+      ],
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":3,\"message\":\"x\",\"details\":[{\"@type\":\"example.com/google.protobuf.Duration\",\"value\":\"1s\"}]}"
+    },
+    {
+      "name": "md-none",
+      "code": 5,
+      "message": "x",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}"
+    },
+    {
+      "name": "md-empty",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}"
+    },
+    {
+      "name": "md-empty-te",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "te": "trailers",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}"
+    },
+    {
+      "name": "md-headers",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "header_md": [
+        [
+          "x-request-id",
+          "abc"
+        ],
+        [
+          "x-multi",
+          "1"
+        ],
+        [
+          "x-multi",
+          "2"
+        ],
+        [
+          "content-type",
+          "application/grpc"
+        ],
+        [
+          "under_score.dot",
+          "v"
+        ]
+      ],
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "grpc-metadata-content-type",
+          "application/grpc"
+        ],
+        [
+          "grpc-metadata-under_score.dot",
+          "v"
+        ],
+        [
+          "grpc-metadata-x-multi",
+          "1"
+        ],
+        [
+          "grpc-metadata-x-multi",
+          "2"
+        ],
+        [
+          "grpc-metadata-x-request-id",
+          "abc"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}"
+    },
+    {
+      "name": "md-header-values",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "header_md": [
+        [
+          "x-v",
+          "a\r\nb"
+        ],
+        [
+          "x-v",
+          "  trimmed  "
+        ],
+        [
+          "x-v",
+          ""
+        ],
+        [
+          "x-v",
+          "conta inválida"
+        ]
+      ],
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "grpc-metadata-x-v",
+          "a  b"
+        ],
+        [
+          "grpc-metadata-x-v",
+          "trimmed"
+        ],
+        [
+          "grpc-metadata-x-v",
+          ""
+        ],
+        [
+          "grpc-metadata-x-v",
+          "conta inválida"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}"
+    },
+    {
+      "name": "md-header-control",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "header_md": [
+        [
+          "x-ok",
+          "fine"
+        ],
+        [
+          "x-bad",
+          "a\u0001b"
+        ]
+      ],
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "grpc-metadata-x-bad",
+          "a\u0001b"
+        ],
+        [
+          "grpc-metadata-x-ok",
+          "fine"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}"
+    },
+    {
+      "name": "md-trailers-no-te",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "header_md": [
+        [
+          "x-h",
+          "1"
+        ]
+      ],
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "grpc-metadata-x-h",
+          "1"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}"
+    },
+    {
+      "name": "md-trailers-te",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "header_md": [
+        [
+          "x-h",
+          "1"
+        ]
+      ],
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ],
+        [
+          "x-t",
+          "3"
+        ],
+        [
+          "x-u",
+          "4"
+        ],
+        [
+          "x-long-name-here",
+          "5"
+        ]
+      ],
+      "te": "trailers",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "grpc-metadata-x-h",
+          "1"
+        ],
+        [
+          "trailer",
+          "Grpc-Trailer-X-Long-Name-Here"
+        ],
+        [
+          "trailer",
+          "Grpc-Trailer-X-T"
+        ],
+        [
+          "trailer",
+          "Grpc-Trailer-X-U"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}",
+      "trailers": [
+        [
+          "grpc-trailer-x-long-name-here",
+          "5"
+        ],
+        [
+          "grpc-trailer-x-t",
+          "2"
+        ],
+        [
+          "grpc-trailer-x-t",
+          "3"
+        ],
+        [
+          "grpc-trailer-x-u",
+          "4"
+        ]
+      ]
+    },
+    {
+      "name": "md-trailers-te-mixed-case",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "te": "deflate, TRAILERS;q=1",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "trailer",
+          "Grpc-Trailer-X-T"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}",
+      "trailers": [
+        [
+          "grpc-trailer-x-t",
+          "2"
+        ]
+      ]
+    },
+    {
+      "name": "md-trailers-te-substring",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "te": "notrailers",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "trailer",
+          "Grpc-Trailer-X-T"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}",
+      "trailers": [
+        [
+          "grpc-trailer-x-t",
+          "2"
+        ]
+      ]
+    },
+    {
+      "name": "md-trailers-te-gzip",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "te": "gzip",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}"
+    },
+    {
+      "name": "md-trailers-te-dotted-i",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "te": "TRAİLERS",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "trailer",
+          "Grpc-Trailer-X-T"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}",
+      "trailers": [
+        [
+          "grpc-trailer-x-t",
+          "2"
+        ]
+      ]
+    },
+    {
+      "name": "md-trailers-te-long-s",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "te": "TRAILERſ",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}"
+    },
+    {
+      "name": "md-trailer-values",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "trailer_md": [
+        [
+          "x-t",
+          " a\r\nb "
+        ]
+      ],
+      "te": "trailers",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "trailer",
+          "Grpc-Trailer-X-T"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"x\",\"details\":[]}",
+      "trailers": [
+        [
+          "grpc-trailer-x-t",
+          "a  b"
+        ]
+      ]
+    },
+    {
+      "name": "md-unauth",
+      "code": 16,
+      "message": "Bearer",
+      "metadata": true,
+      "header_md": [
+        [
+          "www-authenticate",
+          "other"
+        ]
+      ],
+      "status": 401,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ],
+        [
+          "grpc-metadata-www-authenticate",
+          "other"
+        ],
+        [
+          "www-authenticate",
+          "Bearer"
+        ]
+      ],
+      "body": "{\"code\":16,\"message\":\"Bearer\",\"details\":[]}"
+    }
+  ],
+  "routes": [
+    {
+      "name": "not-found",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/users"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/nope",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "not-found-no-handlers",
+      "mode": "all_except_reserved",
+      "handlers": [],
+      "method": "GET",
+      "target": "/",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "not-found-legacy",
+      "mode": "legacy",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v2/x",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "not-found-bare-verb",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}:get"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/:get",
+      "status": 404,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "method-not-allowed",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "POST",
+          "template": "/v1/users"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/users",
+      "status": 501,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":12,\"message\":\"Method Not Allowed\",\"details\":[]}"
+    },
+    {
+      "name": "method-not-allowed-delete",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "DELETE",
+      "target": "/v1/x",
+      "status": 501,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":12,\"message\":\"Method Not Allowed\",\"details\":[]}"
+    },
+    {
+      "name": "method-not-allowed-verb",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "POST",
+          "template": "/v1/{name}:start"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a:start",
+      "status": 501,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":12,\"message\":\"Method Not Allowed\",\"details\":[]}"
+    },
+    {
+      "name": "bad-request-not-origin-form",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "*",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":3,\"message\":\"Bad Request\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-then-not-found",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-truncated",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a%25z",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%z\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-all-characters",
+      "mode": "all_characters",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25zz",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%zz\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-twice-then-not-found",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        },
+        {
+          "method": "GET",
+          "template": "/v1/{id}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\"\",\"details\":[]}{\"code\":2,\"message\":\"malformed path escape \\\"%\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-then-method-not-allowed",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        },
+        {
+          "method": "POST",
+          "template": "/v1/a:%zz"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a:%25zz",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%zz\\\"\",\"details\":[]}{\"code\":12,\"message\":\"Method Not Allowed\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-other-method-then-not-found",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "POST",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-deep-wildcard",
+      "mode": "all_except_slash",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name=**}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a/%25/b",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%/b\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-then-matched",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/a:%zz"
+        },
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a:%25zz",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%zz\\\"\",\"details\":[]}handler 0"
+    },
+    {
+      "name": "malformed-control",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%01",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\\x01\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-del",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%7F",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\\x7f\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-quote",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%22",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\\\\\"\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-backslash",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%5C",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\\\\\\\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-tab-newline",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%09%0A",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\\t\\\\n\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-printable-2byte",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%C3%A9",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%é\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-nonprintable-2byte",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%C2%85",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\\u0085\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-nbsp",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%C2%A0",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\\u00a0\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-soft-hyphen",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%C2%AD",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\\u00ad\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-unassigned",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%CD%B8",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\\u0378\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-invalid-utf8",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25a%C3%A9",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%a\\\\xc3\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-cut-3byte",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%E2%82%AC",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\\xe2\\\\x82\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    },
+    {
+      "name": "malformed-overlong",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%C0%80",
+      "status": 400,
+      "headers": [
+        [
+          "content-type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"code\":2,\"message\":\"malformed path escape \\\"%\\\\xc0\\\\x80\\\"\",\"details\":[]}{\"code\":5,\"message\":\"Not Found\",\"details\":[]}"
+    }
+  ]
+}

@@ -1,0 +1,953 @@
+{
+  "codes": [
+    -1,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    100,
+    2147483647,
+    -2147483648
+  ],
+  "statuses": [
+    {
+      "name": "code-ok",
+      "code": 0,
+      "message": "boom"
+    },
+    {
+      "name": "code-canceled",
+      "code": 1,
+      "message": "boom"
+    },
+    {
+      "name": "code-unknown",
+      "code": 2,
+      "message": "boom"
+    },
+    {
+      "name": "code-invalid_argument",
+      "code": 3,
+      "message": "boom"
+    },
+    {
+      "name": "code-deadline_exceeded",
+      "code": 4,
+      "message": "boom"
+    },
+    {
+      "name": "code-not_found",
+      "code": 5,
+      "message": "boom"
+    },
+    {
+      "name": "code-already_exists",
+      "code": 6,
+      "message": "boom"
+    },
+    {
+      "name": "code-permission_denied",
+      "code": 7,
+      "message": "boom"
+    },
+    {
+      "name": "code-resource_exhausted",
+      "code": 8,
+      "message": "boom"
+    },
+    {
+      "name": "code-failed_precondition",
+      "code": 9,
+      "message": "boom"
+    },
+    {
+      "name": "code-aborted",
+      "code": 10,
+      "message": "boom"
+    },
+    {
+      "name": "code-out_of_range",
+      "code": 11,
+      "message": "boom"
+    },
+    {
+      "name": "code-unimplemented",
+      "code": 12,
+      "message": "boom"
+    },
+    {
+      "name": "code-internal",
+      "code": 13,
+      "message": "boom"
+    },
+    {
+      "name": "code-unavailable",
+      "code": 14,
+      "message": "boom"
+    },
+    {
+      "name": "code-data_loss",
+      "code": 15,
+      "message": "boom"
+    },
+    {
+      "name": "code-unauthenticated",
+      "code": 16,
+      "message": "boom"
+    },
+    {
+      "name": "code-out-of-range-17",
+      "code": 17,
+      "message": "boom"
+    },
+    {
+      "name": "code-out-of-range--1",
+      "code": -1,
+      "message": "boom"
+    },
+    {
+      "name": "code-out-of-range-2147483647",
+      "code": 2147483647,
+      "message": "boom"
+    },
+    {
+      "name": "code-out-of-range--2147483648",
+      "code": -2147483648,
+      "message": "boom"
+    },
+    {
+      "name": "code-ok-with-details",
+      "code": 0,
+      "message": "ignored",
+      "details": [
+        {
+          "type_url": "type.googleapis.com/does.not.Exist",
+          "value_hex": "08"
+        }
+      ]
+    },
+    {
+      "name": "code-ok-with-metadata",
+      "code": 0,
+      "message": "",
+      "metadata": true,
+      "header_md": [
+        [
+          "x-a",
+          "1"
+        ]
+      ]
+    },
+    {
+      "name": "message-empty",
+      "code": 5,
+      "message": ""
+    },
+    {
+      "name": "message-quotes-backslash",
+      "code": 3,
+      "message": "say \"hi\" \\ \\n"
+    },
+    {
+      "name": "message-control",
+      "code": 3,
+      "message": "a\u0000b\u0001c\bd\te\nf\fg\rh\u001fij"
+    },
+    {
+      "name": "message-html",
+      "code": 3,
+      "message": "<script>&amp;</script>"
+    },
+    {
+      "name": "message-unicode",
+      "code": 3,
+      "message": "ação 名前 😀    � ­"
+    },
+    {
+      "name": "message-slash",
+      "code": 3,
+      "message": "a/b"
+    },
+    {
+      "name": "unauth-empty",
+      "code": 16,
+      "message": ""
+    },
+    {
+      "name": "unauth-bearer",
+      "code": 16,
+      "message": "Bearer realm=\"delonix\", error=\"invalid_token\""
+    },
+    {
+      "name": "unauth-newlines",
+      "code": 16,
+      "message": "line one\r\nline two\nthree\rfour"
+    },
+    {
+      "name": "unauth-surrounding-space",
+      "code": 16,
+      "message": "  \t padded \t "
+    },
+    {
+      "name": "unauth-control",
+      "code": 16,
+      "message": "a\u0001b"
+    },
+    {
+      "name": "unauth-unicode",
+      "code": 16,
+      "message": "conta inválida"
+    },
+    {
+      "name": "permission-denied-no-www-authenticate",
+      "code": 7,
+      "message": "Bearer"
+    },
+    {
+      "name": "details-empty-any",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {}
+      ]
+    },
+    {
+      "name": "details-two-empty-any",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {},
+        {}
+      ]
+    },
+    {
+      "name": "details-value-without-type",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "value_hex": "0801"
+        }
+      ]
+    },
+    {
+      "name": "details-unregistered",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "type.googleapis.com/does.not.Exist",
+          "value_hex": "0801"
+        }
+      ]
+    },
+    {
+      "name": "details-unregistered-no-value",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "type.googleapis.com/does.not.Exist"
+        }
+      ]
+    },
+    {
+      "name": "details-no-slash",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "does.not.Exist"
+        }
+      ]
+    },
+    {
+      "name": "details-empty-then-unregistered",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {},
+        {
+          "type_url": "example.com/x.Y"
+        }
+      ]
+    },
+    {
+      "name": "details-unauth-unregistered",
+      "code": 16,
+      "message": "who are you",
+      "details": [
+        {
+          "type_url": "example.com/x.Y"
+        }
+      ]
+    },
+    {
+      "name": "details-unregistered-with-metadata",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "example.com/x.Y"
+        }
+      ],
+      "metadata": true,
+      "header_md": [
+        [
+          "x-a",
+          "1"
+        ]
+      ],
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "te": "trailers"
+    },
+    {
+      "name": "details-registered-duration",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "type.googleapis.com/google.protobuf.Duration",
+          "value_hex": "08011080cab5ee01"
+        }
+      ]
+    },
+    {
+      "name": "details-registered-status",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "type.googleapis.com/google.rpc.Status",
+          "value_hex": "0805120178"
+        }
+      ]
+    },
+    {
+      "name": "details-registered-bad-value",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "type.googleapis.com/google.protobuf.Duration",
+          "value_hex": "ff"
+        }
+      ]
+    },
+    {
+      "name": "details-registered-other-host",
+      "code": 3,
+      "message": "x",
+      "details": [
+        {
+          "type_url": "example.com/google.protobuf.Duration",
+          "value_hex": "0801"
+        }
+      ]
+    },
+    {
+      "name": "md-none",
+      "code": 5,
+      "message": "x"
+    },
+    {
+      "name": "md-empty",
+      "code": 5,
+      "message": "x",
+      "metadata": true
+    },
+    {
+      "name": "md-empty-te",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "te": "trailers"
+    },
+    {
+      "name": "md-headers",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "header_md": [
+        [
+          "x-request-id",
+          "abc"
+        ],
+        [
+          "x-multi",
+          "1"
+        ],
+        [
+          "x-multi",
+          "2"
+        ],
+        [
+          "content-type",
+          "application/grpc"
+        ],
+        [
+          "under_score.dot",
+          "v"
+        ]
+      ]
+    },
+    {
+      "name": "md-header-values",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "header_md": [
+        [
+          "x-v",
+          "a\r\nb"
+        ],
+        [
+          "x-v",
+          "  trimmed  "
+        ],
+        [
+          "x-v",
+          ""
+        ],
+        [
+          "x-v",
+          "conta inválida"
+        ]
+      ]
+    },
+    {
+      "name": "md-header-control",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "header_md": [
+        [
+          "x-ok",
+          "fine"
+        ],
+        [
+          "x-bad",
+          "a\u0001b"
+        ]
+      ]
+    },
+    {
+      "name": "md-trailers-no-te",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "header_md": [
+        [
+          "x-h",
+          "1"
+        ]
+      ],
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ]
+    },
+    {
+      "name": "md-trailers-te",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "header_md": [
+        [
+          "x-h",
+          "1"
+        ]
+      ],
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ],
+        [
+          "x-t",
+          "3"
+        ],
+        [
+          "x-u",
+          "4"
+        ],
+        [
+          "x-long-name-here",
+          "5"
+        ]
+      ],
+      "te": "trailers"
+    },
+    {
+      "name": "md-trailers-te-mixed-case",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "te": "deflate, TRAILERS;q=1"
+    },
+    {
+      "name": "md-trailers-te-substring",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "te": "notrailers"
+    },
+    {
+      "name": "md-trailers-te-gzip",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "te": "gzip"
+    },
+    {
+      "name": "md-trailers-te-dotted-i",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "te": "TRAİLERS"
+    },
+    {
+      "name": "md-trailers-te-long-s",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "trailer_md": [
+        [
+          "x-t",
+          "2"
+        ]
+      ],
+      "te": "TRAILERſ"
+    },
+    {
+      "name": "md-trailer-values",
+      "code": 5,
+      "message": "x",
+      "metadata": true,
+      "trailer_md": [
+        [
+          "x-t",
+          " a\r\nb "
+        ]
+      ],
+      "te": "trailers"
+    },
+    {
+      "name": "md-unauth",
+      "code": 16,
+      "message": "Bearer",
+      "metadata": true,
+      "header_md": [
+        [
+          "www-authenticate",
+          "other"
+        ]
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "name": "not-found",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/users"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/nope"
+    },
+    {
+      "name": "not-found-no-handlers",
+      "mode": "all_except_reserved",
+      "handlers": [],
+      "method": "GET",
+      "target": "/"
+    },
+    {
+      "name": "not-found-legacy",
+      "mode": "legacy",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v2/x"
+    },
+    {
+      "name": "not-found-bare-verb",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}:get"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/:get"
+    },
+    {
+      "name": "method-not-allowed",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "POST",
+          "template": "/v1/users"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/users"
+    },
+    {
+      "name": "method-not-allowed-delete",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "DELETE",
+      "target": "/v1/x"
+    },
+    {
+      "name": "method-not-allowed-verb",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "POST",
+          "template": "/v1/{name}:start"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a:start"
+    },
+    {
+      "name": "bad-request-not-origin-form",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "*"
+    },
+    {
+      "name": "malformed-then-not-found",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25"
+    },
+    {
+      "name": "malformed-truncated",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a%25z"
+    },
+    {
+      "name": "malformed-all-characters",
+      "mode": "all_characters",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25zz"
+    },
+    {
+      "name": "malformed-twice-then-not-found",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        },
+        {
+          "method": "GET",
+          "template": "/v1/{id}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25"
+    },
+    {
+      "name": "malformed-then-method-not-allowed",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        },
+        {
+          "method": "POST",
+          "template": "/v1/a:%zz"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a:%25zz"
+    },
+    {
+      "name": "malformed-other-method-then-not-found",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "POST",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25"
+    },
+    {
+      "name": "malformed-deep-wildcard",
+      "mode": "all_except_slash",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name=**}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a/%25/b"
+    },
+    {
+      "name": "malformed-then-matched",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/a:%zz"
+        },
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/a:%25zz"
+    },
+    {
+      "name": "malformed-control",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%01"
+    },
+    {
+      "name": "malformed-del",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%7F"
+    },
+    {
+      "name": "malformed-quote",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%22"
+    },
+    {
+      "name": "malformed-backslash",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%5C"
+    },
+    {
+      "name": "malformed-tab-newline",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%09%0A"
+    },
+    {
+      "name": "malformed-printable-2byte",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%C3%A9"
+    },
+    {
+      "name": "malformed-nonprintable-2byte",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%C2%85"
+    },
+    {
+      "name": "malformed-nbsp",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%C2%A0"
+    },
+    {
+      "name": "malformed-soft-hyphen",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%C2%AD"
+    },
+    {
+      "name": "malformed-unassigned",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%CD%B8"
+    },
+    {
+      "name": "malformed-invalid-utf8",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25a%C3%A9"
+    },
+    {
+      "name": "malformed-cut-3byte",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%E2%82%AC"
+    },
+    {
+      "name": "malformed-overlong",
+      "mode": "all_except_reserved",
+      "handlers": [
+        {
+          "method": "GET",
+          "template": "/v1/{name}"
+        }
+      ],
+      "method": "GET",
+      "target": "/v1/%25%C0%80"
+    }
+  ]
+}

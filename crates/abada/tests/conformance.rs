@@ -173,7 +173,7 @@ fn requests_route_like_grpc_gateway() {
                 ),
                 RouteOutcome::NotFound => ("not_found".into(), 0, BTreeMap::new()),
                 RouteOutcome::MethodNotAllowed => ("method_not_allowed".into(), 0, BTreeMap::new()),
-                RouteOutcome::BadRequest(_) => ("bad_request".into(), 0, BTreeMap::new()),
+                RouteOutcome::BadRequest { .. } => ("bad_request".into(), 0, BTreeMap::new()),
             },
         };
         let want = (r.outcome.clone(), r.handler, r.params.clone());

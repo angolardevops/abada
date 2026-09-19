@@ -43,6 +43,24 @@ for binpb in "$ROOT"/conformance/contracts/*.binpb; do
   fi
 done
 
+# Errors: DefaultHTTPErrorHandler and the routing errors, over a real
+# net/http server.
+etmp="$(mktemp "$ROOT/conformance/vectors/.errors.XXXXXX")"
+(cd "$WORK" && ABADA_GENERATOR="grpc-gateway $GATEWAY_TAG, $(go version | cut -d' ' -f3)" \
+  go run ./internal/abadaoracle errors) < "$ROOT/conformance/cases/errors.json" > "$etmp"
+eout="$ROOT/conformance/vectors/errors.json"
+if [ "${1:-}" = "--check" ]; then
+  if ! diff <(grep -v '"generator"' "$eout") <(grep -v '"generator"' "$etmp") > /dev/null; then
+    rm -f "$etmp"
+    echo "$eout is stale: run scripts/regen-vectors.sh" >&2
+    exit 1
+  fi
+  rm -f "$etmp"
+else
+  mv "$etmp" "$eout"
+  echo "wrote $eout"
+fi
+
 if [ "${1:-}" = "--check" ]; then
   # The Go version is recorded, not compared: the net/url rules it produced are.
   if ! diff <(grep -v '"generator"' "$out") <(grep -v '"generator"' "$tmp") > /dev/null; then
