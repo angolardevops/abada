@@ -14,6 +14,22 @@ jobs:
       - run: cargo fmt --all --check
       - run: cargo clippy --workspace --all-targets -- -D warnings
       - run: cargo test --workspace
+  msrv:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.85
+      - run: cargo check --workspace --all-targets
+  harness:
+    # AGENTS.md, skills, reviewers, ADR index and the guard hook agree with
+    # the repository.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 scripts/check-harness.py
   conformance:
     # The vectors are grpc-gateway's own answers. This job asks it again, so a
     # hand-edited or stale vector file cannot make the Rust tests pass.

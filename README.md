@@ -28,6 +28,11 @@ Or from `build.rs`:
 abada_build::configure().compile_protos(&["proto/api.proto"], &["proto"])?;
 ```
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Contributors and AI agents follow
+[AGENTS.md](AGENTS.md).
+
 ## License
 
 Apache-2.0.
