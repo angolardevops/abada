@@ -310,8 +310,17 @@ pub(crate) fn populate_field_value_from_path(
         msg = child;
         i += 1;
     };
-    // A message-typed last field (a well-known type) is one level more.
-    if is_message(&fd) && level + 1 > MAX_MESSAGE_DEPTH {
+    // A message-typed value (a well-known type; the element of a list, the value
+    // of a map) is one level more. A map's entry is not a level of its own.
+    let value_kind = if fd.is_map() {
+        let Kind::Message(entry) = fd.kind() else {
+            unreachable!("a map field is a message entry");
+        };
+        entry.map_entry_value_field().kind()
+    } else {
+        fd.kind()
+    };
+    if matches!(value_kind, Kind::Message(_)) && level + 1 > MAX_MESSAGE_DEPTH {
         return Err(too_deep());
     }
 

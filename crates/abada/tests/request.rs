@@ -91,6 +91,7 @@ const DEEPER_THAN_LIMIT: &[&str] = &[
     "query-depth-101",
     "query-depth-102",
     "query-depth-100-timestamp-leaf",
+    "query-depth-100-repeated-timestamp-leaf",
     "query-depth-1000",
     "query-depth-5000",
     "query-depth-unknown-at-101",

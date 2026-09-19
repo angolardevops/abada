@@ -183,8 +183,10 @@ fn nested_struct(depth: usize) -> Vec<u8> {
 
 /// `keys` query keys, each 99 components of `nested` and a scalar, that diverge
 /// at once (`oMsg` where a bit of the key number is set): each builds about a
-/// hundred messages of its own, where keys that share a prefix share them.
-fn divergent_deep_query(keys: usize) -> String {
+/// hundred messages of its own, where keys that share a prefix share them. The
+/// last value is padded so the URI is `uri_len` long: `http::Uri` holds 65 534
+/// bytes at most, and the amplification bound only applies from 64 KiB in.
+fn divergent_deep_query(keys: usize, uri_len: usize) -> String {
     let bits = usize::BITS - keys.next_power_of_two().leading_zeros();
     let mut q = Vec::new();
     for i in 0..keys {
@@ -196,7 +198,13 @@ fn divergent_deep_query(keys: usize) -> String {
         }
         q.push(format!("{}.fString=1", path.join(".")));
     }
-    format!("/v1/query/x?{}", q.join("&"))
+    let uri = format!("/v1/query/x?{}", q.join("&"));
+    assert!(
+        uri.len() <= uri_len,
+        "{} keys are longer than {uri_len}",
+        keys
+    );
+    format!("{uri}{}", "1".repeat(uri_len - uri.len()))
 }
 
 fn corpus() -> Vec<Case> {
@@ -253,9 +261,9 @@ fn corpus() -> Vec<Case> {
             vec![],
         ),
         case(
-            "query: 93 divergent 100-deep keys",
+            "query: 94 divergent 100-deep keys",
             "GET",
-            &divergent_deep_query(93),
+            &divergent_deep_query(94, 65_530),
             vec![],
         ),
         case(
@@ -415,8 +423,12 @@ fn corpus() -> Vec<Case> {
 /// See docs/readiness/grpc-gateway-parity.md, S5.
 const RATCHET: &[(&str, f64, f64)] = &[
     // Go's figure is not measured (NaN): it has no depth limit, so its cost per
-    // level is the open question. abada measured 93-130x at 64 keys, release.
-    ("query: 93 divergent 100-deep keys", 150.0, f64::NAN),
+    // level is the open question. abada measured ~93x here, release.
+    ("query: 94 divergent 100-deep keys", 150.0, f64::NAN),
+    // One key of 4 000 or 9 000 components builds 99 levels before it is
+    // refused: ~12.5x, over the 10x rule. Go's figure is not measured.
+    ("query: 4000-deep field path", 15.0, f64::NAN),
+    ("query: 9000-deep field path (54 KB)", 15.0, f64::NAN),
     ("body: 10^6 element array", 60.0, 39.1),
     ("body: 10^5 map entries", 18.0, 11.9),
 ];
@@ -528,8 +540,11 @@ async fn hostile_input_never_panics_and_costs_in_proportion() {
                 }
                 // Amplification only means something above a floor: a 20-byte
                 // input allocating 4 KiB of fixed cost is not a finding.
-                let bound = RATCHET.iter().find(|r| r.0 == c.name).map_or(10.0, |r| r.1);
-                if in_bytes >= 64 * 1024 && amp > bound {
+                // A ratcheted case is checked whatever its size: the URI of a
+                // query case cannot pass 65 534 bytes, so the floor would skip it.
+                let ratchet = RATCHET.iter().find(|r| r.0 == c.name);
+                let bound = ratchet.map_or(10.0, |r| r.1);
+                if (in_bytes >= 64 * 1024 || ratchet.is_some()) && amp > bound {
                     failures.push(format!(
                         "{}: peak {} B for {} B in ({amp:.1}x, bound {bound}x)",
                         c.name, o.peak_over_base, in_bytes
