@@ -85,7 +85,7 @@ four properties together, and each one is a test, not a claim:
 | The call itself: `service::call::unary`, in-process, one RPC registered by hand | done, narrow scope | 2 integration tests (`crates/abada/tests/call.rs`), 3 mutations — see "Call" below; no proxy, no rich errors, no streaming |
 | The `tower::Service` (`service::Gateway`), a `Router<Registration>` of hand-registered RPCs | done, narrow scope | 2 integration tests (`crates/abada/tests/gateway.rs`), 3 mutations — see "Gateway" below |
 | `response_body`, proxy, streaming | not started | — |
-| Security and performance parity with grpc-gateway | measured, **not at level** | property test over a 45-input hostile corpus: no panic in a JSON body, but a 4 000-component query path aborts the process (stack overflow, blocking); one FAIL on memory amplification of large repeated fields and maps (1.4–1.9× grpc-gateway's); most rows NOT VALIDATED — `docs/readiness/grpc-gateway-parity.md` |
+| Security and performance parity with grpc-gateway | measured, **not at level** | property test over a 41-input hostile corpus: no panic in a JSON body, but a 4 000-component query path aborts the process (stack overflow, blocking); one FAIL on memory amplification of large repeated fields and maps (1.4–1.9× grpc-gateway's); most rows NOT VALIDATED — `docs/readiness/grpc-gateway-parity.md` |
 
 The conformance suite (`crates/abada/tests/conformance.rs`) was checked by
 breaking the code on purpose: dropping the `/` quirk of the parser, the
