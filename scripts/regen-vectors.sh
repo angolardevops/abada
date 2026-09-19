@@ -95,6 +95,24 @@ else
   echo "wrote $eout"
 fi
 
+# Metadata: runtime.AnnotateContext and the default incoming header matcher —
+# no wire exchange needed, it never writes an HTTP response.
+mtmp="$(mktemp "$ROOT/conformance/vectors/.metadata.XXXXXX")"
+(cd "$WORK" && ABADA_GENERATOR="grpc-gateway $GATEWAY_TAG, $(go version | cut -d' ' -f3)" \
+  go run ./internal/abadaoracle metadata) < "$ROOT/conformance/cases/metadata.json" > "$mtmp"
+mout="$ROOT/conformance/vectors/metadata.json"
+if [ "${1:-}" = "--check" ]; then
+  if ! diff <(grep -v '"generator"' "$mout") <(grep -v '"generator"' "$mtmp") > /dev/null; then
+    rm -f "$mtmp"
+    echo "$mout is stale: run scripts/regen-vectors.sh" >&2
+    exit 1
+  fi
+  rm -f "$mtmp"
+else
+  mv "$mtmp" "$mout"
+  echo "wrote $mout"
+fi
+
 # JSON transcoding: conformance/cases/json-<name>.json holds bodies for the
 # messages of contracts/<name>.binpb, or of protos/<name>.binpb (the protos
 # written for the conformance suite); the vectors are what grpc-gateway's

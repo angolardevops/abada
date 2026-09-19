@@ -80,7 +80,8 @@ four properties together, and each one is a test, not a claim:
 | `PATCH` field mask from the body (`FieldMaskFromRequestBody`) | done | 23 vectors |
 | `response_body` selection | exposed (`RequestBinding::response_body`), not written | resolved against the response type; the writer (`Marshaler::encode_field`) is done; wiring it into a response is a later phase |
 | Calling the RPC: one call path for in-process and proxy | decided: `tonic::client::Grpc<S: GrpcService>` | [ADR 0002](adr/0002-chamada-do-rpc-in-process-e-proxy.md) — proven identical for a unary call in-process and over a real loopback proxy, `benches/tonic-call-proto` |
-| Request metadata (errors, trailers), the `service` module itself, streaming | not started | — |
+| Incoming metadata: `Authorization`/`Grpc-Metadata-*` headers, `X-Forwarded-*`, `Grpc-Timeout` (`abada::service::metadata::incoming`) | done | 30 vectors over `runtime.AnnotateContext` — see "Metadata" below |
+| Response metadata out (`Grpc-Metadata-*`/`Grpc-Trailer-*`), the call itself, the `service` module's `tower::Service`, streaming | not started | — |
 
 The conformance suite (`crates/abada/tests/conformance.rs`) was checked by
 breaking the code on purpose: dropping the `/` quirk of the parser, the
@@ -333,11 +334,58 @@ generated Go code dereferences a nil message), a top-level path variable in a
 oneof another body member already set (the Go message names Go types; abada's
 text differs), `Any` in a `PATCH` body that is not an object (Go panics),
 `X-HTTP-Method-Override` values outside ASCII, forms over 10 MiB, the query
-parameter limit, request metadata (`Grpc-Metadata-*`, `Grpc-Timeout`), client
+parameter limit (incoming metadata is its own section below), client
 and bidirectional streaming, `repeated_path_param_separator` other than `csv`,
 `allow_patch_feature=false`, and any query whose answer depends on Go map
 order (two keys for one field, or one error among several): the oracle drops
 such cases and abada takes keys in order of appearance.
+
+## Metadata
+
+`abada::service::metadata::incoming` is `runtime.AnnotateContext`
+(`runtime/context.go`) with the default header matcher
+(`runtime/mux.go`'s `DefaultHeaderMatcher`) — turning an incoming HTTP
+request's headers, `Host` and peer address into the gRPC metadata pairs and
+deadline a call carries. `crates/abada/tests/metadata.rs` replays 30 vectors
+from `conformance/vectors/metadata.json`, produced by a new `metadata`
+subcommand of `conformance/oracle` that calls the real function directly (no
+wire exchange: `AnnotateContext` never writes an HTTP response). What the
+vectors fix, against intuition:
+
+- **`Grpc-Timeout` is checked before anything else**, and a malformed one
+  (shorter than two characters, or a unit other than `H M S m u n`) aborts
+  the whole call — it does not just get skipped the way an invalid metadata
+  key or non-ASCII value later in the same function does.
+- **`Authorization` becomes two pairs**, not one: an unconditional
+  `authorization` copy (backwards-compatible, never validated), and a
+  `grpcgateway-authorization` copy through the same permanent-header path
+  every other forwarded header takes — which the non-ASCII-value check
+  *does* apply to, so a non-ASCII `Authorization` value keeps the first pair
+  and drops the second.
+- **A `-Bin`-suffixed header's value skips the printable-ASCII check
+  entirely** and is base64-decoded instead — padded (`StdEncoding`) when the
+  header value's length is a multiple of 4, unpadded (`RawStdEncoding`)
+  otherwise; a decode failure aborts the call, the only other case that does.
+- **`X-Forwarded-Host`/`-For` are never matched like an ordinary header**:
+  an existing `X-Forwarded-Host` wins over `Host`; `X-Forwarded-For`'s
+  existing values (in header order) are joined with the peer address's IP
+  (parsed off `RemoteAddr`) appended last.
+
+Checked by breaking the code on purpose: the padded/unpadded threshold
+inverted (not caught until vectors with actual padding characters existed —
+`AGhlbGxv` needs none), the timeout units for `M`/`m` swapped, the
+non-ASCII-value check removed, the `Authorization` special case removed, and
+the peer address prepended instead of appended to `X-Forwarded-For` — each
+made a named vector fail.
+
+Not validated: a custom header matcher or metadata annotator (`ServeMuxOption`s
+Go accepts; not in v0.1 scope), an invalid gRPC metadata *key* from such a
+matcher (the default one only ever produces valid keys from a real header
+name), a negative `Grpc-Timeout` count (Go hands `context.WithTimeout` an
+already-past deadline; `Duration` cannot represent that, so abada clamps to
+zero — untested, and not the same value), `RemoteAddr` as a bracketed IPv6
+address, and the exact text of a base64 decode failure (Go's own decoder
+message is not reproduced, only that decoding fails).
 
 ## Decision: how JSON is transcoded
 

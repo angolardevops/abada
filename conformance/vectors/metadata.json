@@ -1,0 +1,431 @@
+{
+  "generator": "grpc-gateway v2.27.3, go1.26.2",
+  "vectors": [
+    {
+      "name": "all-empty",
+      "headers": [],
+      "pairs": [],
+      "has_timeout": false
+    },
+    {
+      "name": "host-fallback",
+      "headers": [],
+      "host": "example.com",
+      "pairs": [
+        [
+          "x-forwarded-host",
+          "example.com"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "xff-from-remote-addr",
+      "headers": [],
+      "remote_addr": "192.0.2.100:12345",
+      "pairs": [
+        [
+          "x-forwarded-for",
+          "192.0.2.100"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "xff-remote-addr-no-port",
+      "headers": [],
+      "remote_addr": "bad-addr-no-port",
+      "pairs": [],
+      "has_timeout": false
+    },
+    {
+      "name": "xff-existing-appended",
+      "headers": [
+        [
+          "X-Forwarded-For",
+          "192.0.2.100"
+        ],
+        [
+          "X-Forwarded-For",
+          "192.0.2.101, 192.0.2.102"
+        ]
+      ],
+      "remote_addr": "192.0.2.200:12345",
+      "pairs": [
+        [
+          "x-forwarded-for",
+          "192.0.2.100, 192.0.2.101, 192.0.2.102, 192.0.2.200"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "host-header-overridden-by-xfh",
+      "headers": [
+        [
+          "X-Forwarded-Host",
+          "qux.example.com"
+        ]
+      ],
+      "host": "ignored-host.example.com",
+      "pairs": [
+        [
+          "x-forwarded-host",
+          "qux.example.com"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "authorization-doubled",
+      "headers": [
+        [
+          "Authorization",
+          "Token 1234567890"
+        ]
+      ],
+      "pairs": [
+        [
+          "authorization",
+          "Token 1234567890"
+        ],
+        [
+          "grpcgateway-authorization",
+          "Token 1234567890"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "authorization-not-validated",
+      "headers": [
+        [
+          "Authorization",
+          "token-café"
+        ]
+      ],
+      "pairs": [
+        [
+          "authorization",
+          "token-café"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "permanent-header-forwarded",
+      "headers": [
+        [
+          "Accept-Language",
+          "en-US"
+        ]
+      ],
+      "pairs": [
+        [
+          "grpcgateway-accept-language",
+          "en-US"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "content-type-forwarded",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "pairs": [
+        [
+          "grpcgateway-content-type",
+          "application/json"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "grpc-metadata-stripped",
+      "headers": [
+        [
+          "Grpc-Metadata-FooBar",
+          "Value1"
+        ]
+      ],
+      "pairs": [
+        [
+          "foobar",
+          "Value1"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "grpc-metadata-mixed-case-merge",
+      "headers": [
+        [
+          "Grpc-Metadata-Foo-BAZ",
+          "Value2"
+        ],
+        [
+          "Grpc-Metadata-foo-bAz",
+          "Value3"
+        ]
+      ],
+      "pairs": [
+        [
+          "foo-baz",
+          "Value2"
+        ],
+        [
+          "foo-baz",
+          "Value3"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "grpc-metadata-duplicate-same-name",
+      "headers": [
+        [
+          "Grpc-Metadata-Ids",
+          "a"
+        ],
+        [
+          "Grpc-Metadata-Ids",
+          "b"
+        ]
+      ],
+      "pairs": [
+        [
+          "ids",
+          "a"
+        ],
+        [
+          "ids",
+          "b"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "grpc-metadata-bin-valid-padded",
+      "headers": [
+        [
+          "Grpc-Metadata-Test-Bin",
+          "AGhlbGxv"
+        ]
+      ],
+      "pairs": [
+        [
+          "test-bin",
+          "\u0000hello"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "grpc-metadata-bin-valid-one-padding-char",
+      "headers": [
+        [
+          "Grpc-Metadata-Two-Bin",
+          "AAE="
+        ]
+      ],
+      "pairs": [
+        [
+          "two-bin",
+          "\u0000\u0001"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "grpc-metadata-bin-valid-two-padding-chars",
+      "headers": [
+        [
+          "Grpc-Metadata-One-Bin",
+          "AQ=="
+        ]
+      ],
+      "pairs": [
+        [
+          "one-bin",
+          "\u0001"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "grpc-metadata-bin-valid-unpadded",
+      "headers": [
+        [
+          "Grpc-Metadata-Test-Bin",
+          "Alo"
+        ]
+      ],
+      "pairs": [
+        [
+          "test-bin",
+          "\u0002Z"
+        ]
+      ],
+      "has_timeout": false
+    },
+    {
+      "name": "grpc-metadata-bin-invalid",
+      "headers": [
+        [
+          "Grpc-Metadata-Bad-Bin",
+          "not valid base64!!"
+        ]
+      ],
+      "pairs": null,
+      "has_timeout": false,
+      "error": "rpc error: code = InvalidArgument desc = invalid binary header Grpc-Metadata-Bad-Bin: illegal base64 data at input byte 3"
+    },
+    {
+      "name": "non-ascii-value-skipped",
+      "headers": [
+        [
+          "Grpc-Metadata-Note",
+          "café"
+        ]
+      ],
+      "pairs": [],
+      "has_timeout": false
+    },
+    {
+      "name": "irrelevant-header-dropped",
+      "headers": [
+        [
+          "X-Custom-Thing",
+          "hello"
+        ]
+      ],
+      "pairs": [],
+      "has_timeout": false
+    },
+    {
+      "name": "grpc-timeout-seconds",
+      "headers": [
+        [
+          "Grpc-Timeout",
+          "23S"
+        ]
+      ],
+      "pairs": [],
+      "has_timeout": true
+    },
+    {
+      "name": "grpc-timeout-hours",
+      "headers": [
+        [
+          "Grpc-Timeout",
+          "17H"
+        ]
+      ],
+      "pairs": [],
+      "has_timeout": true
+    },
+    {
+      "name": "grpc-timeout-minutes",
+      "headers": [
+        [
+          "Grpc-Timeout",
+          "19M"
+        ]
+      ],
+      "pairs": [],
+      "has_timeout": true
+    },
+    {
+      "name": "grpc-timeout-milliseconds",
+      "headers": [
+        [
+          "Grpc-Timeout",
+          "1009m"
+        ]
+      ],
+      "pairs": [],
+      "has_timeout": true
+    },
+    {
+      "name": "grpc-timeout-microseconds",
+      "headers": [
+        [
+          "Grpc-Timeout",
+          "1000003u"
+        ]
+      ],
+      "pairs": [],
+      "has_timeout": true
+    },
+    {
+      "name": "grpc-timeout-nanoseconds",
+      "headers": [
+        [
+          "Grpc-Timeout",
+          "100000007n"
+        ]
+      ],
+      "pairs": [],
+      "has_timeout": true
+    },
+    {
+      "name": "grpc-timeout-empty-value",
+      "headers": [
+        [
+          "Grpc-Timeout",
+          ""
+        ]
+      ],
+      "pairs": [],
+      "has_timeout": false
+    },
+    {
+      "name": "grpc-timeout-invalid-unit",
+      "headers": [
+        [
+          "Grpc-Timeout",
+          "5X"
+        ]
+      ],
+      "pairs": null,
+      "has_timeout": false,
+      "error": "rpc error: code = InvalidArgument desc = invalid grpc-timeout: 5X"
+    },
+    {
+      "name": "grpc-timeout-too-short",
+      "headers": [
+        [
+          "Grpc-Timeout",
+          "H"
+        ]
+      ],
+      "pairs": null,
+      "has_timeout": false,
+      "error": "rpc error: code = InvalidArgument desc = invalid grpc-timeout: H"
+    },
+    {
+      "name": "grpc-timeout-does-not-become-a-pair",
+      "headers": [
+        [
+          "Grpc-Timeout",
+          "5S"
+        ],
+        [
+          "Grpc-Metadata-Marker",
+          "x"
+        ]
+      ],
+      "pairs": [
+        [
+          "marker",
+          "x"
+        ]
+      ],
+      "has_timeout": true
+    }
+  ]
+}

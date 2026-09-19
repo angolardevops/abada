@@ -1,0 +1,128 @@
+{
+  "cases": [
+    { "name": "all-empty", "headers": [], "host": "", "remote_addr": "" },
+    { "name": "host-fallback", "headers": [], "host": "example.com", "remote_addr": "" },
+    { "name": "xff-from-remote-addr", "headers": [], "host": "", "remote_addr": "192.0.2.100:12345" },
+    { "name": "xff-remote-addr-no-port", "headers": [], "host": "", "remote_addr": "bad-addr-no-port" },
+    {
+      "name": "xff-existing-appended",
+      "headers": [
+        ["X-Forwarded-For", "192.0.2.100"],
+        ["X-Forwarded-For", "192.0.2.101, 192.0.2.102"]
+      ],
+      "host": "",
+      "remote_addr": "192.0.2.200:12345"
+    },
+    {
+      "name": "host-header-overridden-by-xfh",
+      "headers": [["X-Forwarded-Host", "qux.example.com"]],
+      "host": "ignored-host.example.com",
+      "remote_addr": ""
+    },
+    {
+      "name": "authorization-doubled",
+      "headers": [["Authorization", "Token 1234567890"]],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "authorization-not-validated",
+      "headers": [["Authorization", "token-café"]],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "permanent-header-forwarded",
+      "headers": [["Accept-Language", "en-US"]],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "content-type-forwarded",
+      "headers": [["Content-Type", "application/json"]],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "grpc-metadata-stripped",
+      "headers": [["Grpc-Metadata-FooBar", "Value1"]],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "grpc-metadata-mixed-case-merge",
+      "headers": [
+        ["Grpc-Metadata-Foo-BAZ", "Value2"],
+        ["Grpc-Metadata-foo-bAz", "Value3"]
+      ],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "grpc-metadata-duplicate-same-name",
+      "headers": [
+        ["Grpc-Metadata-Ids", "a"],
+        ["Grpc-Metadata-Ids", "b"]
+      ],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "grpc-metadata-bin-valid-padded",
+      "headers": [["Grpc-Metadata-Test-Bin", "AGhlbGxv"]],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "grpc-metadata-bin-valid-one-padding-char",
+      "headers": [["Grpc-Metadata-Two-Bin", "AAE="]],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "grpc-metadata-bin-valid-two-padding-chars",
+      "headers": [["Grpc-Metadata-One-Bin", "AQ=="]],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "grpc-metadata-bin-valid-unpadded",
+      "headers": [["Grpc-Metadata-Test-Bin", "Alo"]],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "grpc-metadata-bin-invalid",
+      "headers": [["Grpc-Metadata-Bad-Bin", "not valid base64!!"]],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "non-ascii-value-skipped",
+      "headers": [["Grpc-Metadata-Note", "café"]],
+      "host": "",
+      "remote_addr": ""
+    },
+    {
+      "name": "irrelevant-header-dropped",
+      "headers": [["X-Custom-Thing", "hello"]],
+      "host": "",
+      "remote_addr": ""
+    },
+    { "name": "grpc-timeout-seconds", "headers": [["Grpc-Timeout", "23S"]], "host": "", "remote_addr": "" },
+    { "name": "grpc-timeout-hours", "headers": [["Grpc-Timeout", "17H"]], "host": "", "remote_addr": "" },
+    { "name": "grpc-timeout-minutes", "headers": [["Grpc-Timeout", "19M"]], "host": "", "remote_addr": "" },
+    { "name": "grpc-timeout-milliseconds", "headers": [["Grpc-Timeout", "1009m"]], "host": "", "remote_addr": "" },
+    { "name": "grpc-timeout-microseconds", "headers": [["Grpc-Timeout", "1000003u"]], "host": "", "remote_addr": "" },
+    { "name": "grpc-timeout-nanoseconds", "headers": [["Grpc-Timeout", "100000007n"]], "host": "", "remote_addr": "" },
+    { "name": "grpc-timeout-empty-value", "headers": [["Grpc-Timeout", ""]], "host": "", "remote_addr": "" },
+    { "name": "grpc-timeout-invalid-unit", "headers": [["Grpc-Timeout", "5X"]], "host": "", "remote_addr": "" },
+    { "name": "grpc-timeout-too-short", "headers": [["Grpc-Timeout", "H"]], "host": "", "remote_addr": "" },
+    {
+      "name": "grpc-timeout-does-not-become-a-pair",
+      "headers": [["Grpc-Timeout", "5S"], ["Grpc-Metadata-Marker", "x"]],
+      "host": "",
+      "remote_addr": ""
+    }
+  ]
+}

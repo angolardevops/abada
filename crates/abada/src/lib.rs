@@ -6,3 +6,4 @@ pub mod error;
 pub mod json;
 pub mod path;
 pub mod request;
+pub mod service;
