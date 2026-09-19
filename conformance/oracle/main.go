@@ -84,6 +84,14 @@ func main() {
 		runErrors()
 		return
 	}
+	if len(os.Args) == 4 && os.Args[1] == "json" {
+		runJSON(os.Args[2], os.Args[3])
+		return
+	}
+	if len(os.Args) == 3 && os.Args[1] == "json-bench" {
+		runJSONBench(os.Args[2])
+		return
+	}
 	if len(os.Args) == 4 && os.Args[1] == "contract" {
 		runContract(os.Args[2], os.Args[3])
 		return

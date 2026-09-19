@@ -12,6 +12,9 @@ if [ ! -d "$WORK" ]; then
   git clone --quiet --depth 1 --branch "$GATEWAY_TAG" \
     https://github.com/grpc-ecosystem/grpc-gateway.git "$WORK"
 fi
+# The checkout is shared between runs and branches: start from an empty oracle
+# directory, or a file removed or renamed here keeps compiling from the cache.
+rm -rf "$WORK/internal/abadaoracle"
 mkdir -p "$WORK/internal/abadaoracle"
 cp "$ROOT"/conformance/oracle/*.go "$WORK/internal/abadaoracle/"
 
@@ -60,6 +63,31 @@ else
   mv "$etmp" "$eout"
   echo "wrote $eout"
 fi
+
+# JSON transcoding: conformance/cases/json-<name>.json holds bodies for the
+# messages of contracts/<name>.binpb; the vectors are what grpc-gateway's default
+# marshaler accepts and answers for each.
+for jcases in "$ROOT"/conformance/cases/json-*.json; do
+  [ -e "$jcases" ] || continue
+  name="$(basename "$jcases" .json)"
+  name="${name#json-}"
+  jtmp="$(mktemp "$ROOT/conformance/vectors/.json-$name.XXXXXX")"
+  (cd "$WORK" && ABADA_GENERATOR="grpc-gateway $GATEWAY_TAG, $(go version | cut -d' ' -f3)" \
+    go run ./internal/abadaoracle json "$ROOT/conformance/contracts/$name.binpb" "$(cat "$ROOT/conformance/contracts/$name.source")") \
+    < "$jcases" > "$jtmp"
+  jout="$ROOT/conformance/vectors/json-$name.json"
+  if [ "${1:-}" = "--check" ]; then
+    if ! diff <(grep -v '"generator"' "$jout") <(grep -v '"generator"' "$jtmp") > /dev/null; then
+      rm -f "$jtmp"
+      echo "$jout is stale: run scripts/regen-vectors.sh" >&2
+      exit 1
+    fi
+    rm -f "$jtmp"
+  else
+    mv "$jtmp" "$jout"
+    echo "wrote $jout"
+  fi
+done
 
 if [ "${1:-}" = "--check" ]; then
   # The Go version is recorded, not compared: the net/url rules it produced are.
