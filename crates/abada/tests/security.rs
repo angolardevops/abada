@@ -189,9 +189,9 @@ fn divergent_deep_query(keys: usize) -> String {
     let mut q = Vec::new();
     for i in 0..keys {
         let mut path: Vec<&str> = vec!["nested"; 99];
-        for l in 0..(bits as usize).min(99) {
+        for (l, component) in path.iter_mut().enumerate().take(bits as usize) {
             if i >> l & 1 == 1 {
-                path[l] = "oMsg";
+                *component = "oMsg";
             }
         }
         q.push(format!("{}.fString=1", path.join(".")));
