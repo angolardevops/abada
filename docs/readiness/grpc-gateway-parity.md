@@ -9,8 +9,9 @@ number here is exploratory**). The gates are defined in
 [`abada-performance`](../../.claude/skills/abada-performance/SKILL.md) (P1–P6).
 
 **Verdict: not at grpc-gateway's level, and there is one blocking finding.**
-A single `GET` aborts the process (below, S2). Apart from it, 45 hostile
-inputs produced no panic and no cross-request state, and nesting 200 000 in a
+A single `GET` aborts the process (below, S2). Apart from it, 41 hostile
+inputs (37 reached abada; 4 were refused by the `http` crate when the request
+was built) produced no panic and no cross-request state, and nesting 200 000 in a
 JSON body answers 400. A second row is a measured FAIL against grpc-gateway
 (memory amplification of large repeated fields and maps), and most rows have no
 evidence because the instrument for them does not exist yet. "At the level of
