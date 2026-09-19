@@ -92,19 +92,20 @@ def report(out):
             print(f"| {r['name']} | {g50:.0f} / {g99:.0f} | {a50:.0f} / {a99:.0f} | {a50/g50:.2f} |")
 
     print("\n## P3 memory: RSS during the soak (MB)\n")
-    print("| side | first sample | last sample | max | growth first→last |\n|---|---|---|---|---|")
+    print("| side | first sample | steady state (last quarter mean) | max | last quarter vs the one before | verdict |\n|---|---|---|---|---|---|")
+    steady = {}
     for s, name in [("go", "grpc-gateway"), ("abada", "abada")]:
         f = f"{out}/raw/soak-{s}.json"
         if not os.path.exists(f): continue
-        ser = json.load(open(f)).get("gateway_rss_series_kb", [])
-        if ser: print(f"| {name} | {ser[0]/1024:.1f} | {ser[-1]/1024:.1f} | {max(ser)/1024:.1f} | {100*(ser[-1]-ser[0])/ser[0]:+.1f}% |")
-    for s in ("go", "abada"):
-        f = f"{out}/raw/soak-{s}.json"
-        if os.path.exists(f):
-            d = json.load(open(f))
-            if d["overall"]["rps"] < 0.95 * d.get("target_rate", 0):
-                print(f"\n**INVALID soak for {s}:** it sustained {d['overall']['rps']:.0f} of {d['target_rate']:.0f} req/s; the RSS includes a queue.")
-    print("\nFlat means the last quarter of the series does not trend up; read the series in `raw/soak-*.json`.")
+        ser = [v / 1024 for v in json.load(open(f)).get("gateway_rss_series_kb", [])]
+        if len(ser) < 8: continue
+        q = len(ser) // 4
+        q3, q4 = st.mean(ser[2*q:3*q]), st.mean(ser[3*q:])
+        steady[s] = q4
+        flat = q4 <= 1.05 * q3
+        print(f"| {name} | {ser[0]:.1f} | {q4:.1f} | {max(ser):.1f} | {q4/q3:.2f}x | {'FLAT at the end' if flat else 'STILL GROWING'} |")
+    if len(steady) == 2:
+        print(f"\nSteady-state RSS abada/grpc-gateway: {steady['abada']/steady['go']:.2f}. The soak is {json.load(open(f'{out}/raw/soak-go.json'))['seconds']:.0f} s: a leak slower than about 1 MB per minute cannot be excluded by it. The growth from the first sample to the plateau is not investigated (candidates: allocator arenas per worker thread, connection buffers); read the series in `raw/soak-*.json`.")
 
     print("\n## P5 cold start: spawn to first correct answer (ms)\n")
     cs = {}

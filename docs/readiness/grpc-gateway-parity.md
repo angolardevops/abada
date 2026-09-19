@@ -100,31 +100,44 @@ the whole mix. Result: **6 of 7 identical**; the seventh, `get_response`
 `response_body` is "not started" in the Progress table — so it is excluded from
 the load and reported as not comparable.
 
-First run, `--quick` protocol (3 s warm-up, 10 s measured, 3 runs, 60 s soak),
-raw files and report in
-[`benches/parity/results/quick-20260919/`](../../benches/parity/results/quick-20260919/report.md).
-**Every row is NOT MEASURED in the skill's sense: the run was exploratory.**
-The host was in power-save (governor `powersave`, energy preference `power`,
-all cores at 544 MHz — found after the run, so recorded by hand), and the load
-average went from 15 to 68 during it. What the data does say, as a direction
-and nothing finer:
+Two runs, raw files and generated reports in
+[`benches/parity/results/`](../../benches/parity/results/). The first
+(`quick-20260919`) ran with every core at 544 MHz and is kept only as the record
+of how the protocol was corrected (its open loop and soak were above capacity).
+The second is the one to read:
+[`full-20260919`](../../benches/parity/results/full-20260919/report.md) —
+the `--full` protocol (10 s warm-up, 30 s measured, 3 runs per point, 300 s
+soak, open-loop rates at 25% and 50% of the measured capacity), governor and
+platform profile `performance`, mean clock 4.6 GHz, go1.26.2, rustc 1.98.1,
+commit `99fe9d2`.
 
-| # | Row | What the exploratory run shows |
+**It is still exploratory by the skill's own rule:** the load average was 16.7 when
+it started (other sessions and VMs on the host) and 6–12 during it, with my own
+load included, and one run at c=1 lost more than half its throughput on each
+side (2 208 req/s on grpc-gateway, 1 648 on abada, against 5 300–6 200 in the
+other runs), which is what widens the ranges. No ratio below may be quoted as a
+result; what follows is the direction the data supports and where it does not
+support one.
+
+| # | Row | What the `--full` run shows (abada / grpc-gateway, median, ranges in the report) |
 |---|---|---|
-| P1 | Latency | closed loop c=1 and c=8: abada's p99 is 0.44–0.53× grpc-gateway's with non-overlapping ranges, p50 the same; c=32 and c=128: ranges overlap. Nothing where abada is behind. Open loop: **invalid** — the fixed rates (5 000, 15 000 req/s) were above the ~5 000 req/s this host sustained, so the latencies measured a queue; the protocol now derives the rates from the measured capacity |
-| P2 | Throughput and CPU | req/s 1.1–1.2× at c=1 and c=8, ranges overlap above; CPU per request 0.46–0.54× at every level (ranges do not overlap) |
-| P3 | Memory | RSS in the soak 74→84 MB (abada) and 59→69 MB (grpc-gateway) — but the soak was overloaded (abada sustained 3 960 of 5 000 req/s), so the growth may be queue. **No flatness claim** |
-| P4 | Tail under load | c=128 p99.9 equal within the ranges; the open-loop tail is invalid |
-| P5 | Cold start | 65.7 ms abada (59–77) vs 60.0 ms grpc-gateway (57–64), 7 runs each; ranges overlap |
+| P1 | Latency | c=8: p50 0.78, p99 0.52, p99.9 0.72, ranges do not overlap. c=1, c=32, c=128: medians at or below 1, ranges overlap. Open loop at 8 457 req/s: p50 0.84 and p99 0.53, ranges do not overlap; at 16 915 req/s p50 and p99 overlap and **p99.9 is 3.1× (11.5 ms against 3.7 ms), ranges 5–32 ms against 2–13 ms**: not an established difference, not cleared either. In the soak at that rate the tail went the other way (p99 1.0 ms abada, 99.8 ms grpc-gateway). By request, the 64 KiB body is where abada is furthest ahead (p50 0.33) |
+| P2 | Throughput and CPU | req/s 1.39× at c=8 and 1.14× at c=32 (ranges do not overlap), overlap at c=1 and c=128 (0.92); CPU per request 0.49–0.74×, lower at every level |
+| P3 | Memory | **steady-state RSS 75 MB against 48 MB (1.55×)**. Both flat over the last half of the soak (last quarter 1.03× the one before for abada, 0.96× for grpc-gateway), but abada climbs from 17 MB to that plateau in about 150 s and the 300 s soak cannot exclude a leak under ~1 MB/min. The cause of the climb is not investigated |
+| P4 | Tail under load | see P1: c=128 p99.9 0.88 with overlap; open loop 16 915 p99.9 above |
+| P5 | Cold start | 6.2 ms abada (5–7) against 5.7 ms (5–6), 7 runs each; overlap |
 | P6 | Stages | routing only, below |
 
+In one sentence, and only as a direction: **on this host, with the proxy setup
+described, abada is at or ahead of grpc-gateway on latency and throughput in every
+closed-loop and low-rate open-loop point, uses about half the CPU per request, and
+uses about 1.55× the memory.** The memory row is the one that would keep the
+skill's overall verdict at "below level" on a quiet host, and the p99.9 at the
+higher open-loop rate is the one to re-measure first.
+
 Not measured with this instrument yet: in-process mode (abada's own number, no Go
-equivalent), the `response_body` request, and anything on a host at full clock.
-**A valid run needs the host in `performance`** — `sudo cpupower frequency-set
--g performance`, or writing `performance` to each
-`/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor` — and no other
-sessions building; then `scripts/parity/run.sh --full`. Changing a system
-setting is left to the machine's owner.
+equivalent), the `response_body` request, and a run on a host with load average
+below 8 (25% of 32 threads).
 
 Routing, the 56 canonical `delonix.node.v1` requests with all 56 bindings
 registered, `route_bench` against `abadaoracle bench`, release, load average
@@ -156,7 +169,7 @@ that earlier table should not be compared with this one.
 - Licences (`cargo deny check licenses`, needs a `deny.toml` decision) and
   `cargo audit`.
 - Streaming and the generated code path (neither exists yet in the stack).
-- Any performance row at full clock speed and low load (see above); `--full` protocol; in-process mode.
+- Any performance row on a quiet host (load below 8): the `--full` run above is at full clock but not quiet; in-process mode.
 - Any number on a quiet host. The run above overlapped with builds of mine.
 
 ## To reach the level
@@ -164,6 +177,6 @@ that earlier table should not be compared with this one.
 In order: (1) find and remove the memory overhead on repeated scalars and maps
 until `RATCHET` reaches Go's column; (2) write the differential corpus for
 S1/S2/S4 in the oracle; (3) ~~add the end-to-end Go server and a load generator~~ (done, this PR)
-then run `scripts/parity/run.sh --full` on a host in `performance` mode so
-P1–P5 get a verdict; (4) a `deny.toml` and a fuzz target per parser; (5) show
+then re-run `scripts/parity/run.sh --full` with the host idle so P1–P5 get a
+verdict (the run of 2026-09-19 is the direction); (4) a `deny.toml` and a fuzz target per parser; (5) show
 `Limited` in the README. Each is its own PR with its own proof.
