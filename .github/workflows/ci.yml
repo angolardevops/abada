@@ -39,4 +39,14 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: "1.26.2"
+      # The request oracle compiles conformance/protos with protoc (compared
+      # with the committed descriptor set, so the version is pinned) and
+      # installs protoc-gen-go-grpc at the version the script pins.
+      - name: protoc 25.1
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/protoc.zip" \
+            https://github.com/protocolbuffers/protobuf/releases/download/v25.1/protoc-25.1-linux-x86_64.zip
+          mkdir -p "$HOME/.local"
+          unzip -q -o "$RUNNER_TEMP/protoc.zip" -d "$HOME/.local"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
       - run: scripts/regen-vectors.sh --check

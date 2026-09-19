@@ -11,7 +11,12 @@ categories.workspace = true
 
 [dependencies]
 http.workspace = true
+# Request population (abada::request): descriptors, dynamic messages and, for
+# now, the interim body decoder on prost-reflect's serde support.
+prost-reflect = { version = "0.16", features = ["serde"] }
+serde_json.workspace = true
 
 [dev-dependencies]
 serde.workspace = true
-serde_json.workspace = true
+base64 = "0.22"
+prost.workspace = true
