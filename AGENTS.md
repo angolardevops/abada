@@ -37,7 +37,7 @@ A change that weakens one of these is not a feature; it needs an ADR (§6).
 
 | Crate | Role | May depend on |
 |---|---|---|
-| `abada` | runtime used by generated code: routing, transcoding, errors, streaming | `http`; `prost-reflect`, `prost-types`, `serde`, `serde_json` (ADR 0001); `tower`, `prost` (property 4, when the service lands) — never `axum`, never `abada-codegen` |
+| `abada` | runtime used by generated code: routing, transcoding, errors, streaming | `http`; `prost-reflect`, `prost-types`, `serde`, `serde_json` (ADR 0001); `prost`, `bytes` (property 4); `tonic` pinned `=0.14.5`, `default-features = false`, `features = ["codegen"]` only (ADR 0002 — never `tonic-build`, `tonic-prost-build`, `tonic-prost`, and never a `tonic` version whose own MSRV is measured above 1.85); `tower` as a **dev-dependency only** (`features = ["util"]`, to hand-write a test double server — becomes a normal dependency, still `tower`, once something in this crate actually implements `tower::Service`) — never `axum`, never `abada-codegen` |
 | `abada-codegen` | `FileDescriptorSet` → `HttpRule`s → Rust code; pure, no I/O besides what it is handed | `abada`, `prost` |
 | `abada-build` | `build.rs` API in the style of `tonic-build` | `abada-codegen` |
 | `protoc-gen-abada` | protoc/buf plugin: `CodeGeneratorRequest` on stdin, response on stdout | `abada-codegen` |

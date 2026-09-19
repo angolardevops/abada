@@ -1,8 +1,9 @@
 //! The pieces a `tower::Service` needs to actually call an RPC: metadata in
-//! and out, and (later) the call itself and NDJSON streaming. See
+//! and out, the call itself, and (later) NDJSON streaming. See
 //! [ADR 0002](../../../../docs/adr/0002-chamada-do-rpc-in-process-e-proxy.md)
-//! for how in-process and proxy calls share one path once this module calls
-//! anything; nothing here does yet.
+//! for how in-process and proxy calls share the one path `call::unary` uses.
 
+pub mod call;
+pub mod codec;
 pub mod metadata;
 pub mod response;
