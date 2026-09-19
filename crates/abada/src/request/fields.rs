@@ -207,13 +207,15 @@ fn lookup(desc: &MessageDescriptor, name: &[u8]) -> Option<FieldDescriptor> {
 
 /// The deepest message nesting a request may be built with, the root counted:
 /// the same 100 the JSON codec allows (`abada::json::DEFAULT_RECURSION_LIMIT`).
-/// prost, which decodes what abada sends, accepts 101 (measured), so a request
+/// prost, which decodes what abada sends, accepts 101 (measured once in review,
+/// no test pins it), so a request
 /// built from scalars and well-known types is never refused downstream for its
 /// depth. A `Struct` or `Value` last field is the exception: the JSON codec
 /// fills it, and for prost an object level is three messages (`Value`, `Struct`,
 /// the map entry) and an array level two, so it decodes at most 33 object or 50
 /// array levels, fewer the deeper the field sits — beyond that the backend's
-/// decoder answers 400 (measured on `prost_types::Value`); no crash.
+/// decoder answers 400 (measured once on `prost_types::Value`, no test pins
+/// the 33 and the 50); no crash.
 ///
 /// grpc-gateway has no such limit: its walk is a loop, and Go's stack grows.
 /// Here a loop alone would not be enough — the message it built would be
@@ -229,10 +231,7 @@ fn too_deep() -> FieldError {
 /// the descriptors alone (nothing deeper is built, and a message Go creates
 /// there has no oneof set): a name that is not a singular message is still
 /// "is not a message"; everything else is the limit.
-fn past_the_limit(fd: &FieldDescriptor, rest: &[&[u8]]) -> FieldError {
-    let Kind::Message(mut desc) = fd.kind() else {
-        unreachable!("the walk only descends through message fields");
-    };
+fn past_the_limit(mut desc: MessageDescriptor, rest: &[&[u8]]) -> FieldError {
     for (j, name) in rest.iter().enumerate() {
         let Some(next) = lookup(&desc, name) else {
             break;
@@ -240,17 +239,24 @@ fn past_the_limit(fd: &FieldDescriptor, rest: &[&[u8]]) -> FieldError {
         if j == rest.len() - 1 {
             break;
         }
-        match next.kind() {
-            Kind::Message(m) if !next.is_list() && !next.is_map() => desc = m,
-            _ => {
-                return FieldError::gateway(format!(
-                    "invalid path: {} is not a message",
-                    quote(name)
-                ));
-            }
+        match singular_message(&next) {
+            Some(m) => desc = m,
+            None => return not_a_message(name),
         }
     }
     too_deep()
+}
+
+/// The message type of a singular message field: what a path may descend into.
+fn singular_message(fd: &FieldDescriptor) -> Option<MessageDescriptor> {
+    match fd.kind() {
+        Kind::Message(m) if !fd.is_list() && !fd.is_map() => Some(m),
+        _ => None,
+    }
+}
+
+fn not_a_message(name: &[u8]) -> FieldError {
+    FieldError::gateway(format!("invalid path: {} is not a message", quote(name)))
 }
 
 /// `runtime.populateFieldValueFromPath`: walk `path` (proto or JSON names),
@@ -297,15 +303,12 @@ pub(crate) fn populate_field_value_from_path(
         if i == path.len() - 1 {
             break fd;
         }
-        if !is_message(&fd) || fd.is_list() || fd.is_map() {
-            return Err(FieldError::gateway(format!(
-                "invalid path: {} is not a message",
-                quote(name)
-            )));
-        }
+        let Some(child_type) = singular_message(&fd) else {
+            return Err(not_a_message(name));
+        };
         level += 1;
         if level > MAX_MESSAGE_DEPTH {
-            return Err(past_the_limit(&fd, &path[i + 1..]));
+            return Err(past_the_limit(child_type, &path[i + 1..]));
         }
         let Value::Message(child) = msg.get_field_mut(&fd) else {
             unreachable!("a singular message field holds a message");

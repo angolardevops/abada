@@ -316,7 +316,8 @@ request as deep as the path names: its vectors answer `request` at 1 000 and at
 5 000 levels (`query-depth-1000`, `query-depth-5000`). abada refuses a request
 that would nest past **100 levels, the root counted, and a message-typed last
 field one more** — the JSON codec's limit (`depth_101`); prost, which decodes
-what abada sends, takes 101 (measured), so what abada builds from scalars and
+what abada sends, takes 101 (measured once in review, and read in prost's
+source; no test pins it), so what abada builds from scalars and
 well-known types is never refused downstream for depth (`Struct`/`Value`
 excepted, below). The error is 400, code 3, `exceeded max recursion depth`.
 
@@ -378,7 +379,7 @@ grpc-gateway serves, answers 400 on every request (found by reading, not
 measured). A `Struct` or `Value` last field is filled by the JSON codec, and
 for prost an object level is three messages (`Value`, `Struct`, the map entry)
 and an array level two: `prost_types::Value` decodes at most 33 levels of object
-or 50 of array (measured in review), fewer the deeper the field sits, and past
+or 50 of array (measured once in review; no test pins either), fewer the deeper the field sits, and past
 that the backend's decoder answers 400 (measured through the gateway with
 arrays: a `fValue` of 50 at level 1 is 200, at level 51 is 400; with 10 or 49
 arrays at level 99 it is 400, and from 100 levels of JSON the codec's own 400
