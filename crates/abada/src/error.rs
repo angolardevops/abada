@@ -194,25 +194,7 @@ impl ErrorResponse {
             };
         };
 
-        let mut trailers = HeaderMap::new();
-        if let Some(md) = metadata {
-            for (key, value) in &md.headers {
-                append(&mut headers, "grpc-metadata-", key, value);
-            }
-            if accepts_trailers {
-                let mut announced: Vec<String> = Vec::new();
-                for (key, value) in &md.trailers {
-                    let name = canonical_mime_header_key(&format!("Grpc-Trailer-{key}"));
-                    if !announced.contains(&name) {
-                        if let Ok(v) = HeaderValue::from_str(&name) {
-                            headers.append(header::TRAILER, v);
-                        }
-                        announced.push(name);
-                    }
-                    append(&mut trailers, "grpc-trailer-", key, value);
-                }
-            }
-        }
+        let trailers = write_metadata(&mut headers, metadata, accepts_trailers);
 
         Self {
             status: http_status_from_code(status.code),
@@ -267,6 +249,43 @@ impl ErrorResponse {
             }
         }
     }
+}
+
+/// `handleForwardResponseServerMetadata` and, when `accepts_trailers`,
+/// `handleForwardResponseTrailerHeader` (`runtime/handler.go`): response
+/// metadata as `Grpc-Metadata-*` headers on `headers`, and, only when the
+/// request accepts them, the trailer names declared on `headers["Trailer"]`
+/// with their `Grpc-Trailer-*` values returned separately — a caller writes
+/// them after the body, as real HTTP trailers, never before. Shared by
+/// [`ErrorResponse`] and a successful call's response
+/// (`crate::service::response::Response`), which both write metadata this
+/// same way.
+pub(crate) fn write_metadata(
+    headers: &mut HeaderMap,
+    metadata: Option<&ServerMetadata>,
+    accepts_trailers: bool,
+) -> HeaderMap {
+    let mut trailers = HeaderMap::new();
+    let Some(md) = metadata else {
+        return trailers;
+    };
+    for (key, value) in &md.headers {
+        append(headers, "grpc-metadata-", key, value);
+    }
+    if accepts_trailers {
+        let mut announced: Vec<String> = Vec::new();
+        for (key, value) in &md.trailers {
+            let name = canonical_mime_header_key(&format!("Grpc-Trailer-{key}"));
+            if !announced.contains(&name) {
+                if let Ok(v) = HeaderValue::from_str(&name) {
+                    headers.append(header::TRAILER, v);
+                }
+                announced.push(name);
+            }
+            append(&mut trailers, "grpc-trailer-", key, value);
+        }
+    }
+    trailers
 }
 
 fn append(map: &mut HeaderMap, prefix: &str, key: &str, value: &[u8]) {

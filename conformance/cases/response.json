@@ -1,0 +1,46 @@
+{
+  "cases": [
+    { "name": "plain-no-metadata", "code": 0, "message": "" },
+    { "name": "message-set-no-metadata", "code": 5, "message": "not found" },
+    { "name": "unicode-message", "code": 3, "message": "café ☃" },
+    {
+      "name": "headers-only-no-te",
+      "code": 0,
+      "message": "ok",
+      "metadata": true,
+      "header_md": [["x-request-id", "abc-123"]]
+    },
+    {
+      "name": "trailers-present-but-te-not-requested",
+      "code": 0,
+      "message": "ok",
+      "metadata": true,
+      "header_md": [["x-request-id", "abc-123"]],
+      "trailer_md": [["x-trace-id", "xyz-789"]]
+    },
+    {
+      "name": "headers-and-trailers-with-te",
+      "code": 0,
+      "message": "ok",
+      "metadata": true,
+      "header_md": [["x-request-id", "abc-123"]],
+      "trailer_md": [["x-trace-id", "xyz-789"]],
+      "te": "trailers"
+    },
+    {
+      "name": "repeated-header-value",
+      "code": 0,
+      "message": "ok",
+      "metadata": true,
+      "header_md": [["x-tag", "a"], ["x-tag", "b"]]
+    },
+    {
+      "name": "repeated-trailer-value-with-te",
+      "code": 0,
+      "message": "ok",
+      "metadata": true,
+      "trailer_md": [["x-tag", "a"], ["x-tag", "b"]],
+      "te": "trailers"
+    }
+  ]
+}

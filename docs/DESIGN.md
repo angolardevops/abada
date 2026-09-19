@@ -81,7 +81,8 @@ four properties together, and each one is a test, not a claim:
 | `response_body` selection | exposed (`RequestBinding::response_body`), not written | resolved against the response type; the writer (`Marshaler::encode_field`) is done; wiring it into a response is a later phase |
 | Calling the RPC: one call path for in-process and proxy | decided: `tonic::client::Grpc<S: GrpcService>` | [ADR 0002](adr/0002-chamada-do-rpc-in-process-e-proxy.md) — proven identical for a unary call in-process and over a real loopback proxy, `benches/tonic-call-proto` |
 | Incoming metadata: `Authorization`/`Grpc-Metadata-*` headers, `X-Forwarded-*`, `Grpc-Timeout` (`abada::service::metadata::incoming`) | done | 30 vectors over `runtime.AnnotateContext` — see "Metadata" below |
-| Response metadata out (`Grpc-Metadata-*`/`Grpc-Trailer-*`), the call itself, the `service` module's `tower::Service`, streaming | not started | — |
+| A successful response: status, `Content-Type`, `Grpc-Metadata-*`/`Grpc-Trailer-*` out (`abada::service::response::Response::success`) | done, whole message only | 8 vectors over `runtime.ForwardResponseMessage` — see "Response" below; `response_body` (one field instead of the whole message) still not wired in |
+| The call itself, the `service` module's `tower::Service`, streaming | not started | — |
 
 The conformance suite (`crates/abada/tests/conformance.rs`) was checked by
 breaking the code on purpose: dropping the `/` quirk of the parser, the
@@ -386,6 +387,37 @@ already-past deadline; `Duration` cannot represent that, so abada clamps to
 zero — untested, and not the same value), `RemoteAddr` as a bracketed IPv6
 address, and the exact text of a base64 decode failure (Go's own decoder
 message is not reproduced, only that decoding fails).
+
+## Response
+
+`abada::service::response::Response::success` is `ForwardResponseMessage`
+(`runtime/handler.go`) with the default marshaler, for a message already
+fully populated — status, `Content-Type`, and outgoing metadata, over the
+same wire-exchange oracle machinery `errors.rs` uses (trailers need real
+HTTP/1.1 framing). It shares header/trailer writing with
+[`ErrorResponse`](#errors) through one function,
+`crate::error::write_metadata`: grpc-gateway's own
+`DefaultHTTPErrorHandler` and `ForwardResponseMessage` both call
+`handleForwardResponseServerMetadata`/`handleForwardResponseTrailerHeader`,
+so abada calls one function from both places too, instead of keeping the
+rule written twice.
+
+`crates/abada/tests/response.rs` replays 8 vectors from
+`conformance/vectors/response.json`. The response message is
+`google.rpc.Status`, reused only because it is a real proto message the Go
+oracle already links — `ForwardResponseMessage` does not care what type it
+forwards, and encoding correctness is `abada::json`'s to prove, not this
+suite's. Checked by breaking the code on purpose: `Content-Type` left unset,
+and trailers written unconditionally instead of only when the request
+accepts them — each failed a named vector (mutating the shared
+`write_metadata` also re-confirmed `errors.rs` still passes, since both
+suites exercise the same function).
+
+Not validated: `response_body` (rendering one field instead of the whole
+message — `RequestBinding::response_body` and `Marshaler::encode_field`
+exist, wiring them together does not yet), and everything the "Errors"
+section above already lists as not validated for header/trailer writing in
+general, since this is the same code.
 
 ## Decision: how JSON is transcoded
 

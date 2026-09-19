@@ -113,6 +113,24 @@ else
   echo "wrote $mout"
 fi
 
+# Successful responses: ForwardResponseMessage over a real net/http server,
+# same wire-exchange machinery as errors (trailers need real HTTP/1.1 framing).
+rtmp="$(mktemp "$ROOT/conformance/vectors/.response.XXXXXX")"
+(cd "$WORK" && ABADA_GENERATOR="grpc-gateway $GATEWAY_TAG, $(go version | cut -d' ' -f3)" \
+  go run ./internal/abadaoracle response) < "$ROOT/conformance/cases/response.json" > "$rtmp"
+rout="$ROOT/conformance/vectors/response.json"
+if [ "${1:-}" = "--check" ]; then
+  if ! diff <(grep -v '"generator"' "$rout") <(grep -v '"generator"' "$rtmp") > /dev/null; then
+    rm -f "$rtmp"
+    echo "$rout is stale: run scripts/regen-vectors.sh" >&2
+    exit 1
+  fi
+  rm -f "$rtmp"
+else
+  mv "$rtmp" "$rout"
+  echo "wrote $rout"
+fi
+
 # JSON transcoding: conformance/cases/json-<name>.json holds bodies for the
 # messages of contracts/<name>.binpb, or of protos/<name>.binpb (the protos
 # written for the conformance suite); the vectors are what grpc-gateway's
