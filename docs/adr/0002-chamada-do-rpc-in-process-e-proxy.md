@@ -104,11 +104,23 @@ differing only in what `S` is. `cargo test`, `cargo clippy --all-targets --
 One structural finding while measuring: `tonic-prost-build` 0.14.6 declares
 `rust-version = 1.88`, above the `1.85` abada's workspace promises. Adding it
 as a normal build-dependency of a workspace member would break the `msrv` CI
-job for the whole repository — not because `tonic` itself (runtime,
-`rust-version = 1.75`) needs it, but because the *codegen* crate does. The
-prototype's own `Cargo.toml` declares its own `[workspace]` and is
-`exclude`d from the root one specifically to keep this from touching abada's
-MSRV claim while the question below is unresolved.
+job for the whole repository. The prototype's own `Cargo.toml` declares its
+own `[workspace]` and is `exclude`d from the root one specifically to keep
+this from touching abada's MSRV claim.
+
+A second, more precise measurement, done after the prototype: `tonic` itself
+(not the `-build` crate) also bumped its declared `rust-version` to `1.88` as
+of the `0.14.6` patch release — `cargo add tonic` or a bare `tonic = "0.14"`
+resolves to `0.14.6` and fails under `+1.85`, confirmed with
+`cargo +1.85 check` on a throwaway crate. Pinning the exact prior patch,
+`tonic = { version = "=0.14.5", default-features = false, features =
+["codegen"] }`, compiles cleanly under `+1.85` and resolves `tonic::Status`,
+`tonic::client::{Grpc, GrpcService}`, `tonic::body::Body` and
+`tonic::codec::Codec` — everything the `service` module needs from this ADR's
+decision — without pulling `tonic-prost`, `tokio`'s `transport`/`server`
+features, `hyper` or `axum`. `abada` never needs the `transport` feature: it
+is generic over `S: GrpcService`, so constructing a `Channel` is the caller's
+problem, not abada's.
 
 ## Decision
 
@@ -130,19 +142,23 @@ RPCs are called — out of scope here; streaming is its own later phase
 
 ## Consequences
 
-- `abada` (the runtime crate) will need `tonic` (client-side types only:
-  `tonic::client::Grpc`, `tonic::client::GrpcService`, `tonic::codec::Codec`,
-  `tonic::Status`) and `tower` once the `service` module is written.
-  `AGENTS.md` §2's allow-list already reserves `tower`/`prost` "when the
-  service lands"; a `tonic` entry needs adding in the same PR that adds the
-  dependency, per `abada-architecture`.
-- **Before that PR**, abada's MSRV claim needs a decision: either raise
-  `rust-version` in the workspace `Cargo.toml` (and the `msrv` CI job) past
-  whatever `tonic`'s own build tooling requires at the time, or avoid
-  `tonic-prost-build`/`tonic-build`'s codegen macros in abada's own build and
-  write the small, fixed service-trait glue the prototype needed by hand.
-  This ADR does not decide which — it is a blocking open question for
-  whoever writes the `service` module, not a preference to settle now.
+- `abada` (the runtime crate) will need, once the `service` module is
+  written: `tonic = { version = "=0.14.5", default-features = false,
+  features = ["codegen"] }` (client-side types only: `tonic::client::Grpc`,
+  `tonic::client::GrpcService`, `tonic::codec::Codec`, `tonic::Status`) and
+  `tower`. `AGENTS.md` §2's allow-list already reserves `tower`/`prost` "when
+  the service lands"; a `tonic` entry, with this exact pin and feature set,
+  needs adding in the same PR that adds the dependency, per
+  `abada-architecture`. Never add `tonic-build`, `tonic-prost-build` or
+  `tonic-prost` to `abada`'s own dependencies — the runtime never needs
+  generated prost types or codegen, only the traits above, and pulling
+  either build-time crate reopens the MSRV break measured above.
+- The exact pin (`=0.14.5`, not `"0.14"`) is deliberate and has a cost: it
+  will not pick up point releases of `tonic` 0.14 on its own, including
+  security fixes, until either abada's MSRV moves past `1.88` or a future
+  `0.14.x` is checked and found not to have raised it again. Whoever writes
+  the `service` module re-checks this pin against the `tonic` version
+  current at the time, the same way this ADR checked `0.14.6`.
 - The in-process path never touches a socket, `hyper` or `h2` framing at the
   OS level — `tonic::client::Grpc` still frames messages the way
   gRPC-over-HTTP/2 does (length-prefixed protobuf), just without a transport
@@ -170,7 +186,8 @@ RPCs are called — out of scope here; streaming is its own later phase
   generated `Server<T>` were tried. A `tower::Service` a user builds by hand
   (e.g. wrapping load-balancing or auth middleware) is architecturally
   expected to work per the trait bound, but was not tried.
-- Whether abada's runtime should depend on `tonic` at all, versus defining
-  its own minimal `GrpcService`-shaped trait to avoid the transitive
-  `tonic-prost-build` MSRV problem reaching even indirectly — not attempted;
-  flagged as the likely next question, not answered here.
+- Whether `=0.14.5` still exact-pins cleanly at the time the `service` module
+  is actually written — measured now (2026-09-19) with `cargo +1.85 check`
+  on a throwaway crate, not re-checked since; a later `tonic` MSRV move (or a
+  yanked `0.14.5`) reopens this specific number, not the decision to depend
+  on `tonic` at all.
