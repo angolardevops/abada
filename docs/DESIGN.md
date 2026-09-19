@@ -2,7 +2,8 @@
 
 `abada` is a Rust equivalent of Go's [grpc-gateway]: it reads the
 `google.api.http` annotations of a `.proto` and produces a REST/JSON front for a
-tonic gRPC service. Status: **proposed**, nothing implemented yet.
+tonic gRPC service. Status: **pre-release** — the Progress table below says what
+is implemented and how it is proven.
 
 [grpc-gateway]: https://github.com/grpc-ecosystem/grpc-gateway
 
@@ -69,11 +70,16 @@ four properties together, and each one is a test, not a claim:
 | Routing: handler order, verbs, 404/405/400 (`Router`) | done | 632 routes, all four unescaping modes, identical outcome, handler and bindings to `runtime.ServeMux` |
 | Request target → `Path`/`RawPath` (`RequestPath`) | done | the bytes `net/url` leaves unescaped are measured from Go, not transcribed |
 | Rule extraction from a descriptor set (`abada_codegen::bindings`) | done | the `delonix.node.v1` contract: same 56 bindings as grpc-gateway, and 728 requests routed identically with all of them registered — see `docs/readiness/delonix-node-v1.md` |
-| POST → GET path-length fallback (`X-HTTP-Method-Override`) | not started | — |
+| POST → GET path-length fallback and `X-HTTP-Method-Override` (`abada::request::dispatch`, `Router::route_with_fallback`) | done | 23 `ServeMux` vectors, including the body `ParseForm` consumes and the 400 before routing — see "Requests" below |
 | Error responses: code → HTTP status, `google.rpc.Status` body, `WWW-Authenticate`, `Grpc-Metadata-*`/`Grpc-Trailer-*`, routing 404/501/400, details through a type registry (`abada::error`) | done | `conformance/vectors/errors.json`: 25 codes, 64 statuses (4 with details of a registered type) and 29 routing errors answered by grpc-gateway's handlers behind a real `net/http` server, compared on the wire — see "Errors" below |
 | JSON transcoding: choice of library | decided: `prost-reflect` | [ADR 0001](adr/0001-transcodificacao-json.md) — 28 bodies over the contract compared with grpc-gateway's default marshaler (`benches/json-transcode`), both directions timed |
 | JSON codec (`abada::json::Marshaler`): `body: "*"`, `body: "<field>"`, `response_body`, well-known types, `Any` through a `TypeRegistry` | done; one written deviation (nesting limit) | 868 cases over `conformance/protos` (every scalar kind, maps with every key kind, oneofs, proto3 `optional`, proto2 with required fields and extensions, all well-known types) and the 28 contract bodies: accept/reject, the decoded message byte for byte, and the output byte for byte with and without `EmitUnpopulated` — see "JSON" below |
-| Query parameters, path values into the request, request metadata, streaming | not started | — |
+| Path values → request fields (`abada::request::RequestBinding`) | done | 259 vectors: every scalar kind, enums, repeated, well-known types, oneof, `{a.b}` and `**`, top-level (`runtime.<Kind>`, base 0) and nested (`PopulateFieldFromPath`, base 10) told apart |
+| Query parameters (`DefaultQueryParser`, the generator's filter, `ParseForm`) | done | 127 vectors |
+| Body: `"*"` / `"<field>"` / absent, and its order against path and query | done, through an interim decoder | 90 vectors; the proto3 JSON codec behind it is `abada::json`'s (see "Requests") |
+| `PATCH` field mask from the body (`FieldMaskFromRequestBody`) | done | 23 vectors |
+| `response_body` selection | exposed (`RequestBinding::response_body`), not written | resolved against the response type; the writer is a later phase |
+| Request metadata, streaming | not started | — |
 
 The conformance suite (`crates/abada/tests/conformance.rs`) was checked by
 breaking the code on purpose: dropping the `/` quirk of the parser, the
@@ -237,6 +243,100 @@ member or a nested field path (abada returns `Unsupported`); group fields;
 code; a float-to-enum conversion on non-amd64 Go; nesting between 101 and
 10 000 levels; invalid UTF-8 inside a proto2 string (abada cannot hold it);
 error message text (protojson's is randomised per build and not compared).
+
+## Requests
+
+`abada::request` is the request step of the handler `protoc-gen-grpc-gateway`
+v2.27.3 generates, read in `internal/gengateway/template.go` and the runtime it
+calls, and measured by `conformance/oracle/e2e`: that oracle does not model
+grpc-gateway, it **generates** the Go gateway for each descriptor set in
+`conformance/contracts` (`protoc-gen-go`, `protoc-gen-go-grpc` v1.5.1 and
+`protoc-gen-grpc-gateway` built from the checkout, run by `protogen` without
+protoc), registers it on a `runtime.ServeMux` and records what an in-process
+gRPC server receives. The generated Go code is not committed: it is a few
+thousand lines that `scripts/regen-vectors.sh` rebuilds in the cache on every
+run, and committing it would let it drift from the plugins that made it.
+`conformance/protos` holds a test proto for the kinds the contract lacks; it
+compiles into `conformance/contracts/abada-conformance-v1.binpb` and is routed
+like a contract (97 more bindings through the route vectors).
+
+`crates/abada/tests/request.rs` replays 600 vectors (522 over the test proto,
+78 over `delonix.node.v1`, one or more requests for each of its 56 bindings)
+through `Router`, `dispatch` and `RequestBinding::decode`, and compares the
+message as a value, or the HTTP status and every `google.rpc.Status` body
+written. What the vectors fix, against intuition:
+
+- **Order**: body, then path variables (a path value overwrites the body's),
+  then the query. A body `"*"` rule never reads the query; any rule reads it
+  only when the request has a top-level field that is neither the body field
+  nor a path variable, so `GET /v1/node?%zz` is not an error.
+- **Two parsers for path values.** A top-level variable goes through
+  `runtime.Int32` & co, which parse integers with base 0 (`0x1f`, `017`,
+  `1_000`); a nested one (`{a.b}`) and every query value go through
+  `parseField`, base 10. A nested enum is parsed twice, and the second parse
+  (base 0) can reject what the first accepted (`08`) or change it (`010`).
+- Top-level `Timestamp`/`Duration` path values go through protojson (`1.5s`);
+  nested and query ones through `time.Parse`/`time.ParseDuration` (`1h30m`),
+  with Go's error text. `FieldMask`, `Struct`, `Value`, maps and messages are
+  refused as path variables by the generator, and abada refuses them too.
+- **Query**: a key is matched by proto or JSON name, filtered after being
+  normalized — unless one component is unknown, then the original spelling is
+  filtered, so `?fString.x=1` on a `{f_string}` route is an error. `m[k]=v`
+  fills maps; repeated fields take one value per occurrence (no comma split);
+  a set oneof refuses any other member; an unknown name is ignored but still
+  creates the messages on its way (`nested.zzz=1` sets `nested`).
+- **Body into a field** is `encoding/json` into the Go field, not protojson:
+  a message field is set even by an empty body, an `int64` field refuses `"5"`,
+  an enum field takes only numbers (truncated), map keys go through
+  `runtime.Int64` & co, `null` clears a `proto3 optional`.
+- **`PATCH`** with a `body` field and exactly one `FieldMask` field (any name)
+  fills the mask from the body's keys, sorted, lists and maps as leaves,
+  `Struct` keys followed blindly; `{}` gives the path `""`; an unknown key is a
+  400. A mask in the query still overrides it afterwards.
+- **`ServeMux`**: `X-HTTP-Method-Override` and the `POST` → `GET` fallback
+  apply only to a `POST` whose first `Content-Type` is exactly
+  `application/x-www-form-urlencoded`; both call `ParseForm`, which consumes
+  the body (the form values become query values, a JSON body decodes as empty),
+  and a form error is a 400 even on a path nothing serves. The generated
+  handlers otherwise discard the body before their own `ParseForm`, so a form
+  body never reaches a handler, but a malformed `Content-Type` is still a 400.
+- Marshaler selection: with only the default marshaler registered,
+  `Content-Type` and `Accept` change nothing (vectors with `application/xml`).
+- A string field given bytes that are not UTF-8 reaches the gRPC client, which
+  refuses to marshal it: `13`, 500. abada answers the same at the same point.
+
+**The body decoder seam.** Messages are decoded through
+`abada::request::BodyDecoder` (`protojson.Unmarshal` with `DiscardUnknown`),
+also used for `Struct`/`Value` query values. `InterimSerdeDecoder`, on
+prost-reflect's serde, stands in until `abada::json` replaces it; the vectors
+avoid the bodies ADR 0001 lists as deviations. Everything around the codec —
+`json.Decoder` reading only the first value, `encoding/json` into non-message
+fields, `strconv`, `time`, `base64`, `url`, `mime` — is abada's and compared
+text for text; the text of an error the decoder writes (`ErrorOrigin::Decoder`,
+39 vectors) is compared on its code only.
+
+Checked by breaking the code on purpose, 27 mutations, each failing the named
+vector: nested integers in base 0, top-level integers in base 10, no second
+enum parse, path before body, query filter off, names not normalized, query
+always parsed, oneof check off, map key split at the first `[`, handler
+reading the form body, `text` refused as a media type, message field left
+unset on an empty body, trailing bytes refused, enum numbers rounded,
+`optional` pointer not allocated, mask paths unsorted, no `""` path for `{}`,
+`Struct` keys not followed, no `GET` fallback, override not upper-cased,
+override form error ignored, Go's NaN payload, no URL-safe base64 retry,
+one-digit hours refused, offset ignored, duration fraction dropped, invalid
+UTF-8 accepted.
+
+Not validated: proto2 requests (refused), `body: "a.b"` (refused: the
+generated Go code dereferences a nil message), a top-level path variable in a
+oneof another body member already set (the Go message names Go types; abada's
+text differs), `Any` in a `PATCH` body that is not an object (Go panics),
+`X-HTTP-Method-Override` values outside ASCII, forms over 10 MiB, the query
+parameter limit, request metadata (`Grpc-Metadata-*`, `Grpc-Timeout`), client
+and bidirectional streaming, `repeated_path_param_separator` other than `csv`,
+`allow_patch_feature=false`, and any query whose answer depends on Go map
+order (two keys for one field, or one error among several): the oracle drops
+such cases and abada takes keys in order of appearance.
 
 ## Decision: how JSON is transcoded
 

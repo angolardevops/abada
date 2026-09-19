@@ -173,6 +173,20 @@ impl<T> Router<T> {
     }
 
     pub fn route(&self, method: &str, request: &RequestPath) -> RouteOutcome<'_, T> {
+        self.route_with_fallback(method, request, false).0
+    }
+
+    /// Routing with `ServeMux`'s path-length fallback: when `get_fallback`
+    /// holds (a form `POST` the mux may treat as a long `GET`), the first other
+    /// method whose pattern matches, if it is `GET`, handles the request
+    /// instead of a `501`. The flag says that happened; the caller then owes
+    /// the `ParseForm` grpc-gateway does at that point.
+    pub fn route_with_fallback(
+        &self,
+        method: &str,
+        request: &RequestPath,
+        get_fallback: bool,
+    ) -> (RouteOutcome<'_, T>, bool) {
         let path = match (self.mode, request.raw_path()) {
             (UnescapingMode::Legacy, _) | (_, None) => request.path(),
             (_, Some(raw)) => raw,
@@ -193,12 +207,15 @@ impl<T> Router<T> {
             for (pattern, handler) in handlers.iter().rev() {
                 let verb_at = verb_index(last, pattern.verb());
                 if verb_at == Some(0) {
-                    return finish(RouteOutcome::NotFound, bad_request);
+                    return (finish(RouteOutcome::NotFound, bad_request), false);
                 }
                 let (comps, verb) = with_verb_split(&components, verb_at);
                 match pattern.match_components(&comps, &verb, self.mode) {
                     Ok(params) => {
-                        return finish(RouteOutcome::Matched { handler, params }, bad_request);
+                        return (
+                            finish(RouteOutcome::Matched { handler, params }, bad_request),
+                            false,
+                        );
                     }
                     Err(MatchError::MalformedEscape(seq)) => {
                         bad_request.push(seq);
@@ -214,11 +231,17 @@ impl<T> Router<T> {
             if m == method {
                 continue;
             }
-            for (pattern, _) in handlers.iter().rev() {
+            for (pattern, handler) in handlers.iter().rev() {
                 let verb_at = verb_index(last, pattern.verb()).filter(|&i| i > 0);
                 let (comps, verb) = with_verb_split(&components, verb_at);
                 match pattern.match_components(&comps, &verb, self.mode) {
-                    Ok(_) => return finish(RouteOutcome::MethodNotAllowed, bad_request),
+                    Ok(params) if get_fallback && m == "GET" => {
+                        return (
+                            finish(RouteOutcome::Matched { handler, params }, bad_request),
+                            true,
+                        );
+                    }
+                    Ok(_) => return (finish(RouteOutcome::MethodNotAllowed, bad_request), false),
                     Err(MatchError::MalformedEscape(seq)) => {
                         bad_request.push(seq);
                     }
@@ -226,7 +249,7 @@ impl<T> Router<T> {
                 }
             }
         }
-        finish(RouteOutcome::NotFound, bad_request)
+        (finish(RouteOutcome::NotFound, bad_request), false)
     }
 }
 
