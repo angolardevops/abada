@@ -221,6 +221,19 @@ fn corpus() -> Vec<Case> {
             &format!("/v1/query/x?{}=1", vec!["nested"; 100].join(".")),
             vec![],
         ),
+        // Past ~2000 components (debug: ~500) this aborted the process.
+        case(
+            "query: 4000-deep field path",
+            "GET",
+            &format!("/v1/query/x?{}=1", vec!["nested"; 4000].join(".")),
+            vec![],
+        ),
+        case(
+            "query: 9000-deep field path (54 KB)",
+            "GET",
+            &format!("/v1/query/x?{}=1", vec!["nested"; 9000].join(".")),
+            vec![],
+        ),
         case(
             "query: overwrite path-bound field",
             "GET",
@@ -519,25 +532,23 @@ async fn hostile_input_never_panics_and_costs_in_proportion() {
     assert!(failures.is_empty(), "\n{}", failures.join("\n"));
 }
 
-/// **KNOWN FAILURE, blocking** (docs/readiness/grpc-gateway-parity.md, S2/S5):
-/// `?nested.nested.….x=1` with N components makes `populate_field_value_from_path`
-/// recurse N deep, on a tokio worker's 2 MiB stack. Where grpc-gateway's Go
-/// stack grows to 1 GB, abada aborts the whole process (SIGABRT, no unwinding,
-/// so `catch_unwind` and `JoinHandle` cannot see it). One `GET` of 54 KB does
-/// it, under hyper's default header limit.
-///
-/// Ignored because it kills the test process by design. Reproduce with
-/// `ABADA_DEEP=9000 cargo test -p abada --test security --release -- --ignored`;
-/// when the bug is fixed, delete `#[ignore]` and move the case into `corpus()`.
+/// `?nested.nested.….f_string=1` with N components used to make
+/// `populate_field_value_from_path` recurse N deep on a tokio worker's 2 MiB
+/// stack: one `GET` of 54 KB aborted the whole process (SIGABRT, nothing can
+/// catch it), where grpc-gateway's Go stack grows to 1 GB. The walk is now a
+/// loop and refuses a request nested past 100 levels (DESIGN.md, "Query field
+/// paths"); the abort itself is the `corpus()` entries below, this pins the
+/// answers around the limit.
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
-#[ignore = "aborts the process: the finding it reproduces is open"]
-async fn a_deep_query_field_path_must_not_abort_the_process() {
-    let depth: usize = std::env::var("ABADA_DEEP")
-        .ok()
-        .and_then(|v| v.parse().ok())
-        .unwrap_or(9000);
-    let uri = format!("/v1/query/x?{}=1", vec!["nested"; depth].join("."));
-    let c = case("deep", "GET", &uri, vec![]);
-    let o = run(gateway(), build(&c).unwrap()).await.unwrap();
-    assert!((100..=599).contains(&o.status));
+async fn a_deep_query_field_path_is_refused_past_100_levels() {
+    let gw = gateway();
+    for (components, status) in [(99, 200), (100, 200), (101, 400), (4000, 400), (9000, 400)] {
+        let uri = format!(
+            "/v1/query/x?{}.f_string=1",
+            vec!["nested"; components - 1].join(".")
+        );
+        let c = case("deep", "GET", &uri, vec![]);
+        let o = run(gw.clone(), build(&c).unwrap()).await.unwrap();
+        assert_eq!(o.status, status, "{components} levels: {}", o.snippet);
+    }
 }

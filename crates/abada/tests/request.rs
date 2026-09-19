@@ -80,6 +80,21 @@ struct GoBinding {
     response_body: String,
 }
 
+/// Cases where abada knowingly answers differently: grpc-gateway builds a
+/// request nested as deep as the query names (its walk is a loop and Go's stack
+/// grows), abada refuses one nested more than 100 levels, the root included —
+/// see `abada::request::fields::MAX_MESSAGE_DEPTH` and DESIGN.md, "Query field
+/// paths". The vector says `request`; abada must say 400, code 3. Those
+/// vectors are not decoded: prost stops at 101 levels, and a vector's 5 000
+/// levels cannot be.
+const DEEPER_THAN_LIMIT: &[&str] = &[
+    "query-depth-101",
+    "query-depth-102",
+    "query-depth-100-timestamp-leaf",
+    "query-depth-1000",
+    "query-depth-5000",
+];
+
 fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../conformance")
 }
@@ -387,6 +402,7 @@ fn agrees(got: &Got, want: &Got) -> bool {
 #[test]
 fn requests_become_the_messages_grpc_gateway_sends() {
     let mut failures = Vec::new();
+    let mut deviating = 0;
     for name in contracts() {
         let v: Vectors = serde_json::from_str(
             &std::fs::read_to_string(root().join(format!("vectors/request-{name}.json")))
@@ -397,8 +413,22 @@ fn requests_become_the_messages_grpc_gateway_sends() {
         let mut decoder_text = 0;
         let mut requests = 0;
         for vector in &v.vectors {
-            let want = expected(&c, vector);
             let got = run(&c, vector);
+            if DEEPER_THAN_LIMIT.contains(&vector.name.as_str()) {
+                deviating += 1;
+                let refused = matches!(&got, Got::Error { status: 400, errors }
+                    if errors.len() == 1
+                        && errors[0].0.code == 3
+                        && errors[0].0.message == "exceeded max recursion depth");
+                if vector.outcome != "request" || !refused {
+                    failures.push(format!(
+                        "{name}/{} should still deviate (grpc-gateway answers `request`, abada 400/3):\n  abada: {got:?}\n  vector: {}",
+                        vector.name, vector.outcome
+                    ));
+                }
+                continue;
+            }
+            let want = expected(&c, vector);
             if !agrees(&got, &want) {
                 failures.push(format!(
                     "{name}/{} [{} {}]:\n  abada:        {got:?}\n  grpc-gateway: {want:?}",
@@ -422,6 +452,11 @@ fn requests_become_the_messages_grpc_gateway_sends() {
             v.generator
         );
     }
+    assert_eq!(
+        deviating,
+        DEEPER_THAN_LIMIT.len(),
+        "every deviation is listed and found in the vectors"
+    );
     assert!(
         failures.is_empty(),
         "{} disagreements:\n{}",

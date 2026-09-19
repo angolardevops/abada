@@ -205,9 +205,26 @@ fn lookup(desc: &MessageDescriptor, name: &[u8]) -> Option<FieldDescriptor> {
         .or_else(|| desc.get_field_by_json_name(name))
 }
 
+/// The deepest message nesting a request may be built with, the root counted:
+/// the same 100 the JSON codec allows (`abada::json::DEFAULT_RECURSION_LIMIT`).
+/// prost, which decodes what abada sends, accepts 101 (measured), so nothing
+/// abada builds is refused downstream for its depth.
+///
+/// grpc-gateway has no such limit: its walk is a loop, and Go's stack grows.
+/// Here a loop alone would not be enough — the message it built would be
+/// dropped and encoded by recursive code on a 2 MiB stack, and 4 000 levels
+/// abort the process. Written deviation: docs/DESIGN.md, "Query field paths".
+pub(crate) const MAX_MESSAGE_DEPTH: usize = 100;
+
+fn too_deep() -> FieldError {
+    FieldError::gateway("exceeded max recursion depth")
+}
+
 /// `runtime.populateFieldValueFromPath`: walk `path` (proto or JSON names),
 /// creating messages on the way, and set the last field from `values`. An
-/// unknown name ends the walk without an error.
+/// unknown name ends the walk without an error. A walk that would nest the
+/// request deeper than [`MAX_MESSAGE_DEPTH`] fails; one that ends first, on an
+/// unknown name or an error, answers as grpc-gateway does.
 pub(crate) fn populate_field_value_from_path(
     ctx: &mut Ctx<'_>,
     msg: &mut DynamicMessage,
@@ -220,33 +237,51 @@ pub(crate) fn populate_field_value_from_path(
     if values.is_empty() {
         return Err(FieldError::gateway("no value provided"));
     }
-    let name = path[0];
-    let Some(fd) = lookup(&msg.descriptor(), name) else {
-        return Ok(());
-    };
-    if let Some(oneof) = fd.containing_oneof() {
-        if !oneof.is_synthetic() {
-            if let Some(set) = oneof.fields().find(|f| msg.has_field(f)) {
-                if !is_message(&fd) || fd.full_name() != set.full_name() {
-                    return Err(FieldError::gateway(format!(
-                        "field already set for oneof {}",
-                        quote(oneof.name().as_bytes())
-                    )));
+    let mut msg = msg;
+    // Levels of message so far: the root is the first.
+    let mut level = 1;
+    let mut fd;
+    let mut i = 0;
+    loop {
+        let name = path[i];
+        let Some(found) = lookup(&msg.descriptor(), name) else {
+            return Ok(());
+        };
+        fd = found;
+        if let Some(oneof) = fd.containing_oneof() {
+            if !oneof.is_synthetic() {
+                if let Some(set) = oneof.fields().find(|f| msg.has_field(f)) {
+                    if !is_message(&fd) || fd.full_name() != set.full_name() {
+                        return Err(FieldError::gateway(format!(
+                            "field already set for oneof {}",
+                            quote(oneof.name().as_bytes())
+                        )));
+                    }
                 }
             }
         }
-    }
-    if path.len() > 1 {
+        if i == path.len() - 1 {
+            break;
+        }
         if !is_message(&fd) || fd.is_list() || fd.is_map() {
             return Err(FieldError::gateway(format!(
                 "invalid path: {} is not a message",
                 quote(name)
             )));
         }
+        level += 1;
+        if level > MAX_MESSAGE_DEPTH {
+            return Err(too_deep());
+        }
         let Value::Message(child) = msg.get_field_mut(&fd) else {
             unreachable!("a singular message field holds a message");
         };
-        return populate_field_value_from_path(ctx, child, &path[1..], values);
+        msg = child;
+        i += 1;
+    }
+    // A message-typed last field (a well-known type) is one level more.
+    if is_message(&fd) && level + 1 > MAX_MESSAGE_DEPTH {
+        return Err(too_deep());
     }
 
     let field_name = quote(fd.name().as_bytes());
