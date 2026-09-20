@@ -149,6 +149,7 @@ touched.
 |---|---|
 | [0001](docs/adr/0001-transcodificacao-json.md) | JSON is transcoded with `prost-reflect` `DynamicMessage`; five deviations to close before claiming JSON compatibility |
 | [0002](docs/adr/0002-chamada-do-rpc-in-process-e-proxy.md) | in-process and proxy calls are one code path, `tonic::client::Grpc<S: GrpcService>`, over a descriptor-driven codec; abada's MSRV vs `tonic-prost-build` is a blocking open question before `tonic` enters `abada`'s own dependencies |
+| [0003](docs/adr/0003-profundidade-da-query.md) | a query field path nests at most 100 levels of message, and its walk is a loop: a permanent deviation from grpc-gateway (which has no limit), because the loop alone still aborts on prost's recursive drop and encode; S5 amplification is the open follow-up |
 
 An ADR is superseded by another ADR, never by an edit to a skill or to this
 file.

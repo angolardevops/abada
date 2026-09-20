@@ -75,7 +75,7 @@ four properties together, and each one is a test, not a claim:
 | JSON transcoding: choice of library | decided: `prost-reflect` | [ADR 0001](adr/0001-transcodificacao-json.md) — 28 bodies over the contract compared with grpc-gateway's default marshaler (`benches/json-transcode`), both directions timed |
 | JSON codec (`abada::json::Marshaler`): `body: "*"`, `body: "<field>"`, `response_body`, well-known types, `Any` through a `TypeRegistry` | done; one written deviation (nesting limit) | 868 cases over `conformance/protos` (every scalar kind, maps with every key kind, oneofs, proto3 `optional`, proto2 with required fields and extensions, all well-known types) and the 28 contract bodies: accept/reject, the decoded message byte for byte, and the output byte for byte with and without `EmitUnpopulated` — see "JSON" below |
 | Path values → request fields (`abada::request::RequestBinding`) | done | 259 vectors: every scalar kind, enums, repeated, well-known types, oneof, `{a.b}` and `**`, top-level (`runtime.<Kind>`, base 0) and nested (`PopulateFieldFromPath`, base 10) told apart |
-| Query parameters (`DefaultQueryParser`, the generator's filter, `ParseForm`) | done; one written deviation (nesting limit) | 151 vectors, 9 of them the deviation — see "Query field paths" below |
+| Query parameters (`DefaultQueryParser`, the generator's filter, `ParseForm`) | done; one written deviation (nesting limit), [ADR 0003](adr/0003-profundidade-da-query.md) | 151 vectors, 9 of them the deviation — see "Query field paths" below |
 | Body: `"*"` / `"<field>"` / absent, and its order against path and query | done, through an interim decoder | 90 vectors; the proto3 JSON codec behind it is `abada::json`'s (see "Requests") |
 | `PATCH` field mask from the body (`FieldMaskFromRequestBody`) | done | 23 vectors |
 | `response_body` selection | exposed (`RequestBinding::response_body`), not written | resolved against the response type; the writer (`Marshaler::encode_field`) is done; wiring it into a response is a later phase |
@@ -320,6 +320,9 @@ what abada sends, takes 101 (measured once in review, and read in prost's
 source; no test pins it), so what abada builds from scalars and
 well-known types is never refused downstream for depth (`Struct`/`Value`
 excepted, below). The error is 400, code 3, `exceeded max recursion depth`.
+
+The decision, its alternatives and when to reopen it are
+[ADR 0003](adr/0003-profundidade-da-query.md).
 
 Why a limit and not only a loop: the original port recursed once per component
 and aborted the process between 2 000 and 4 000 components (between 500 and
