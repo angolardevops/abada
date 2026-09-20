@@ -75,7 +75,7 @@ four properties together, and each one is a test, not a claim:
 | JSON transcoding: choice of library | decided: `prost-reflect` | [ADR 0001](adr/0001-transcodificacao-json.md) — 28 bodies over the contract compared with grpc-gateway's default marshaler (`benches/json-transcode`), both directions timed |
 | JSON codec (`abada::json::Marshaler`): `body: "*"`, `body: "<field>"`, `response_body`, well-known types, `Any` through a `TypeRegistry` | done; one written deviation (nesting limit) | 868 cases over `conformance/protos` (every scalar kind, maps with every key kind, oneofs, proto3 `optional`, proto2 with required fields and extensions, all well-known types) and the 28 contract bodies: accept/reject, the decoded message byte for byte, and the output byte for byte with and without `EmitUnpopulated` — see "JSON" below |
 | Path values → request fields (`abada::request::RequestBinding`) | done | 259 vectors: every scalar kind, enums, repeated, well-known types, oneof, `{a.b}` and `**`, top-level (`runtime.<Kind>`, base 0) and nested (`PopulateFieldFromPath`, base 10) told apart |
-| Query parameters (`DefaultQueryParser`, the generator's filter, `ParseForm`) | done | 127 vectors |
+| Query parameters (`DefaultQueryParser`, the generator's filter, `ParseForm`) | done; one written deviation (nesting limit) | 151 vectors, 9 of them the deviation — see "Query field paths" below |
 | Body: `"*"` / `"<field>"` / absent, and its order against path and query | done, through an interim decoder | 90 vectors; the proto3 JSON codec behind it is `abada::json`'s (see "Requests") |
 | `PATCH` field mask from the body (`FieldMaskFromRequestBody`) | done | 23 vectors |
 | `response_body` selection | exposed (`RequestBinding::response_body`), not written | resolved against the response type; the writer (`Marshaler::encode_field`) is done; wiring it into a response is a later phase |
@@ -85,7 +85,7 @@ four properties together, and each one is a test, not a claim:
 | The call itself: `service::call::unary`, in-process, one RPC registered by hand | done, narrow scope | 2 integration tests (`crates/abada/tests/call.rs`), 3 mutations — see "Call" below; no proxy, no rich errors, no streaming |
 | The `tower::Service` (`service::Gateway`), a `Router<Registration>` of hand-registered RPCs | done, narrow scope | 2 integration tests (`crates/abada/tests/gateway.rs`), 3 mutations — see "Gateway" below |
 | `response_body`, proxy, streaming | not started | — |
-| Security and performance parity with grpc-gateway | measured, **not at level** | property test over a 41-input hostile corpus: no panic in a JSON body, but a 4 000-component query path aborts the process (stack overflow, blocking); one FAIL on memory amplification of large repeated fields and maps (1.4–1.9× grpc-gateway's); most rows NOT VALIDATED — `docs/readiness/grpc-gateway-parity.md`; the load server for P1–P5 exists (`scripts/parity/`), `--full` run at full clock: at or ahead on latency and throughput, ~0.5× CPU, ~1.55× memory, exploratory (host not quiet) |
+| Security and performance parity with grpc-gateway | measured, **not at level** | property test over a 44-input hostile corpus: no panic and no abort (the 4 000- and 9 000-component query paths that aborted the process are refused, S2 closed); one FAIL on memory amplification of large repeated fields and maps (1.4–1.9× grpc-gateway's); most rows NOT VALIDATED — `docs/readiness/grpc-gateway-parity.md`; the load server for P1–P5 exists (`scripts/parity/`), `--full` run at full clock: at or ahead on latency and throughput, ~0.5× CPU, ~1.55× memory, exploratory (host not quiet) |
 
 The conformance suite (`crates/abada/tests/conformance.rs`) was checked by
 breaking the code on purpose: dropping the `/` quirk of the parser, the
@@ -310,6 +310,82 @@ written. What the vectors fix, against intuition:
   `Content-Type` and `Accept` change nothing (vectors with `application/xml`).
 - A string field given bytes that are not UTF-8 reaches the gRPC client, which
   refuses to marshal it: `13`, 500. abada answers the same at the same point.
+
+**Query field paths.** grpc-gateway walks `?a.b.c=v` in a loop and builds a
+request as deep as the path names: its vectors answer `request` at 1 000 and at
+5 000 levels (`query-depth-1000`, `query-depth-5000`). abada refuses a request
+that would nest past **100 levels, the root counted, and a message-typed last
+field one more** — the JSON codec's limit (`depth_101`); prost, which decodes
+what abada sends, takes 101 (measured once in review, and read in prost's
+source; no test pins it), so what abada builds from scalars and
+well-known types is never refused downstream for depth (`Struct`/`Value`
+excepted, below). The error is 400, code 3, `exceeded max recursion depth`.
+
+Why a limit and not only a loop: the original port recursed once per component
+and aborted the process between 2 000 and 4 000 components (between 500 and
+1 000 unoptimised) on a 2 MiB worker stack — a 54 KB `GET`, under hyper's
+header limit. Making the walk iterative did not fix it: the 4 000-level message
+it then built is dropped and encoded by recursive code, and the process still
+aborted (mutation below). The limit bounds every recursion that follows.
+
+The limit applies where the walk *reaches* it, so the answers grpc-gateway gives
+before that point are kept: a 5 000-component path with an unknown name third is
+still ignored (`query-depth-5000-unknown-at-3`, 200) and one with a scalar third
+is still "is not a message" (`-5000-not-a-message-at-3`). Past level 100 only
+half of that survives. A scalar in the middle still answers "is not a message"
+as Go does, told from the descriptors without building anything
+(`query-depth-not-a-message-at-101`, `-150`, `-2500`, agreeing). An **unknown
+name is the limit's 400**, where Go answers 200 having built the whole empty
+chain (`query-depth-unknown-at-101`, `-150`).
+
+The last field is counted too: a value of message type (a well-known type, the
+element of a list, the value of a map — a map's entry is not a level of its
+own) is one level more. At exactly 100 components a scalar, a list of scalars
+and a map of scalars answer as Go does, errors included
+(`query-depth-100-repeated-scalar-leaf`, `-100-map-scalar-leaf`,
+`-100-scalar-parse-error`, `-100-scalar-too-many-values`, agreeing); a
+`Timestamp`, singular or repeated, is level 101 and refused
+(`-100-timestamp-leaf`, `-100-repeated-timestamp-leaf`), and so is a map of
+messages, where Go's own error for that field (`unsupported message type`) is
+replaced by the limit's (`-100-map-msg-leaf`; at 99 the two agree). A
+last-field *error* on a path of 101 or more components is the limit's 400 and
+has no vector: Go builds the message first, and which error wins between two
+deep keys is Go's map order.
+
+Deviating vectors, pinned by name in `tests/request.rs` (`DEEPER_THAN_LIMIT`,
+asserted to still deviate): `query-depth-101`, `-102`, `-100-timestamp-leaf`,
+`-1000`, `-5000`, `-100-repeated-timestamp-leaf`, `-100-map-msg-leaf`,
+`-unknown-at-101`, `-unknown-at-150` — 9 of the 24 `query-depth-*` vectors. The
+other 15 agree: `-99`, `-100`, `-99-timestamp-leaf`, `-99-repeated-timestamp-leaf`,
+`-99-map-msg-leaf`, `-unknown-at-100`, `-5000-unknown-at-3`,
+`-5000-not-a-message-at-3`, the three `-not-a-message-at-*`, and the four
+`-100-…` scalar-leaf cases above. Not pinned: an unknown name mid-path past the
+limit, and a list or map mid-path past the limit (read in the code and probed
+by the security review, not vectors).
+
+Mutations, each run and each failing the vector or test named: the original
+recursion aborts in `tests/security.rs` (debug and release) and in
+`tests/request.rs`; the loop without the limit aborts in `tests/security.rs`
+in debug only (in release it fails by assertion: 101 levels answer 200) and in
+`tests/request.rs` in both; limit 101, the leaf level not counted and a
+`path.len()` check up front fail the vectors above; without the descriptor scan
+the three `not-a-message` vectors fail; counting a map's entry as a level fails
+`-100-map-scalar-leaf` when maps of scalars are counted too (that was the
+defect a review found) and `-99-map-msg-leaf` when only maps of messages are;
+treating every map as scalar fails `-100-map-msg-leaf`.
+
+Three consequences. A path variable `{a.b.c…}` of 101 or more components, which
+grpc-gateway serves, answers 400 on every request (found by reading, not
+measured). A `Struct` or `Value` last field is filled by the JSON codec, and
+for prost an object level is three messages (`Value`, `Struct`, the map entry)
+and an array level two: `prost_types::Value` decodes at most 33 levels of object
+or 50 of array (measured once in review; no test pins either), fewer the deeper the field sits, and past
+that the backend's decoder answers 400 (measured through the gateway with
+arrays: a `fValue` of 50 at level 1 is 200, at level 51 is 400; with 10 or 49
+arrays at level 99 it is 400, and from 100 levels of JSON the codec's own 400
+answers first). No crash. And a query is bounded in depth, not in cost — see the parity
+report, S5, where the amplification (90× to 125× by construction, and reachable
+through a form `POST` body as well as a URI) is a FAIL.
 
 **The body decoder seam.** Messages are decoded through
 `abada::request::BodyDecoder` (`protojson.Unmarshal` with `DiscardUnknown`),
