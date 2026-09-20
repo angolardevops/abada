@@ -145,7 +145,7 @@ The second is the one to read:
 the `--full` protocol (10 s warm-up, 30 s measured, 3 runs per point, 300 s
 soak, open-loop rates at 25% and 50% of the measured capacity), governor and
 platform profile `performance`, mean clock 4.6 GHz, go1.26.2, rustc 1.98.1,
-commit `99fe9d2`.
+commit `99fe9d2`, which is **before** the depth limits of #13 (query field paths, JSON decoding) entered the branch. None of the seven requests of the mix has a deep path, so a change is not expected, but it was not re-measured.
 
 **It is still exploratory by the skill's own rule:** the load average was 16.7 when
 it started (other sessions and VMs on the host) and 6–12 during it, with my own
