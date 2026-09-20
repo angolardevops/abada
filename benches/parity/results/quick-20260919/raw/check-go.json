@@ -1,0 +1,113 @@
+[
+ {
+  "name": "get_small",
+  "status": 200,
+  "expect": 200,
+  "body": {}
+ },
+ {
+  "name": "get_query",
+  "status": 200,
+  "expect": 200,
+  "body": {}
+ },
+ {
+  "name": "post_1k",
+  "status": 200,
+  "expect": 200,
+  "body": {}
+ },
+ {
+  "name": "post_64k",
+  "status": 200,
+  "expect": 200,
+  "body": {}
+ },
+ {
+  "name": "patch_mask",
+  "status": 200,
+  "expect": 200,
+  "body": {}
+ },
+ {
+  "name": "get_response",
+  "status": 200,
+  "expect": 200,
+  "body": {
+   "fDouble": 0,
+   "fFloat": 0,
+   "fInt32": 0,
+   "fInt64": "9007199254740993",
+   "fUint32": 0,
+   "fUint64": "18446744073709551615",
+   "fSint32": 0,
+   "fSint64": "0",
+   "fFixed32": 0,
+   "fFixed64": "0",
+   "fSfixed32": 0,
+   "fSfixed64": "0",
+   "fBool": false,
+   "fString": "hello from the backend",
+   "fBytes": "",
+   "fEnum": "GREEN",
+   "rString": [
+    "alpha",
+    "beta",
+    "gamma",
+    "delta"
+   ],
+   "rInt32": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "rEnum": [],
+   "rBytes": [],
+   "rDouble": [],
+   "rTimestamp": [],
+   "items": [],
+   "mStr": {
+    "k1": "v1",
+    "k2": "v2",
+    "k3": "v3"
+   },
+   "mInt": {
+    "1": 10,
+    "2": 20
+   },
+   "mEnum": {},
+   "mMsg": {},
+   "fTimestamp": "2026-09-19T10:00:00.123Z",
+   "fDuration": "3.500s",
+   "wDouble": null,
+   "wFloat": null,
+   "wInt64": null,
+   "wUint64": null,
+   "wInt32": null,
+   "wUint32": null,
+   "wBool": null,
+   "wString": null,
+   "wBytes": null,
+   "fMask": null,
+   "fStruct": null,
+   "fValue": null,
+   "customName": "",
+   "nested": null
+  }
+ },
+ {
+  "name": "error_status",
+  "status": 404,
+  "expect": 404,
+  "body": {
+   "code": 5,
+   "message": "the resource does not exist",
+   "details": []
+  }
+ }
+]

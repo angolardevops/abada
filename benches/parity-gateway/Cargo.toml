@@ -1,0 +1,19 @@
+[package]
+name = "abada-parity-gateway"
+description = "The abada side of the performance gate: Gateway mounted in hyper, calling a gRPC backend over a tonic Channel. Not published."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+abada.workspace = true
+abada-codegen.workspace = true
+prost-reflect = "0.16.5"
+http.workspace = true
+tower.workspace = true
+tokio = { version = "1", features = ["rt-multi-thread", "net", "macros", "time"] }
+hyper = { version = "1", features = ["server", "http1"] }
+hyper-util = { version = "0.1", features = ["tokio", "service"] }
+tonic = { version = "=0.14.5", default-features = false, features = ["codegen", "transport"] }
