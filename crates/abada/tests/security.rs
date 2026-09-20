@@ -25,6 +25,10 @@ use http_body_util::{BodyExt, Full};
 use prost_reflect::{DescriptorPool, DynamicMessage, ReflectMessage};
 use tower::ServiceExt;
 
+/// The counting allocator is global: two tests at once would pollute each
+/// other's peak, so every test that measures takes this first.
+static SERIAL: tokio::sync::Mutex<()> = tokio::sync::Mutex::const_new(());
+
 struct Counting;
 static LIVE: AtomicUsize = AtomicUsize::new(0);
 static PEAK: AtomicUsize = AtomicUsize::new(0);
@@ -181,6 +185,32 @@ fn nested_struct(depth: usize) -> Vec<u8> {
     s.into_bytes()
 }
 
+/// `keys` query keys, each 99 components of `nested` and a scalar, that diverge
+/// at once (`oMsg` where a bit of the key number is set): each builds about a
+/// hundred messages of its own, where keys that share a prefix share them. The
+/// last value is padded so the URI is `uri_len` long: `http::Uri` holds 65 534
+/// bytes at most, and the amplification bound only applies from 64 KiB in.
+fn divergent_deep_query(keys: usize, uri_len: usize) -> String {
+    let bits = usize::BITS - keys.next_power_of_two().leading_zeros();
+    let mut q = Vec::new();
+    for i in 0..keys {
+        let mut path: Vec<&str> = vec!["nested"; 99];
+        for (l, component) in path.iter_mut().enumerate().take(bits as usize) {
+            if i >> l & 1 == 1 {
+                *component = "oMsg";
+            }
+        }
+        q.push(format!("{}.fString=1", path.join(".")));
+    }
+    let uri = format!("/v1/query/x?{}", q.join("&"));
+    assert!(
+        uri.len() <= uri_len,
+        "{} keys are longer than {uri_len}",
+        keys
+    );
+    format!("{uri}{}", "1".repeat(uri_len - uri.len()))
+}
+
 fn corpus() -> Vec<Case> {
     let star = "/v1/body/star/x";
     let mut c = vec![
@@ -219,6 +249,25 @@ fn corpus() -> Vec<Case> {
             "query: 100-deep field path",
             "GET",
             &format!("/v1/query/x?{}=1", vec!["nested"; 100].join(".")),
+            vec![],
+        ),
+        // Past ~2000 components (debug: ~500) this aborted the process.
+        case(
+            "query: 4000-deep field path",
+            "GET",
+            &format!("/v1/query/x?{}=1", vec!["nested"; 4000].join(".")),
+            vec![],
+        ),
+        case(
+            "query: 9000-deep field path (54 KB)",
+            "GET",
+            &format!("/v1/query/x?{}=1", vec!["nested"; 9000].join(".")),
+            vec![],
+        ),
+        case(
+            "query: 94 divergent 100-deep keys",
+            "GET",
+            &divergent_deep_query(94, 65_530),
             vec![],
         ),
         case(
@@ -377,6 +426,13 @@ fn corpus() -> Vec<Case> {
 /// of 3 runs, host load ~17/32): the target the ceiling must reach.
 /// See docs/readiness/grpc-gateway-parity.md, S5.
 const RATCHET: &[(&str, f64, f64)] = &[
+    // Go's figure is not measured (NaN): it has no depth limit, so its cost per
+    // level is the open question. abada measured ~93x here, release.
+    ("query: 94 divergent 100-deep keys", 150.0, f64::NAN),
+    // One key of 4 000 or 9 000 components builds 99 levels before it is
+    // refused: ~12.5x, over the 10x rule. Go's figure is not measured.
+    ("query: 4000-deep field path", 15.0, f64::NAN),
+    ("query: 9000-deep field path (54 KB)", 15.0, f64::NAN),
     ("body: 10^6 element array", 60.0, 39.1),
     ("body: 10^5 map entries", 18.0, 11.9),
 ];
@@ -441,6 +497,7 @@ where
 
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn hostile_input_never_panics_and_costs_in_proportion() {
+    let _serial = SERIAL.lock().await;
     let gw = gateway();
     let mut failures = Vec::new();
     println!(
@@ -488,8 +545,11 @@ async fn hostile_input_never_panics_and_costs_in_proportion() {
                 }
                 // Amplification only means something above a floor: a 20-byte
                 // input allocating 4 KiB of fixed cost is not a finding.
-                let bound = RATCHET.iter().find(|r| r.0 == c.name).map_or(10.0, |r| r.1);
-                if in_bytes >= 64 * 1024 && amp > bound {
+                // A ratcheted case is checked whatever its size: the URI of a
+                // query case cannot pass 65 534 bytes, so the floor would skip it.
+                let ratchet = RATCHET.iter().find(|r| r.0 == c.name);
+                let bound = ratchet.map_or(10.0, |r| r.1);
+                if (in_bytes >= 64 * 1024 || ratchet.is_some()) && amp > bound {
                     failures.push(format!(
                         "{}: peak {} B for {} B in ({amp:.1}x, bound {bound}x)",
                         c.name, o.peak_over_base, in_bytes
@@ -509,6 +569,14 @@ async fn hostile_input_never_panics_and_costs_in_proportion() {
             }
         }
     }
+    // A ratchet is matched by case name: one that names no case checks nothing.
+    let names: Vec<String> = corpus().into_iter().map(|c| c.name).collect();
+    for (name, _, _) in RATCHET {
+        assert!(
+            names.iter().any(|n| n == name),
+            "RATCHET names no case: {name}"
+        );
+    }
     // No cross-request state: the same request before and after the corpus.
     let probe = case("probe", "GET", "/v1/top/int32/7", vec![]);
     let o = run(gw.clone(), build(&probe).unwrap()).await.unwrap();
@@ -519,25 +587,24 @@ async fn hostile_input_never_panics_and_costs_in_proportion() {
     assert!(failures.is_empty(), "\n{}", failures.join("\n"));
 }
 
-/// **KNOWN FAILURE, blocking** (docs/readiness/grpc-gateway-parity.md, S2/S5):
-/// `?nested.nested.….x=1` with N components makes `populate_field_value_from_path`
-/// recurse N deep, on a tokio worker's 2 MiB stack. Where grpc-gateway's Go
-/// stack grows to 1 GB, abada aborts the whole process (SIGABRT, no unwinding,
-/// so `catch_unwind` and `JoinHandle` cannot see it). One `GET` of 54 KB does
-/// it, under hyper's default header limit.
-///
-/// Ignored because it kills the test process by design. Reproduce with
-/// `ABADA_DEEP=9000 cargo test -p abada --test security --release -- --ignored`;
-/// when the bug is fixed, delete `#[ignore]` and move the case into `corpus()`.
+/// `?nested.nested.….f_string=1` with N components used to make
+/// `populate_field_value_from_path` recurse N deep on a tokio worker's 2 MiB
+/// stack: one `GET` of 54 KB aborted the whole process (SIGABRT, nothing can
+/// catch it), where grpc-gateway's Go stack grows to 1 GB. The walk is now a
+/// loop and refuses a request nested past 100 levels (DESIGN.md, "Query field
+/// paths"); the abort itself is the `corpus()` entries below, this pins the
+/// answers around the limit.
 #[tokio::test(flavor = "multi_thread", worker_threads = 2)]
-#[ignore = "aborts the process: the finding it reproduces is open"]
-async fn a_deep_query_field_path_must_not_abort_the_process() {
-    let depth: usize = std::env::var("ABADA_DEEP")
-        .ok()
-        .and_then(|v| v.parse().ok())
-        .unwrap_or(9000);
-    let uri = format!("/v1/query/x?{}=1", vec!["nested"; depth].join("."));
-    let c = case("deep", "GET", &uri, vec![]);
-    let o = run(gateway(), build(&c).unwrap()).await.unwrap();
-    assert!((100..=599).contains(&o.status));
+async fn a_deep_query_field_path_is_refused_past_100_levels() {
+    let _serial = SERIAL.lock().await;
+    let gw = gateway();
+    for (components, status) in [(99, 200), (100, 200), (101, 400), (4000, 400), (9000, 400)] {
+        let uri = format!(
+            "/v1/query/x?{}.f_string=1",
+            vec!["nested"; components - 1].join(".")
+        );
+        let c = case("deep", "GET", &uri, vec![]);
+        let o = run(gw.clone(), build(&c).unwrap()).await.unwrap();
+        assert_eq!(o.status, status, "{components} levels: {}", o.snippet);
+    }
 }
