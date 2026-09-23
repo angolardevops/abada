@@ -145,30 +145,27 @@ func (r *recorder) take() []received {
 	return got
 }
 
-func main() {
-	grpclog.SetLoggerV2(grpclog.NewLoggerV2(io.Discard, io.Discard, io.Discard))
-	if len(os.Args) != 3 {
-		fail("usage: e2e <descriptor set> <source> < cases.json")
-	}
-	services := servicesOf(os.Args[1])
-	var c cases
-	if err := json.NewDecoder(os.Stdin).Decode(&c); err != nil {
-		fail("decode cases: %v", err)
-	}
-
-	rec := &recorder{}
+// dialBackend starts an in-process gRPC server whose every method is handled
+// by handle, and returns a connection to it. Shared by both modes: the
+// difference between them is only what handle answers.
+func dialBackend(handle func(any, grpc.ServerStream) error) *grpc.ClientConn {
 	lis := bufconn.Listen(1 << 20)
-	srv := grpc.NewServer(grpc.UnknownServiceHandler(rec.handle), grpc.ForceServerCodec(rawCodec{}))
+	srv := grpc.NewServer(grpc.UnknownServiceHandler(handle), grpc.ForceServerCodec(rawCodec{}))
 	go func() { _ = srv.Serve(lis) }()
-	defer srv.Stop()
 	conn, err := grpc.NewClient("passthrough:///bufconn",
 		grpc.WithContextDialer(func(ctx context.Context, _ string) (net.Conn, error) { return lis.DialContext(ctx) }),
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		fail("dial: %v", err)
 	}
-	defer conn.Close()
+	return conn
+}
 
+// newMuxes builds one runtime.ServeMux per unescaping/fallback option, each
+// with every service of the set registered. The order the services are
+// registered in decides which handler wins a request two of them match:
+// declaration order, as the contract vectors assume.
+func newMuxes(services []string, conn *grpc.ClientConn) map[string]*runtime.ServeMux {
 	muxes := map[string]*runtime.ServeMux{}
 	for name, opts := range map[string][]runtime.ServeMuxOption{
 		"":                    nil,
@@ -177,9 +174,6 @@ func main() {
 		"all_characters":      {runtime.WithUnescapingMode(runtime.UnescapingModeAllCharacters)},
 	} {
 		mux := runtime.NewServeMux(opts...)
-		// The order the services are registered in decides which handler wins
-		// a request two of them match: declaration order, as the contract
-		// vectors assume.
 		for _, s := range services {
 			register, ok := registry[s]
 			if !ok {
@@ -191,6 +185,28 @@ func main() {
 		}
 		muxes[name] = mux
 	}
+	return muxes
+}
+
+func main() {
+	grpclog.SetLoggerV2(grpclog.NewLoggerV2(io.Discard, io.Discard, io.Discard))
+	if len(os.Args) == 4 && os.Args[1] == "-http" {
+		runHTTP(os.Args[2], os.Args[3])
+		return
+	}
+	if len(os.Args) != 3 {
+		fail("usage: e2e [-http] <descriptor set> <source> < cases.json")
+	}
+	services := servicesOf(os.Args[1])
+	var c cases
+	if err := json.NewDecoder(os.Stdin).Decode(&c); err != nil {
+		fail("decode cases: %v", err)
+	}
+
+	rec := &recorder{}
+	conn := dialBackend(rec.handle)
+	defer conn.Close()
+	muxes := newMuxes(services, conn)
 
 	out := vectors{Generator: os.Getenv("ABADA_GENERATOR"), Source: os.Args[2], Notes: notes, NotPrintable: notPrintable()}
 	seen := map[string]bool{}

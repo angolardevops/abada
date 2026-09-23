@@ -1,0 +1,542 @@
+{
+  "note": "One case per response_body shape of abada.conformance.response.v1, each with a backend that answers a fixed message. Every binding is a GET with one path parameter, so the request half is the same for all of them and the only thing under test is what the response writer does with the selection. Written by hand; the -full/-empty pairs are the same two replies through every binding.",
+  "cases": [
+    {
+      "name": "whole-full",
+      "method": "GET",
+      "target": "/v1/whole/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "whole-empty",
+      "method": "GET",
+      "target": "/v1/whole/n",
+      "backend": {}
+    },
+    {
+      "name": "star-full",
+      "method": "GET",
+      "target": "/v1/star/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "star-empty",
+      "method": "GET",
+      "target": "/v1/star/n",
+      "backend": {}
+    },
+    {
+      "name": "text-full",
+      "method": "GET",
+      "target": "/v1/text/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "text-empty",
+      "method": "GET",
+      "target": "/v1/text/n",
+      "backend": {}
+    },
+    {
+      "name": "number-full",
+      "method": "GET",
+      "target": "/v1/number/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "number-empty",
+      "method": "GET",
+      "target": "/v1/number/n",
+      "backend": {}
+    },
+    {
+      "name": "flag-full",
+      "method": "GET",
+      "target": "/v1/flag/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "flag-empty",
+      "method": "GET",
+      "target": "/v1/flag/n",
+      "backend": {}
+    },
+    {
+      "name": "blob-full",
+      "method": "GET",
+      "target": "/v1/blob/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "blob-empty",
+      "method": "GET",
+      "target": "/v1/blob/n",
+      "backend": {}
+    },
+    {
+      "name": "shade-full",
+      "method": "GET",
+      "target": "/v1/shade/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "shade-empty",
+      "method": "GET",
+      "target": "/v1/shade/n",
+      "backend": {}
+    },
+    {
+      "name": "ratio-full",
+      "method": "GET",
+      "target": "/v1/ratio/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "ratio-empty",
+      "method": "GET",
+      "target": "/v1/ratio/n",
+      "backend": {}
+    },
+    {
+      "name": "tags-full",
+      "method": "GET",
+      "target": "/v1/tags/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "tags-empty",
+      "method": "GET",
+      "target": "/v1/tags/n",
+      "backend": {}
+    },
+    {
+      "name": "items-full",
+      "method": "GET",
+      "target": "/v1/items/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "items-empty",
+      "method": "GET",
+      "target": "/v1/items/n",
+      "backend": {}
+    },
+    {
+      "name": "shades-full",
+      "method": "GET",
+      "target": "/v1/shades/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "shades-empty",
+      "method": "GET",
+      "target": "/v1/shades/n",
+      "backend": {}
+    },
+    {
+      "name": "labels-full",
+      "method": "GET",
+      "target": "/v1/labels/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "labels-empty",
+      "method": "GET",
+      "target": "/v1/labels/n",
+      "backend": {}
+    },
+    {
+      "name": "objects-full",
+      "method": "GET",
+      "target": "/v1/objects/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "objects-empty",
+      "method": "GET",
+      "target": "/v1/objects/n",
+      "backend": {}
+    },
+    {
+      "name": "inner-full",
+      "method": "GET",
+      "target": "/v1/inner/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "inner-empty",
+      "method": "GET",
+      "target": "/v1/inner/n",
+      "backend": {}
+    },
+    {
+      "name": "when-full",
+      "method": "GET",
+      "target": "/v1/when/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "when-empty",
+      "method": "GET",
+      "target": "/v1/when/n",
+      "backend": {}
+    },
+    {
+      "name": "wrapped-full",
+      "method": "GET",
+      "target": "/v1/wrapped/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "wrapped-empty",
+      "method": "GET",
+      "target": "/v1/wrapped/n",
+      "backend": {}
+    },
+    {
+      "name": "structured-full",
+      "method": "GET",
+      "target": "/v1/structured/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "structured-empty",
+      "method": "GET",
+      "target": "/v1/structured/n",
+      "backend": {}
+    },
+    {
+      "name": "maybe-full",
+      "method": "GET",
+      "target": "/v1/maybe/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "maybe-empty",
+      "method": "GET",
+      "target": "/v1/maybe/n",
+      "backend": {}
+    },
+    {
+      "name": "raw-full",
+      "method": "GET",
+      "target": "/v1/raw/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "raw-empty",
+      "method": "GET",
+      "target": "/v1/raw/n",
+      "backend": {}
+    },
+    {
+      "name": "nested-text-full",
+      "method": "GET",
+      "target": "/v1/nested/text/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "nested-text-empty",
+      "method": "GET",
+      "target": "/v1/nested/text/n",
+      "backend": {}
+    },
+    {
+      "name": "nested-leaf-full",
+      "method": "GET",
+      "target": "/v1/nested/leaf/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "nested-leaf-empty",
+      "method": "GET",
+      "target": "/v1/nested/leaf/n",
+      "backend": {}
+    },
+    {
+      "name": "deep-full",
+      "method": "GET",
+      "target": "/v1/nested/deep/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "deep-empty",
+      "method": "GET",
+      "target": "/v1/nested/deep/n",
+      "backend": {}
+    },
+    {
+      "name": "nested-tags-full",
+      "method": "GET",
+      "target": "/v1/nested/tags/n",
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\""
+      }
+    },
+    {
+      "name": "nested-tags-empty",
+      "method": "GET",
+      "target": "/v1/nested/tags/n",
+      "backend": {}
+    },
+    {
+      "name": "nothing-empty",
+      "method": "GET",
+      "target": "/v1/nothing/n",
+      "backend": {}
+    },
+    {
+      "name": "nested-text-inner-unset",
+      "method": "GET",
+      "target": "/v1/nested/text/n",
+      "backend": {
+        "reply": "text:\"t\" number:1"
+      }
+    },
+    {
+      "name": "nested-leaf-inner-unset",
+      "method": "GET",
+      "target": "/v1/nested/leaf/n",
+      "backend": {
+        "reply": "text:\"t\" number:1"
+      }
+    },
+    {
+      "name": "deep-inner-unset",
+      "method": "GET",
+      "target": "/v1/nested/deep/n",
+      "backend": {
+        "reply": "text:\"t\" number:1"
+      }
+    },
+    {
+      "name": "nested-tags-inner-unset",
+      "method": "GET",
+      "target": "/v1/nested/tags/n",
+      "backend": {
+        "reply": "text:\"t\" number:1"
+      }
+    },
+    {
+      "name": "deep-leaf-unset",
+      "method": "GET",
+      "target": "/v1/nested/deep/n",
+      "backend": {
+        "reply": "inner{text:\"only text\" count:2}"
+      }
+    },
+    {
+      "name": "nested-leaf-leaf-unset",
+      "method": "GET",
+      "target": "/v1/nested/leaf/n",
+      "backend": {
+        "reply": "inner{text:\"only text\" count:2}"
+      }
+    },
+    {
+      "name": "raw-empty-message",
+      "method": "GET",
+      "target": "/v1/raw/n",
+      "backend": {
+        "reply": "raw{}"
+      }
+    },
+    {
+      "name": "raw-binary",
+      "method": "GET",
+      "target": "/v1/raw/n",
+      "backend": {
+        "reply": "raw{content_type:\"application/octet-stream\" data:\"\\000\\001\\002\\377\"}"
+      }
+    },
+    {
+      "name": "raw-no-content-type",
+      "method": "GET",
+      "target": "/v1/raw/n",
+      "backend": {
+        "reply": "raw{data:\"no content type\"}"
+      }
+    },
+    {
+      "name": "rawwhole-text",
+      "method": "GET",
+      "target": "/v1/rawwhole/n",
+      "backend": {
+        "reply": "content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\""
+      }
+    },
+    {
+      "name": "rawwhole-binary",
+      "method": "GET",
+      "target": "/v1/rawwhole/n",
+      "backend": {
+        "reply": "content_type:\"application/octet-stream\" data:\"\\000\\001\\002\\377\""
+      }
+    },
+    {
+      "name": "rawwhole-no-content-type",
+      "method": "GET",
+      "target": "/v1/rawwhole/n",
+      "backend": {
+        "reply": "data:\"body with no content type\""
+      }
+    },
+    {
+      "name": "rawwhole-empty",
+      "method": "GET",
+      "target": "/v1/rawwhole/n",
+      "backend": {}
+    },
+    {
+      "name": "rawwhole-content-type-only",
+      "method": "GET",
+      "target": "/v1/rawwhole/n",
+      "backend": {
+        "reply": "content_type:\"application/pdf\""
+      }
+    },
+    {
+      "name": "text-with-trailers",
+      "method": "GET",
+      "target": "/v1/text/n",
+      "headers": [
+        [
+          "TE",
+          "trailers"
+        ]
+      ],
+      "backend": {
+        "reply": "text:\"hi <&> \\\"q\\\" caf\\303\\251\" number:9007199254740993 flag:true blob:\"\\001\\002\\377\" shade:SEVEN ratio:0.1 tags:\"a\" tags:\"<b>\" items{text:\"i1\" count:1 leaf{name:\"l1\" ratio:2.5} tags:\"t\" blob:\"\\001\" shade:PALE} items{text:\"i2\"} shades:PALE shades:SEVEN labels{key:\"k\" value:\"v\"} labels{key:\"<x>\" value:\"y\"} objects{key:\"o\" value{text:\"inner\"}} inner{text:\"nested <&>\" count:-3 leaf{name:\"deep\" ratio:1.5} tags:\"n1\" tags:\"n2\" blob:\"\\007\" shade:SEVEN} when{seconds:1700000000 nanos:250000000} wrapped{value:\"w\"} structured{fields{key:\"s\" value{string_value:\"1\"}}} raw{content_type:\"text/plain; charset=utf-8\" data:\"plain bytes\"} maybe:\"m\"",
+        "header_md": [
+          [
+            "x-request-id",
+            "r"
+          ]
+        ],
+        "trailer_md": [
+          [
+            "x-trace-id",
+            "t"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "raw-with-trailers",
+      "method": "GET",
+      "target": "/v1/raw/n",
+      "headers": [
+        [
+          "TE",
+          "trailers"
+        ]
+      ],
+      "backend": {
+        "reply": "raw{content_type:\"application/octet-stream\" data:\"\\000\\001\\002\\377\"}",
+        "trailer_md": [
+          [
+            "x-trace-id",
+            "t"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "rawwhole-with-trailers",
+      "method": "GET",
+      "target": "/v1/rawwhole/n",
+      "headers": [
+        [
+          "TE",
+          "trailers"
+        ]
+      ],
+      "backend": {
+        "reply": "content_type:\"text/plain\" data:\"x\"",
+        "trailer_md": [
+          [
+            "x-trace-id",
+            "t"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "text-error",
+      "method": "GET",
+      "target": "/v1/text/n",
+      "backend": {
+        "error": {
+          "code": 5,
+          "message": "gone"
+        }
+      }
+    },
+    {
+      "name": "rawwhole-error",
+      "method": "GET",
+      "target": "/v1/rawwhole/n",
+      "backend": {
+        "error": {
+          "code": 5,
+          "message": "gone"
+        }
+      }
+    },
+    {
+      "name": "nothing-error",
+      "method": "GET",
+      "target": "/v1/nothing/n",
+      "backend": {
+        "error": {
+          "code": 13,
+          "message": "boom"
+        }
+      }
+    }
+  ]
+}

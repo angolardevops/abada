@@ -1,0 +1,1254 @@
+{
+  "note": "One case per delonix.node.v1 binding, with the backend answering the EMPTY message of that binding's response type: what varies between them is the response type, so this measures the response writer over all 56 bindings' output messages. Method, target, headers and body are the canonical request of conformance/cases/request-delonix-node-v1.json, which is where they were written by hand; the five server-streaming RPCs (WatchOperation, Logs, WatchEvents, Exec, Console) are left out \u2014 ForwardResponseStream is a later phase. The last cases add a failing backend, response metadata and trailers on top of one binding each. Three cases were tried and removed because they measure Go's transport or net/http, not the gateway: an OK status with no message (grpc-go turns it into EOF/Unknown before the gateway sees it), a negative code (grpc-status is unsigned on the wire, so the client reports \"malformed grpc-status\"), and a malformed path escape (net/http answers 400 text/plain itself, so the mux is never reached \u2014 that path is measured by conformance/cases/errors.json and path.json, which feed the mux directly).",
+  "cases": [
+    {
+      "name": "GetOperation",
+      "method": "GET",
+      "target": "/v1/operations/op-123",
+      "backend": {}
+    },
+    {
+      "name": "ListOperations",
+      "method": "GET",
+      "target": "/v1/operations?page.pageSize=50&page.page_token=abc&activeOnly=true",
+      "backend": {}
+    },
+    {
+      "name": "CancelOperation",
+      "method": "POST",
+      "target": "/v1/operations/op-123:cancel",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{}",
+      "backend": {}
+    },
+    {
+      "name": "CreateContainer",
+      "method": "POST",
+      "target": "/v1/namespaces/default/containers",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"name\": \"web\", \"labels\": {\"app\": \"web\"}, \"annotations\": {\"owner\": \"team-a\"}, \"spec\": {\"image\": \"docker.io/library/nginx:1.27\", \"entrypoint\": [\"/docker-entrypoint.sh\"], \"command\": [\"nginx\", \"-g\", \"daemon off;\"], \"env\": {\"A\": \"1\", \"B\": \"two\"}, \"secrets\": [{\"secret\": \"db\", \"key\": \"password\", \"delivery\": \"SECRET_DELIVERY_FILE\"}], \"workdir\": \"/\", \"user\": \"101:101\", \"hostname\": \"web\", \"resources\": {\"memoryLimitBytes\": \"268435456\", \"cpuLimitMillis\": \"500\", \"pidsLimit\": \"256\"}, \"mounts\": [{\"volume\": \"data\", \"target\": \"/usr/share/nginx/html\", \"readOnly\": true}, {\"hostPath\": \"/etc/localtime\", \"target\": \"/etc/localtime\"}], \"networks\": [{\"network\": \"frontend\", \"ipv4Address\": \"10.0.0.5\", \"aliases\": [\"web\"]}], \"ports\": [{\"hostIp\": \"127.0.0.1\", \"hostPort\": 8080, \"containerPort\": 80, \"protocol\": \"PROTOCOL_TCP\"}], \"security\": {\"capDrop\": [\"ALL\"], \"noNewPrivileges\": true}, \"restart\": {\"mode\": \"RESTART_MODE_ON_FAILURE\", \"maxRetries\": 3}, \"healthCheck\": {\"command\": [\"curl\", \"-f\", \"http://localhost/\"], \"interval\": \"30s\", \"timeout\": \"5s\", \"retries\": 3, \"startPeriod\": \"10s\"}, \"tmpfs\": [\"/tmp\"], \"readOnlyRootfs\": true, \"sysctls\": {\"net.core.somaxconn\": \"1024\"}, \"logFormat\": \"json\"}, \"requestId\": \"req-1\", \"start\": true}",
+      "backend": {}
+    },
+    {
+      "name": "CreateContainer-namespace-from-path",
+      "method": "POST",
+      "target": "/v1/namespaces/default/containers",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"namespace\": \"other\", \"name\": \"web\"}",
+      "backend": {}
+    },
+    {
+      "name": "CreateContainer-bad-body",
+      "method": "POST",
+      "target": "/v1/namespaces/default/containers",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"name\": 5}",
+      "backend": {}
+    },
+    {
+      "name": "GetContainer",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {}
+    },
+    {
+      "name": "ListContainers",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers?labelSelector=app%3Dweb&page.pageSize=20",
+      "backend": {}
+    },
+    {
+      "name": "ListContainers-page-size-bad",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers?page.pageSize=twenty",
+      "backend": {}
+    },
+    {
+      "name": "ListContainers-namespace-query-ignored",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers?namespace=other",
+      "backend": {}
+    },
+    {
+      "name": "UpdateContainer",
+      "method": "PATCH",
+      "target": "/v1/namespaces/default/containers/web",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"spec\": {\"env\": {\"A\": \"2\"}, \"resources\": {\"memoryLimitBytes\": \"536870912\"}}}",
+      "backend": {}
+    },
+    {
+      "name": "UpdateContainer-explicit-mask",
+      "method": "PATCH",
+      "target": "/v1/namespaces/default/containers/web?updateMask=spec.env",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"spec\": {\"env\": {\"A\": \"2\"}, \"image\": \"x\"}}",
+      "backend": {}
+    },
+    {
+      "name": "UpdateContainer-meta-labels",
+      "method": "PATCH",
+      "target": "/v1/namespaces/default/containers/web",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"meta\": {\"labels\": {\"tier\": \"gold\"}}, \"spec\": {\"restart\": {\"mode\": \"RESTART_MODE_ALWAYS\"}}}",
+      "backend": {}
+    },
+    {
+      "name": "UpdateContainer-unknown-field",
+      "method": "PATCH",
+      "target": "/v1/namespaces/default/containers/web",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"spec\":{\"imagee\":\"x\"}}",
+      "backend": {}
+    },
+    {
+      "name": "UpdateContainer-empty",
+      "method": "PATCH",
+      "target": "/v1/namespaces/default/containers/web",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "backend": {}
+    },
+    {
+      "name": "DeleteContainer",
+      "method": "DELETE",
+      "target": "/v1/namespaces/default/containers/web?etag=%22abc%22&force=true&requestId=req-2",
+      "backend": {}
+    },
+    {
+      "name": "DeleteContainer-force-bad",
+      "method": "DELETE",
+      "target": "/v1/namespaces/default/containers/web?force=yes",
+      "backend": {}
+    },
+    {
+      "name": "StartContainer",
+      "method": "POST",
+      "target": "/v1/namespaces/default/containers/web:start",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{}",
+      "backend": {}
+    },
+    {
+      "name": "StopContainer",
+      "method": "POST",
+      "target": "/v1/namespaces/default/containers/web:stop",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"gracePeriod\":\"10s\"}",
+      "backend": {}
+    },
+    {
+      "name": "KillContainer",
+      "method": "POST",
+      "target": "/v1/namespaces/default/containers/web:kill",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"signal\":\"SIGKILL\"}",
+      "backend": {}
+    },
+    {
+      "name": "WaitContainer",
+      "method": "POST",
+      "target": "/v1/namespaces/default/containers/web:wait",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "backend": {}
+    },
+    {
+      "name": "Stats",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web/stats",
+      "backend": {}
+    },
+    {
+      "name": "CreatePod",
+      "method": "POST",
+      "target": "/v1/namespaces/default/pods",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"name\": \"p\", \"labels\": {\"app\": \"p\"}, \"spec\": {\"containers\": [{\"name\": \"a\", \"spec\": {\"image\": \"busybox\"}}], \"shareProcessNamespace\": true, \"ports\": [{\"containerPort\": 53, \"protocol\": \"PROTOCOL_UDP\"}]}}",
+      "backend": {}
+    },
+    {
+      "name": "GetPod",
+      "method": "GET",
+      "target": "/v1/namespaces/default/pods/p",
+      "backend": {}
+    },
+    {
+      "name": "ListPods",
+      "method": "GET",
+      "target": "/v1/namespaces/default/pods?label_selector=app%3Dp",
+      "backend": {}
+    },
+    {
+      "name": "DeletePod",
+      "method": "DELETE",
+      "target": "/v1/namespaces/default/pods/p?force=false",
+      "backend": {}
+    },
+    {
+      "name": "CreateVirtualMachine",
+      "method": "POST",
+      "target": "/v1/namespaces/default/virtualmachines",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"name\": \"vm1\", \"spec\": {\"image\": \"debian-12\", \"vcpus\": 2, \"memoryBytes\": \"2147483648\", \"diskBytes\": \"21474836480\", \"networks\": [{\"network\": \"frontend\"}], \"cloudInit\": {\"hostname\": \"vm1\", \"sshAuthorizedKeys\": [\"ssh-ed25519 AAAA\"]}, \"provider\": \"libvirt\", \"requiredCapabilities\": [\"kvm\"], \"extensions\": {\"byProvider\": {\"libvirt\": {\"machine\": \"q35\", \"hugepages\": true}}}, \"restart\": \"RESTART_MODE_ALWAYS\"}, \"waitUntilReachable\": true}",
+      "backend": {}
+    },
+    {
+      "name": "GetVirtualMachine",
+      "method": "GET",
+      "target": "/v1/namespaces/default/virtualmachines/vm1",
+      "backend": {}
+    },
+    {
+      "name": "ListVirtualMachines",
+      "method": "GET",
+      "target": "/v1/namespaces/default/virtualmachines?page.pageToken=t",
+      "backend": {}
+    },
+    {
+      "name": "DeleteVirtualMachine",
+      "method": "DELETE",
+      "target": "/v1/namespaces/default/virtualmachines/vm1?requestId=r",
+      "backend": {}
+    },
+    {
+      "name": "StartVirtualMachine",
+      "method": "POST",
+      "target": "/v1/namespaces/default/virtualmachines/vm1:start",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"requestId\":\"r-start\"}",
+      "backend": {}
+    },
+    {
+      "name": "StopVirtualMachine",
+      "method": "POST",
+      "target": "/v1/namespaces/default/virtualmachines/vm1:stop",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"requestId\":\"r-stop\"}",
+      "backend": {}
+    },
+    {
+      "name": "PauseVirtualMachine",
+      "method": "POST",
+      "target": "/v1/namespaces/default/virtualmachines/vm1:pause",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"requestId\":\"r-pause\"}",
+      "backend": {}
+    },
+    {
+      "name": "ResumeVirtualMachine",
+      "method": "POST",
+      "target": "/v1/namespaces/default/virtualmachines/vm1:resume",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"requestId\":\"r-resume\"}",
+      "backend": {}
+    },
+    {
+      "name": "CreateSnapshot",
+      "method": "POST",
+      "target": "/v1/namespaces/default/virtualmachines/vm1/snapshots",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"snapshot\":\"s1\"}",
+      "backend": {}
+    },
+    {
+      "name": "ListSnapshots",
+      "method": "GET",
+      "target": "/v1/namespaces/default/virtualmachines/vm1/snapshots",
+      "backend": {}
+    },
+    {
+      "name": "RestoreSnapshot",
+      "method": "POST",
+      "target": "/v1/namespaces/default/virtualmachines/vm1/snapshots/s1:restore",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"requestId\":\"r\"}",
+      "backend": {}
+    },
+    {
+      "name": "DeleteSnapshot",
+      "method": "DELETE",
+      "target": "/v1/namespaces/default/virtualmachines/vm1/snapshots/s1?requestId=r",
+      "backend": {}
+    },
+    {
+      "name": "CreateNetwork",
+      "method": "POST",
+      "target": "/v1/namespaces/default/networks",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"name\": \"n\", \"spec\": {\"topology\": \"NETWORK_TOPOLOGY_OVERLAY\", \"ipv4Cidr\": \"10.1.0.0/24\", \"overlay\": {\"vni\": 4242, \"encrypted\": true, \"peers\": [{\"nodeIp\": \"192.0.2.1\", \"publicKey\": \"k\", \"tunnelIp\": \"10.255.0.1\"}]}}}",
+      "backend": {}
+    },
+    {
+      "name": "GetNetwork",
+      "method": "GET",
+      "target": "/v1/namespaces/default/networks/n",
+      "backend": {}
+    },
+    {
+      "name": "ListNetworks",
+      "method": "GET",
+      "target": "/v1/namespaces/default/networks?page.pageSize=5",
+      "backend": {}
+    },
+    {
+      "name": "DeleteNetwork",
+      "method": "DELETE",
+      "target": "/v1/namespaces/default/networks/n?etag=e",
+      "backend": {}
+    },
+    {
+      "name": "ConnectContainer",
+      "method": "POST",
+      "target": "/v1/namespaces/default/networks/n:connect",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"container\":\"web\",\"ipv4Address\":\"10.1.0.9\"}",
+      "backend": {}
+    },
+    {
+      "name": "DisconnectContainer",
+      "method": "POST",
+      "target": "/v1/namespaces/default/networks/n:disconnect",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"container\":\"web\"}",
+      "backend": {}
+    },
+    {
+      "name": "CreateVolume",
+      "method": "POST",
+      "target": "/v1/namespaces/default/volumes",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"name\": \"v\", \"spec\": {\"remote\": {\"protocol\": \"REMOTE_PROTOCOL_NFS\", \"server\": \"nas\", \"share\": \"/export\", \"readOnly\": true}, \"quotaBytes\": \"1073741824\", \"alertPercent\": 80}}",
+      "backend": {}
+    },
+    {
+      "name": "GetVolume",
+      "method": "GET",
+      "target": "/v1/namespaces/default/volumes/v",
+      "backend": {}
+    },
+    {
+      "name": "ListVolumes",
+      "method": "GET",
+      "target": "/v1/namespaces/default/volumes",
+      "backend": {}
+    },
+    {
+      "name": "DeleteVolume",
+      "method": "DELETE",
+      "target": "/v1/namespaces/default/volumes/v?destroyRemote=true",
+      "backend": {}
+    },
+    {
+      "name": "PullImage",
+      "method": "POST",
+      "target": "/v1/images:pull",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"reference\":\"docker.io/library/alpine:3.20\",\"platform\":\"linux/amd64\",\"credentialsSecret\":\"reg\"}",
+      "backend": {}
+    },
+    {
+      "name": "GetImage",
+      "method": "GET",
+      "target": "/v1/images:get?reference=docker.io%2Flibrary%2Falpine%3A3.20",
+      "backend": {}
+    },
+    {
+      "name": "GetImage-plus-in-reference",
+      "method": "GET",
+      "target": "/v1/images:get?reference=a+b",
+      "backend": {}
+    },
+    {
+      "name": "ListImages",
+      "method": "GET",
+      "target": "/v1/images?referencePrefix=docker.io/&page.pageSize=10",
+      "backend": {}
+    },
+    {
+      "name": "DeleteImage",
+      "method": "POST",
+      "target": "/v1/images:delete",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"reference\":\"alpine\"}",
+      "backend": {}
+    },
+    {
+      "name": "PushImage",
+      "method": "POST",
+      "target": "/v1/images:push",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"reference\":\"alpine\",\"destination\":\"registry.local/alpine\"}",
+      "backend": {}
+    },
+    {
+      "name": "BuildImage",
+      "method": "POST",
+      "target": "/v1/images:build",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"contextPath\": \"/src\", \"file\": \"Containerfile\", \"tags\": [\"a:1\", \"a:latest\"], \"targetStage\": \"final\", \"buildArgs\": {\"V\": \"1\"}, \"secretRefs\": [\"npm\"], \"noCache\": true}",
+      "backend": {}
+    },
+    {
+      "name": "ScanImage",
+      "method": "POST",
+      "target": "/v1/images:scan",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"reference\":\"alpine\"}",
+      "backend": {}
+    },
+    {
+      "name": "PlanStack",
+      "method": "POST",
+      "target": "/v1/stacks/web:plan",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"manifest\":\"c2VydmljZXM6IHt9Cg==\",\"prune\":true}",
+      "backend": {}
+    },
+    {
+      "name": "ApplyStack",
+      "method": "POST",
+      "target": "/v1/stacks/web:apply",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"manifest\":\"c2VydmljZXM6IHt9Cg==\",\"replace\":[\"svc/a\"],\"requestId\":\"r\"}",
+      "backend": {}
+    },
+    {
+      "name": "DestroyStack",
+      "method": "POST",
+      "target": "/v1/stacks/web:destroy",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"requestId\":\"r\"}",
+      "backend": {}
+    },
+    {
+      "name": "GetNodeInfo",
+      "method": "GET",
+      "target": "/v1/node",
+      "backend": {}
+    },
+    {
+      "name": "GetHealth",
+      "method": "GET",
+      "target": "/v1/node/health",
+      "backend": {}
+    },
+    {
+      "name": "GetCapacity",
+      "method": "GET",
+      "target": "/v1/node/capacity",
+      "backend": {}
+    },
+    {
+      "name": "ListProviders",
+      "method": "GET",
+      "target": "/v1/providers?kind=vm",
+      "backend": {}
+    },
+    {
+      "name": "ListOperations-form-fallback",
+      "method": "POST",
+      "target": "/v1/operations",
+      "headers": [
+        [
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        ]
+      ],
+      "body": "activeOnly=true&page.pageSize=3",
+      "backend": {}
+    },
+    {
+      "name": "DeleteContainer-override",
+      "method": "POST",
+      "target": "/v1/namespaces/default/containers/web",
+      "headers": [
+        [
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        ],
+        [
+          "X-HTTP-Method-Override",
+          "DELETE"
+        ]
+      ],
+      "body": "force=true",
+      "backend": {}
+    },
+    {
+      "name": "GetContainer-escaped-name",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/we%20b",
+      "backend": {}
+    },
+    {
+      "name": "GetOperation-bad-query-ignored",
+      "method": "GET",
+      "target": "/v1/operations/op?a=%zz;b",
+      "backend": {}
+    },
+    {
+      "name": "GetNodeInfo-bad-query-ignored",
+      "method": "GET",
+      "target": "/v1/node?%zz",
+      "backend": {}
+    },
+    {
+      "name": "CreateContainer-query-ignored",
+      "method": "POST",
+      "target": "/v1/namespaces/default/containers?name=q&%zz",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{\"name\":\"b\"}",
+      "backend": {}
+    },
+    {
+      "name": "CreateContainer-trailing-slash",
+      "method": "POST",
+      "target": "/v1/namespaces/default/containers/",
+      "headers": [
+        [
+          "Content-Type",
+          "application/json"
+        ]
+      ],
+      "body": "{}",
+      "backend": {}
+    },
+    {
+      "name": "code-1",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 1,
+          "message": "code 1 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-2",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 2,
+          "message": "code 2 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-3",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 3,
+          "message": "code 3 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-4",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 4,
+          "message": "code 4 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-5",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 5,
+          "message": "code 5 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-6",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 6,
+          "message": "code 6 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-7",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 7,
+          "message": "code 7 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-8",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 8,
+          "message": "code 8 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-9",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 9,
+          "message": "code 9 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-10",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 10,
+          "message": "code 10 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-11",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 11,
+          "message": "code 11 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-12",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 12,
+          "message": "code 12 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-13",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 13,
+          "message": "code 13 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-14",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 14,
+          "message": "code 14 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-15",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 15,
+          "message": "code 15 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-16",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 16,
+          "message": "code 16 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-17",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 17,
+          "message": "code 17 from the backend"
+        }
+      }
+    },
+    {
+      "name": "code-1000",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 1000,
+          "message": "code 1000 from the backend"
+        }
+      }
+    },
+    {
+      "name": "error-message-html",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 3,
+          "message": "<script> & \"quoted\" \u2028 caf\u00e9 \u2603"
+        }
+      }
+    },
+    {
+      "name": "error-message-empty",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 5,
+          "message": ""
+        }
+      }
+    },
+    {
+      "name": "error-unauthenticated-www-authenticate",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 16,
+          "message": "Bearer realm=\"abada\""
+        }
+      }
+    },
+    {
+      "name": "error-unauthenticated-message-with-newline",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 16,
+          "message": "Bearer\r\nrealm=x"
+        }
+      }
+    },
+    {
+      "name": "details-registered-duration",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 9,
+          "message": "with a detail",
+          "details": [
+            {
+              "type_url": "type.googleapis.com/google.protobuf.Duration",
+              "value_hex": "0805"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "details-registered-status",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 9,
+          "message": "with a status detail",
+          "details": [
+            {
+              "type_url": "type.googleapis.com/google.rpc.Status",
+              "value_hex": "080712026e6f"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "details-two-registered",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 9,
+          "message": "two details",
+          "details": [
+            {
+              "type_url": "type.googleapis.com/google.protobuf.Duration",
+              "value_hex": "0805"
+            },
+            {
+              "type_url": "type.googleapis.com/google.rpc.Status",
+              "value_hex": "080712026e6f"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "details-unregistered-type",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 9,
+          "message": "unknown detail type",
+          "details": [
+            {
+              "type_url": "type.googleapis.com/nowhere.Unknown",
+              "value_hex": "0801"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "details-empty-type-url",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 9,
+          "message": "detail without a type",
+          "details": [
+            {
+              "type_url": "",
+              "value_hex": "0801"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "details-registered-type-bad-bytes",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "error": {
+          "code": 9,
+          "message": "detail that does not decode",
+          "details": [
+            {
+              "type_url": "type.googleapis.com/google.protobuf.Duration",
+              "value_hex": "ffff"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "md-headers-only",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "header_md": [
+          [
+            "x-request-id",
+            "abc-123"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "md-headers-repeated",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "header_md": [
+          [
+            "x-tag",
+            "a"
+          ],
+          [
+            "x-tag",
+            "b"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "md-trailers-no-te",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "header_md": [
+          [
+            "x-request-id",
+            "abc"
+          ]
+        ],
+        "trailer_md": [
+          [
+            "x-trace-id",
+            "xyz"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "md-trailers-with-te",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "headers": [
+        [
+          "TE",
+          "trailers"
+        ]
+      ],
+      "backend": {
+        "header_md": [
+          [
+            "x-request-id",
+            "abc"
+          ]
+        ],
+        "trailer_md": [
+          [
+            "x-trace-id",
+            "xyz"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "md-trailers-repeated-with-te",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "headers": [
+        [
+          "TE",
+          "trailers"
+        ]
+      ],
+      "backend": {
+        "trailer_md": [
+          [
+            "x-tag",
+            "a"
+          ],
+          [
+            "x-tag",
+            "b"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "md-binary-header",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "header_md": [
+          [
+            "x-raw-bin",
+            "AQIDBA=="
+          ]
+        ]
+      }
+    },
+    {
+      "name": "md-on-error-with-te",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "headers": [
+        [
+          "TE",
+          "trailers"
+        ]
+      ],
+      "backend": {
+        "header_md": [
+          [
+            "x-request-id",
+            "abc"
+          ]
+        ],
+        "trailer_md": [
+          [
+            "x-trace-id",
+            "xyz"
+          ]
+        ],
+        "error": {
+          "code": 7,
+          "message": "denied"
+        }
+      }
+    },
+    {
+      "name": "md-on-error-no-te",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "header_md": [
+          [
+            "x-request-id",
+            "abc"
+          ]
+        ],
+        "trailer_md": [
+          [
+            "x-trace-id",
+            "xyz"
+          ]
+        ],
+        "error": {
+          "code": 7,
+          "message": "denied"
+        }
+      }
+    },
+    {
+      "name": "md-te-not-trailers",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "headers": [
+        [
+          "TE",
+          "gzip"
+        ]
+      ],
+      "backend": {
+        "trailer_md": [
+          [
+            "x-trace-id",
+            "xyz"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "md-te-mixed-case",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "headers": [
+        [
+          "TE",
+          "deflate, TRAILERS"
+        ]
+      ],
+      "backend": {
+        "trailer_md": [
+          [
+            "x-trace-id",
+            "xyz"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "populated-container",
+      "method": "GET",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {
+        "reply": "meta{name:\"web\" namespace:\"default\" uid:\"u-1\"} spec{image:\"nginx:1.27\"}"
+      }
+    },
+    {
+      "name": "route-not-found",
+      "method": "GET",
+      "target": "/v1/nowhere",
+      "backend": {}
+    },
+    {
+      "name": "route-wrong-method",
+      "method": "PUT",
+      "target": "/v1/namespaces/default/containers/web",
+      "backend": {}
+    }
+  ]
+}

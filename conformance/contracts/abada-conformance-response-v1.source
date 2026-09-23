@@ -1,0 +1,1 @@
+conformance/protos/abada/conformance/response/v1/response.proto (protoc 25.1, --include_imports; google/api/annotations.proto from delonix-node-v1.binpb, google/api/httpbody.proto from conformance/protos/google/api/)

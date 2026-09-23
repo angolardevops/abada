@@ -1,0 +1,3652 @@
+{
+  "generator": "grpc-gateway v2.27.3, go1.26.2",
+  "source": "conformance/protos/abada/conformance/response/v1/response.proto (protoc 25.1, --include_imports; google/api/annotations.proto from delonix-node-v1.binpb, google/api/httpbody.proto from conformance/protos/google/api/)",
+  "bindings": [
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Whole",
+      "http_method": "GET",
+      "template": "/v1/whole/{name}",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Star",
+      "http_method": "GET",
+      "template": "/v1/star/{name}",
+      "response_body": "*",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Text",
+      "http_method": "GET",
+      "template": "/v1/text/{name}",
+      "response_body": "text",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Number",
+      "http_method": "GET",
+      "template": "/v1/number/{name}",
+      "response_body": "number",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Flag",
+      "http_method": "GET",
+      "template": "/v1/flag/{name}",
+      "response_body": "flag",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Blob",
+      "http_method": "GET",
+      "template": "/v1/blob/{name}",
+      "response_body": "blob",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Shaded",
+      "http_method": "GET",
+      "template": "/v1/shade/{name}",
+      "response_body": "shade",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Ratio",
+      "http_method": "GET",
+      "template": "/v1/ratio/{name}",
+      "response_body": "ratio",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Tags",
+      "http_method": "GET",
+      "template": "/v1/tags/{name}",
+      "response_body": "tags",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Items",
+      "http_method": "GET",
+      "template": "/v1/items/{name}",
+      "response_body": "items",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Shades",
+      "http_method": "GET",
+      "template": "/v1/shades/{name}",
+      "response_body": "shades",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Labels",
+      "http_method": "GET",
+      "template": "/v1/labels/{name}",
+      "response_body": "labels",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Objects",
+      "http_method": "GET",
+      "template": "/v1/objects/{name}",
+      "response_body": "objects",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "InnerMessage",
+      "http_method": "GET",
+      "template": "/v1/inner/{name}",
+      "response_body": "inner",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "When",
+      "http_method": "GET",
+      "template": "/v1/when/{name}",
+      "response_body": "when",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Wrapped",
+      "http_method": "GET",
+      "template": "/v1/wrapped/{name}",
+      "response_body": "wrapped",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Structured",
+      "http_method": "GET",
+      "template": "/v1/structured/{name}",
+      "response_body": "structured",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Maybe",
+      "http_method": "GET",
+      "template": "/v1/maybe/{name}",
+      "response_body": "maybe",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Raw",
+      "http_method": "GET",
+      "template": "/v1/raw/{name}",
+      "response_body": "raw",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "RawWhole",
+      "http_method": "GET",
+      "template": "/v1/rawwhole/{name}",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "NestedText",
+      "http_method": "GET",
+      "template": "/v1/nested/text/{name}",
+      "response_body": "inner.text",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "NestedLeaf",
+      "http_method": "GET",
+      "template": "/v1/nested/leaf/{name}",
+      "response_body": "inner.leaf",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "DeepName",
+      "http_method": "GET",
+      "template": "/v1/nested/deep/{name}",
+      "response_body": "inner.leaf.name",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "NestedTags",
+      "http_method": "GET",
+      "template": "/v1/nested/tags/{name}",
+      "response_body": "inner.tags",
+      "index": 0
+    },
+    {
+      "service": "abada.conformance.response.v1.ResponseService",
+      "method": "Nothing",
+      "http_method": "GET",
+      "template": "/v1/nothing/{name}",
+      "index": 0
+    }
+  ],
+  "routes": [
+    {
+      "from": 0,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/whole/x",
+      "outcome": "matched",
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 1,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/star/x",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 2,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/text/x",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 3,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/number/x",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 4,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/flag/x",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 5,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/blob/x",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 6,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shade/x",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 7,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/ratio/x",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 8,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/tags/x",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 9,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/items/x",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 10,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shades/x",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 11,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/labels/x",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 12,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/objects/x",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 13,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/inner/x",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 14,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/when/x",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 15,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/wrapped/x",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 16,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/structured/x",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 17,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/maybe/x",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 18,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/raw/x",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 19,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/rawwhole/x",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 20,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/text/x",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 21,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/leaf/x",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 22,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/deep/x",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 23,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/tags/x",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 24,
+      "canonical": true,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nothing/x",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "x"
+      }
+    },
+    {
+      "from": 0,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/whole/",
+      "outcome": "matched",
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 0,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/whole/:get",
+      "outcome": "matched",
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 0,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/whole/a",
+      "outcome": "matched",
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 0,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/whole/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 0,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/whole/a:a:b",
+      "outcome": "matched",
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 0,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/whole/a",
+      "outcome": "matched",
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 1,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/star/~",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 1,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/star/a",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 1,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/star/users",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 1,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/star/a:a:b",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 1,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/star/a",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 1,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/star/a:get",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/text/:get",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/text/a:a:b",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/text/v1",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/text/%20",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 2,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/text/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 2,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/text/a:a:b",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/number/%25",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "name": "%"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/number/~",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/number/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 3,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/number/a%3Aget",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/number/%25",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "name": "%"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/number/a",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/flag/a",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/flag/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 4,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/flag/b",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/flag/a:a:b",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/flag/projects",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/flag/b",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/blob/",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 5,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/blob/:get",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/blob/projects",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/blob/a%3Aget",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/blob/a",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/blob/",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 6,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shade/%25",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "name": "%"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shade/%25",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "name": "%"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shade/items",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shade/users",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shade/x%2fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 6,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shade/items",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/ratio/a:get",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/ratio/%25",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "%"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/ratio/:get",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/ratio/x%2fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 7,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/ratio/",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 7,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/ratio/a:get",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/tags/items",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/tags/items",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/tags/:get",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/tags/",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 8,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/tags/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 8,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/tags/a",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/items/",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 9,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/items/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 9,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/items/a:get",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/items/v1",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/items/:get",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/items/b",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shades/b",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shades/:get",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shades/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 10,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shades/%25",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "%"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shades/a:get",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/shades/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 11,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/labels/items",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/labels/a:a:b",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/labels/items",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/labels/users",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/labels/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 11,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/labels/end",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/objects/projects",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/objects/b",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/objects/%25",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "%"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/objects/a:get",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/objects/%25",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "%"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/objects/a%3Aget",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/inner/a:get",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/inner/x%2fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 13,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/inner/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 13,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/inner/b",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/inner/",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 13,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/inner/a",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/when/b",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/when/end",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/when/a:a:b",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/when/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 14,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/when/x%2fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 14,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/when/v1",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/wrapped/~",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/wrapped/a:a:b",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/wrapped/%25",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": "%"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/wrapped/%20",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 15,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/wrapped/end",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/wrapped/projects",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/structured/users",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/structured/a%3Aget",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/structured/a:a:b",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/structured/a:get",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/structured/projects",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/structured/end",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/maybe/:get",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/maybe/",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 17,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/maybe/a:get",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/maybe/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 17,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/maybe/v1",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/maybe/~",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/raw/a:a:b",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/raw/%20",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 18,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/raw/users",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/raw/b",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/raw/a:a:b",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/raw/items",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/rawwhole/end",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/rawwhole/a:get",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/rawwhole/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 19,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/rawwhole/v1",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/rawwhole/:get",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/rawwhole/end",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/text/a%3Aget",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/text/a:get",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/text/a%3Aget",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/text/items",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/text/a:a:b",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/text/users",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/leaf/a%3Aget",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/leaf/:get",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/leaf/v1",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/leaf/a:get",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/leaf/~",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/leaf/:get",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/deep/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 22,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/deep/x%2fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 22,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/deep/",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 22,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/deep/%25",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "%"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/deep/items",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/deep/a:a:b",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/tags/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 23,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/tags/v1",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/tags/~",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/tags/v1",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/tags/items",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nested/tags/users",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 24,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nothing/~",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 24,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nothing/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 24,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nothing/items",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 24,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nothing/end",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 24,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nothing/%20",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 24,
+      "mode": "legacy",
+      "method": "GET",
+      "target": "/v1/nothing/x%2Fy",
+      "outcome": "not_found"
+    },
+    {
+      "from": 0,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/whole/a:get",
+      "outcome": "matched",
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 0,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/whole/%20",
+      "outcome": "matched",
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 0,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/whole/projects",
+      "outcome": "matched",
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 0,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/whole/~",
+      "outcome": "matched",
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 0,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/whole/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 0,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/whole/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 1,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/star/v1",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 1,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/star/%20",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 1,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/star/%20",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 1,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/star/v1",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 1,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/star/:get",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 1,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/star/",
+      "outcome": "matched",
+      "handler": 1,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 2,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/text/:get",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/text/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 2,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/text/x%2Fy",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/text/%20",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 2,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/text/end",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 2,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/text/:get",
+      "outcome": "matched",
+      "handler": 2,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/number/items",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/number/v1",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/number/:get",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/number/items",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/number/a%3Aget",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 3,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/number/%20",
+      "outcome": "matched",
+      "handler": 3,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 4,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/flag/~",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/flag/v1",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/flag/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 4,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/flag/~",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/flag/x%2Fy",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 4,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/flag/a:get",
+      "outcome": "matched",
+      "handler": 4,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/blob/users",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/blob/users",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/blob/items",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/blob/x%2fy",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/blob/~",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 5,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/blob/x%2Fy",
+      "outcome": "matched",
+      "handler": 5,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/shade/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 6,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/shade/items",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/shade/v1",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/shade/a%3Aget",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/shade/projects",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 6,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/shade/end",
+      "outcome": "matched",
+      "handler": 6,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/ratio/end",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/ratio/v1",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/ratio/items",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/ratio/~",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 7,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/ratio/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 7,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/ratio/:get",
+      "outcome": "matched",
+      "handler": 7,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/tags/:get",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/tags/~",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/tags/items",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/tags/v1",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/tags/x%2Fy",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 8,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/tags/%20",
+      "outcome": "matched",
+      "handler": 8,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 9,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/items/x%2fy",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/items/v1",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/items/b",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/items/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 9,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/items/users",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 9,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/items/projects",
+      "outcome": "matched",
+      "handler": 9,
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/shades/v1",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/shades/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 10,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/shades/projects",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/shades/x%2Fy",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/shades/a:a:b",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 10,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/shades/a:a:b",
+      "outcome": "matched",
+      "handler": 10,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/labels/end",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/labels/:get",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/labels/:get",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/labels/end",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 11,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/labels/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 11,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/labels/users",
+      "outcome": "matched",
+      "handler": 11,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/objects/projects",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/objects/a:get",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/objects/",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 12,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/objects/~",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/objects/v1",
+      "outcome": "matched",
+      "handler": 12,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 12,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/objects/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 13,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/inner/a",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/inner/",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 13,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/inner/a:get",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/inner/v1",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/inner/v1",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 13,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/inner/~",
+      "outcome": "matched",
+      "handler": 13,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/when/a%3Aget",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/when/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 14,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/when/b",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/when/a:get",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/when/b",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 14,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/when/users",
+      "outcome": "matched",
+      "handler": 14,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/wrapped/a",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/wrapped/:get",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/wrapped/a:a:b",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/wrapped/users",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/wrapped/a",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 15,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/wrapped/a:a:b",
+      "outcome": "matched",
+      "handler": 15,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/structured/a:get",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/structured/%20",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 16,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/structured/v1",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "v1"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/structured/end",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/structured/x%2Fy",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 16,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/structured/projects",
+      "outcome": "matched",
+      "handler": 16,
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/maybe/x%2fy",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/maybe/b",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/maybe/end",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/maybe/b",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/maybe/x%2fy",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 17,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/maybe/users",
+      "outcome": "matched",
+      "handler": 17,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/raw/items",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/raw/~",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/raw/a",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/raw/x%2fy",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/raw/b",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 18,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/raw/%20",
+      "outcome": "matched",
+      "handler": 18,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 19,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/rawwhole/a:get",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/rawwhole/users",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/rawwhole/:get",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/rawwhole/end",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "name": "end"
+      }
+    },
+    {
+      "from": 19,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/rawwhole/%zz",
+      "outcome": "invalid_target"
+    },
+    {
+      "from": 19,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/rawwhole/a:a:b",
+      "outcome": "matched",
+      "handler": 19,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/text/a",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "a"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/text/:get",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": ":get"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/text/items",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/text/b",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/text/users",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "users"
+      }
+    },
+    {
+      "from": 20,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/text/x%2fy",
+      "outcome": "matched",
+      "handler": 20,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/leaf/items",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/leaf/a:get",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/leaf/x%2Fy",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/leaf/a:a:b",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/leaf/~",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": "~"
+      }
+    },
+    {
+      "from": 21,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/leaf/",
+      "outcome": "matched",
+      "handler": 21,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 22,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/deep/a:a:b",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/deep/a%3Aget",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/deep/projects",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/deep/a:a:b",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 22,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/deep/%20",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 22,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/deep/x%2Fy",
+      "outcome": "matched",
+      "handler": 22,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/tags/a:a:b",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/tags/items",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "items"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/tags/a:a:b",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/tags/projects",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "projects"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/tags/b",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "b"
+      }
+    },
+    {
+      "from": 23,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nested/tags/x%2fy",
+      "outcome": "matched",
+      "handler": 23,
+      "params": {
+        "name": "x/y"
+      }
+    },
+    {
+      "from": 24,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nothing/a:a:b",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "a:a:b"
+      }
+    },
+    {
+      "from": 24,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nothing/a%3Aget",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": "a:get"
+      }
+    },
+    {
+      "from": 24,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nothing/%20",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": " "
+      }
+    },
+    {
+      "from": 24,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nothing/%25",
+      "outcome": "bad_request"
+    },
+    {
+      "from": 24,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nothing/",
+      "outcome": "matched",
+      "handler": 24,
+      "params": {
+        "name": ""
+      }
+    },
+    {
+      "from": 24,
+      "mode": "all_except_reserved",
+      "method": "GET",
+      "target": "/v1/nothing/%zz",
+      "outcome": "invalid_target"
+    }
+  ],
+  "dropped_nondeterministic": 0
+}
