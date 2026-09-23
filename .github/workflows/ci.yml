@@ -30,6 +30,20 @@ jobs:
         with:
           python-version: "3.12"
       - run: python3 scripts/check-harness.py
+  supply-chain:
+    # S6 of .claude/skills/abada-security/SKILL.md: advisories, licences, bans
+    # and sources, configured in deny.toml. `cargo deny check advisories` reads
+    # the same RustSec database `cargo audit` does, so audit is not run
+    # separately; deny additionally checks the licence allow-list, which audit
+    # has no notion of.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check advisories bans licenses sources
+
   conformance:
     # The vectors are grpc-gateway's own answers. This job asks it again, so a
     # hand-edited or stale vector file cannot make the Rust tests pass.
