@@ -126,6 +126,9 @@ fn successful_responses_match_forward_response_message() {
         let got = Response::success(
             &Marshaler::default(),
             &message,
+            // These vectors are ForwardResponseMessage for the WHOLE message;
+            // the response_body selections are e2e-*.json's (tests/e2e.rs).
+            &[],
             metadata.as_ref(),
             error::accepts_trailers(te.as_ref()),
         )

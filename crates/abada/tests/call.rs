@@ -128,6 +128,7 @@ async fn a_successful_call_carries_metadata_both_ways() {
         status_message(0, "hello"),
         &metadata,
         &Marshaler::default(),
+        &[],
         false,
     )
     .await
@@ -156,6 +157,7 @@ async fn a_failing_call_becomes_an_error_response() {
         status_message(TRIGGER_NOT_FOUND, "irrelevant"),
         &Incoming::default(),
         &Marshaler::default(),
+        &[],
         false,
     )
     .await

@@ -8,8 +8,8 @@
 //! One RPC still means one [`Registration`], built by hand: there is no
 //! code generation yet (`protoc-gen-abada`/`abada-build`), so nothing
 //! builds a `Router<Registration>` for a whole service automatically.
-//! `response_body` and streaming RPCs are not handled — see
-//! `docs/DESIGN.md`'s "Gateway" section for the rest of what is not.
+//! Streaming RPCs are not handled — see `docs/DESIGN.md`'s "Gateway"
+//! section for the rest of what is not.
 
 use std::future::Future;
 use std::pin::Pin;
@@ -267,6 +267,7 @@ where
         message,
         &incoming_metadata,
         marshaler,
+        registration.binding.response_body(),
         wants_trailers,
     )
     .await
