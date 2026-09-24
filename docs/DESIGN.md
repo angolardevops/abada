@@ -82,7 +82,9 @@ four properties together, and each one is a test, not a claim:
 | Calling the RPC: one call path for in-process and proxy | decided: `tonic::client::Grpc<S: GrpcService>` | [ADR 0002](adr/0002-chamada-do-rpc-in-process-e-proxy.md) — proven identical for a unary call in-process and over a real loopback proxy, `benches/tonic-call-proto` |
 | Incoming metadata: `Authorization`/`Grpc-Metadata-*` headers, `X-Forwarded-*`, `Grpc-Timeout` (`abada::service::metadata::incoming`) | done | 30 vectors over `runtime.AnnotateContext` — see "Metadata" below |
 | A successful response: status, `Content-Type`, `Grpc-Metadata-*`/`Grpc-Trailer-*` out (`abada::service::response::Response::success`) | done, whole message only | 8 vectors over `runtime.ForwardResponseMessage` — see "Response" below; `response_body` (one field instead of the whole message) still not wired in |
-| The call itself, the `service` module's `tower::Service`, streaming | not started | — |
+| The call itself: `service::call::unary`, in-process, one RPC registered by hand | done, narrow scope | 2 integration tests (`crates/abada/tests/call.rs`), 3 mutations — see "Call" below; no proxy, no rich errors, no streaming |
+| The `tower::Service` (`service::Gateway`), a `Router<Registration>` of hand-registered RPCs | done, narrow scope | 2 integration tests (`crates/abada/tests/gateway.rs`), 3 mutations — see "Gateway" below |
+| `response_body`, proxy, streaming | not started | — |
 
 The conformance suite (`crates/abada/tests/conformance.rs`) was checked by
 breaking the code on purpose: dropping the `/` quirk of the parser, the
@@ -418,6 +420,125 @@ message — `RequestBinding::response_body` and `Marshaler::encode_field`
 exist, wiring them together does not yet), and everything the "Errors"
 section above already lists as not validated for header/trailer writing in
 general, since this is the same code.
+
+## Call
+
+`abada::service::call::unary` calls one RPC and turns the result into a
+[`response::Response`](#response) or an
+[`ErrorResponse`](#errors), given what `RequestBinding::decode` and
+`metadata::incoming` already produced, through the path
+[ADR 0002](adr/0002-chamada-do-rpc-in-process-e-proxy.md) decided:
+`tonic::client::Grpc<S: GrpcService>` plus a
+[`service::codec::DynamicCodec`](adr/0002-chamada-do-rpc-in-process-e-proxy.md)
+(the ADR's prototype codec, moved into the runtime crate unchanged). Adding
+`tonic` (pinned `=0.14.5`, `default-features = false`, `features =
+["codegen"]`, per the ADR's own measurement) to `abada`'s dependencies —
+and `AGENTS.md` §2 — is this piece's own consequence of that decision.
+
+This is **not** conformance-tested against grpc-gateway: nothing in
+`runtime/*.go` corresponds to `call::unary` itself — it is abada's own
+assembly of pieces each already proven on their own (request→message in
+`tests/request.rs`, metadata in `tests/metadata.rs`, a successful response
+in `tests/response.rs`, the call mechanism itself in ADR 0002's prototype).
+What had no prior proof was whether the assembly's wiring is correct, so
+`crates/abada/tests/call.rs` is an integration test instead: a real,
+hand-written tonic service (`tonic::server::Grpc` — the server-side
+counterpart of the client wrapper, driven by the same `DynamicCodec` —
+codegen-free, since nothing in this crate's build or tests may depend on
+`tonic-build`/`tonic-prost-build` either, for the same MSRV reason as the
+runtime dependency) that echoes a request field back, copies one metadata
+value across, and fails with `NOT_FOUND` on request. Two tests: a
+successful call carries a request metadata value in and a response
+metadata value out; a failing call becomes the right HTTP status and body.
+Three mutations, each failing the test it should: outgoing metadata never
+copied, response metadata never read back, and the gRPC status code not
+carried into the error.
+
+Deliberately narrow, and named as such rather than left implicit:
+
+- **In-process only.** ADR 0002 already proved in-process and proxy are the
+  same code; this increment does not repeat that proof, it only wires the
+  in-process side end to end.
+- **One RPC, registered by hand.** No `Router`/`RequestBinding` integration,
+  no `tower::Service` for `tonic::client::Grpc<S>` to sit behind — a caller
+  builds the `Grpc`, the codec and the message itself. That assembly (a
+  `Router` of bindings, each with its own descriptors, driving `call::unary`
+  behind an actual `impl tower::Service<http::Request<B>>`) is the next
+  piece, not this one.
+- **Errors carry only a code and a message.** `tonic::Status::details()`
+  (the `grpc-status-details-bin` trailer) is not decoded into
+  `error::Any`s — every error in this suite has none.
+- **No response trailers.** `tonic::Response::metadata()` (used here) is
+  headers; ADR 0002 already found no direct tonic hook for a handler to set
+  trailers on a successful response, so there is nothing to read back yet.
+- **The `Grpc-Timeout` value is passed to `tonic::Request::set_timeout`,
+  and nothing here proves it actually cuts a slow call short** — the fake
+  server never runs long enough to test that, and no case tries.
+- **`grpc.ready()` failing** (the underlying `tower::Service` refusing a
+  new request — a transport-level condition, not a `tonic::Status`) becomes
+  a plain `Unknown` error; `runtime.HTTPError`'s exact text for this case
+  in Go was not read, so the message is abada's own, not grpc-gateway's.
+
+## Gateway
+
+`abada::service::Gateway<S>` is the `tower::Service<http::Request<ReqBody>>`
+`runtime.ServeMux.ServeHTTP` corresponds to: it holds a
+`path::Router<Registration>` (a [`Registration`] pairs one `RequestBinding`
+with the full `/<package>.<Service>/<Method>` path `call::unary` sends the
+request to) and the call target `S`, and on every request runs the same
+steps this crate already proves in isolation — `RequestPath::parse`,
+`request::dispatch`, `RequestBinding::decode`, `metadata::incoming`,
+`call::unary`, and the response/error writers — in that order, then turns
+whichever of `service::response::Response`/`error::ErrorResponse` comes
+back into a real `http::Response`. `ResponseBody` (its own small
+`http_body::Body`) writes one data frame and, only when there are any, one
+trailers frame — nothing more general is needed, since `abada` writes it
+and nothing else has to read it back.
+
+Proven by two integration tests
+(`crates/abada/tests/gateway.rs`; like `call.rs`, no grpc-gateway
+equivalent exists for this assembly, so this is integration, not
+conformance): a `GET` request is routed through a real `RequestBinding`
+built from the `abada-conformance-request-v1` contract's `PathService.Top`
+method, reaches a real, hand-written, codegen-free tonic service (the same
+kind `call.rs` and the ADR 0002 prototype use), and its response comes back
+as a real `http::Response` — status, a response metadata header, and the
+body all checked; separately, an unrouted request answers grpc-gateway's
+own 404 (`ErrorResponse::for_route`, already proven in `errors.rs`, reused
+as-is). Three mutations, each failing the test it should: the routed
+response's body silently dropped, and — this is what the first version of
+this test did *not* catch, because the test only checked a *response*
+metadata header the server sets unconditionally rather than a *request*
+metadata value it must be given to echo back — the incoming HTTP request's
+metadata never reaching `call::unary` at all. Fixed by making the fake
+server echo one request metadata value into its response, exactly so a
+"metadata never wired through" mutation has something to break.
+
+**A debugging note worth keeping**: building the codegen-free fake server
+for `gateway.rs` surfaced a real gap in the "swap request/decode" rule
+`call.rs`'s own doc comment already states — its own fake server had the
+encode/decode descriptors in the wrong order for a *server* codec (should
+be response, request — the opposite of the client's), silently correct
+only because that test's request and response happened to share one
+message type (`google.rpc.Status`). Fixed in both files (`docs/adr/
+0002-chamada-do-rpc-in-process-e-proxy.md`'s prototype is not affected: it
+never builds a server-side codec, only a generated one). A second,
+Rust-specific finding: a function returning `-> impl SomeTrait` where
+`SomeTrait` has an associated type does not, on its own, let the compiler
+prove that associated type is `Send`, even when the concrete underlying
+type's `Future` genuinely is — `Gateway`'s `impl tower::Service` requires
+`S::Future: Send`, and satisfying it needed the return type written as
+`impl GrpcService<Body, ..., Future: Send> + Clone` (an associated-type
+bound directly in the `impl Trait`), not just returning a future that
+happens to be `Send`.
+
+Not validated: everything "Call" above already lists (proxy, rich errors,
+`response_body`, streaming, real timeout cutoff), a request body `abada`'s
+own `http_body::Body` reading fails on (falls back to a plain `Internal`
+error; no case exercises a body that actually errors while being read),
+and more than one `Registration` in the same `Router` (nothing here tests
+that two real RPCs coexist correctly, only that one does and an unmatched
+path answers 404).
 
 ## Decision: how JSON is transcoded
 
