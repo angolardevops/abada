@@ -438,7 +438,7 @@
             "application/grpc"
           ]
         ],
-        "body": "[{\"text\":\"i1\",\"count\":\"1\",\"leaf\":{\"name\":\"l1\",\"ratio\":2.5},\"tags\":[\"t\"],\"blob\":\"AQ==\",\"shade\":\"PALE\"},{\"text\":\"i2\",\"count\":\"0\",\"leaf\":null,\"tags\":[],\"blob\":\"\",\"shade\":\"SHADE_UNSPECIFIED\"}]"
+        "body": "[{\"text\":\"i1\", \"count\":\"1\", \"leaf\":{\"name\":\"l1\", \"ratio\":2.5}, \"tags\":[\"t\"], \"blob\":\"AQ==\", \"shade\":\"PALE\"},{\"text\":\"i2\", \"count\":\"0\", \"leaf\":null, \"tags\":[], \"blob\":\"\", \"shade\":\"SHADE_UNSPECIFIED\"}]"
       }
     },
     {

@@ -154,7 +154,7 @@
             "application/json"
           ]
         ],
-        "body": "{\"code\":3,\"message\":\"proto: (line 1:10): invalid value for string field name: 5\",\"details\":[]}"
+        "body": "{\"code\":3,\"message\":\"proto: (line 1:10): invalid value for string field name: 5\",\"details\":[]}"
       }
     },
     {
