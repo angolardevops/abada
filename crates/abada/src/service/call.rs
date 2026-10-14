@@ -38,6 +38,11 @@ const CODE_INTERNAL: i32 = 13;
 /// follows for which descriptor decodes what. `response_body` is the field
 /// path the binding selected, which [`response::Response::success`] applies
 /// to the answer.
+// Dívida herdada de f06204a (ramo service/unary-e2e, sem PR): a assinatura
+// chegou a 8 argumentos quando `response_body` e `accepts_trailers` se
+// juntaram aos seis anteriores. Agrupá-los num tipo é mudança de desenho e
+// pertence ao PR que fechar o response_body, não a esta consolidação.
+#[allow(clippy::too_many_arguments)]
 pub async fn unary<S>(
     grpc: &mut tonic::client::Grpc<S>,
     rpc_path: &http::uri::PathAndQuery,
