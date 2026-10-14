@@ -1,0 +1,93 @@
+{
+ "mode": "closed",
+ "concurrency": 32,
+ "seconds": 10.002353019,
+ "overall": {
+  "name": "mix",
+  "count": 42600,
+  "errors_unexpected_status": 0,
+  "rps": 4258.997849713866,
+  "p50_us": 7065.203,
+  "p90_us": 10574.29,
+  "p99_us": 16408.243,
+  "p999_us": 24215.493,
+  "max_us": 37305.886,
+  "mean_us": 7509.206234389671
+ },
+ "per_request": [
+  {
+   "name": "get_small",
+   "count": 15967,
+   "errors_unexpected_status": 0,
+   "rps": 1596.324381839937,
+   "p50_us": 7054.133,
+   "p90_us": 10479.153,
+   "p99_us": 16095.939,
+   "p999_us": 24651.838,
+   "max_us": 31067.057,
+   "mean_us": 7482.055001565729
+  },
+  {
+   "name": "get_query",
+   "count": 10705,
+   "errors_unexpected_status": 0,
+   "rps": 1070.2481685724636,
+   "p50_us": 6910.554,
+   "p90_us": 10418.169,
+   "p99_us": 16367.807,
+   "p999_us": 22968.903,
+   "max_us": 37305.886,
+   "mean_us": 7357.406990004671
+  },
+  {
+   "name": "post_1k",
+   "count": 7913,
+   "errors_unexpected_status": 0,
+   "rps": 791.113849408118,
+   "p50_us": 7133.07,
+   "p90_us": 10632.189,
+   "p99_us": 16880.775,
+   "p999_us": 23456.154,
+   "max_us": 29242.156,
+   "mean_us": 7583.635412359408
+  },
+  {
+   "name": "post_64k",
+   "count": 1625,
+   "errors_unexpected_status": 0,
+   "rps": 162.4617724362684,
+   "p50_us": 8435.083,
+   "p90_us": 11888.958,
+   "p99_us": 17014.816,
+   "p999_us": 21123.745,
+   "max_us": 30750.866,
+   "mean_us": 8797.43733723077
+  },
+  {
+   "name": "patch_mask",
+   "count": 3701,
+   "errors_unexpected_status": 0,
+   "rps": 370.01293525331033,
+   "p50_us": 7031.079,
+   "p90_us": 10454.167,
+   "p99_us": 15738.151,
+   "p999_us": 21669.455,
+   "max_us": 29939.639,
+   "mean_us": 7477.681091056471
+  },
+  {
+   "name": "error_status",
+   "count": 2689,
+   "errors_unexpected_status": 0,
+   "rps": 268.8367422037697,
+   "p50_us": 6855.712,
+   "p90_us": 10416.937,
+   "p99_us": 16184.535,
+   "p999_us": 21981.749,
+   "max_us": 30535.183,
+   "mean_us": 7320.614034213462
+  }
+ ],
+ "gateway_cpu_ms_per_request": 1.0730046948356808,
+ "gateway_rss_end_kb": 22600
+}

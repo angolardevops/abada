@@ -39,15 +39,26 @@ measured is the gateway. Then:
 
 | Side | What runs |
 |---|---|
-| Reference | Go: `runtime.ServeMux` + the generated handlers (the oracle already builds them for `request`), over a real `net/http` server and a real `grpc.ClientConn` to the fake backend — the oracle's `e2e` package is the place |
-| abada | `Gateway` mounted in hyper, calling the fake backend through a real `tonic::transport::Channel` (proxy mode), and again in-process (property 3) |
+| Reference | Go: `conformance/oracle/parity` — the code `protoc-gen-grpc-gateway` v2.27.3 generates for the contract, on a `runtime.ServeMux` over a real `net/http` server and a real `grpc.ClientConn`, default options. Built by `scripts/parity/build-reference.sh` |
+| abada | `benches/parity-gateway` — `Gateway` mounted in hyper (HTTP/1.1, keep-alive), calling the backend through one `tonic::transport::Channel` (proxy mode, the counterpart of the Go `ClientConn`) |
+| Backend (shared) | `parity backend`: a gRPC server with a fixed in-memory answer per RPC and no work of its own; both gateways call the same process |
+| Load generator (shared) | `parity loadgen`, out of process; closed loop and open loop (latency from the intended start), CPU and RSS of the gateway read from `/proc` |
+
+`scripts/parity/run.sh --quick|--full` runs the whole protocol (fresh processes
+per run, sides alternated run by run, correctness check first, cold start,
+soak) and `scripts/parity/summarize.py` prints the tables with medians,
+ranges and a verdict per row. **Before any request is measured, `check` must
+show both gateways answering the whole mix identically**; a request they answer
+differently is excluded from the load (`weight: 0` in `benches/parity/mix.json`
+with the reason) and reported as not comparable — that is how `response_body`
+was found missing.
 
 Run **both modes for abada** and label them: in-process has no Go equivalent
 and must never be compared with the reference's network hop as if it did — it is
 reported as abada's own number.
 
 **Load generator.** One generator for both sides, out of process, so it does not
-steal from either: `oha`, `wrk` or `ghz` (HTTP side: `oha`/`wrk`). Fixed
+steal from either (`parity loadgen`; `oha` or `wrk` are acceptable for a spot check). Fixed
 concurrency levels — 1, 8, `nproc`, 4×`nproc` — for a fixed duration (≥ 30 s
 after a 10 s warm-up), **closed loop** for throughput and **open loop at a
 fixed rate** (coordinated-omission-safe, e.g. `oha -q`) for latency
@@ -61,7 +72,10 @@ request is reported separately and as the mix.
 
 ## 3. Conditions (from `abada-measure`, repeated because they get skipped)
 
-Before and after every run: `uptime`, CPU model and thread count, governor,
+Before and after every run: `uptime`, CPU model and thread count, **governor and
+current clock** (a laptop in `powersave` at 544 MHz makes every number about 5×
+slower and every wake-up longer; the ratio survives, the absolute numbers do not,
+and it must be said), 
 whether another build is running (`pgrep -a cargo`). **A run started with load
 average above 25% of the thread count is exploratory, not a result** — it goes
 in the report labelled as such, and no ratio from it is quoted. Three runs

@@ -1,0 +1,20 @@
+{
+ "mode": "full",
+ "warmup": "10s",
+ "duration": "30s",
+ "runs": 3,
+ "soak_seconds": 300,
+ "date_utc": "2026-09-19T22:23:57Z",
+ "commit": "99fe9d2",
+ "cpu": "AMD Ryzen 9 8940HX with Radeon Graphics",
+ "threads": 32,
+ "governor": "performance",
+ "energy_preference": "performance",
+ "cpu_mhz_mean_before": 4628,
+ "go": "go1.26.2",
+ "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+ "load_before": 16.71,
+ "other_builds": "0",
+ "load_after": 7.25,
+ "cpu_mhz_mean_after": 4555.0
+}

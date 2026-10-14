@@ -1,0 +1,93 @@
+{
+ "mode": "closed",
+ "concurrency": 1,
+ "seconds": 30.000133935,
+ "overall": {
+  "name": "mix",
+  "count": 159358,
+  "errors_unexpected_status": 0,
+  "rps": 5311.909618312842,
+  "p50_us": 159.197,
+  "p90_us": 230.05,
+  "p99_us": 744.322,
+  "p999_us": 1084.147,
+  "max_us": 4030.936,
+  "mean_us": 187.94200136798906
+ },
+ "per_request": [
+  {
+   "name": "get_small",
+   "count": 59577,
+   "errors_unexpected_status": 0,
+   "rps": 1985.8911339890321,
+   "p50_us": 149.129,
+   "p90_us": 202.198,
+   "p99_us": 387.384,
+   "p999_us": 613.036,
+   "max_us": 2640.216,
+   "mean_us": 161.12360065125804
+  },
+  {
+   "name": "get_query",
+   "count": 39722,
+   "errors_unexpected_status": 0,
+   "rps": 1324.0607553974241,
+   "p50_us": 153.387,
+   "p90_us": 206.707,
+   "p99_us": 381.764,
+   "p999_us": 624.859,
+   "max_us": 3177.42,
+   "mean_us": 165.2734358038367
+  },
+  {
+   "name": "post_1k",
+   "count": 29996,
+   "errors_unexpected_status": 0,
+   "rps": 999.8622027818623,
+   "p50_us": 173.274,
+   "p90_us": 230.931,
+   "p99_us": 418.142,
+   "p999_us": 637.622,
+   "max_us": 2348.46,
+   "mean_us": 186.39077020269372
+  },
+  {
+   "name": "post_64k",
+   "count": 5847,
+   "errors_unexpected_status": 0,
+   "rps": 194.89912987283466,
+   "p50_us": 620.089,
+   "p90_us": 931.912,
+   "p99_us": 1172.091,
+   "p999_us": 1840.722,
+   "max_us": 4030.936,
+   "mean_us": 680.9434424491192
+  },
+  {
+   "name": "patch_mask",
+   "count": 14329,
+   "errors_unexpected_status": 0,
+   "rps": 477.6312009488367,
+   "p50_us": 167.744,
+   "p90_us": 223.006,
+   "p99_us": 411.81,
+   "p999_us": 619.659,
+   "max_us": 2762.014,
+   "mean_us": 180.38865608207132
+  },
+  {
+   "name": "error_status",
+   "count": 9887,
+   "errors_unexpected_status": 0,
+   "rps": 329.56519532285216,
+   "p50_us": 153.507,
+   "p90_us": 205.424,
+   "p99_us": 369.711,
+   "p999_us": 632.072,
+   "max_us": 2987.405,
+   "mean_us": 164.71795054111462
+  }
+ ],
+ "gateway_cpu_ms_per_request": 0.22904403920731936,
+ "gateway_rss_end_kb": 24492
+}

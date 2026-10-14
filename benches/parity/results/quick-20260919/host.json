@@ -1,0 +1,20 @@
+{
+ "mode": "quick",
+ "warmup": "3s",
+ "duration": "10s",
+ "runs": 3,
+ "soak_seconds": 60,
+ "date_utc": "2026-09-19T21:59:10Z",
+ "commit": "1e91e02",
+ "cpu": "AMD Ryzen 9 8940HX with Radeon Graphics",
+ "threads": 32,
+ "governor": "powersave",
+ "go": "go1.26.2",
+ "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+ "load_before": 14.87,
+ "other_builds": "0",
+ "load_after": 68.26,
+ "energy_preference": "power",
+ "cpu_mhz_mean_before": 544,
+ "_note": "energy_preference and cpu_mhz recorded by hand after the run, when the 544 MHz clocks were found; run.sh records them from now on"
+}

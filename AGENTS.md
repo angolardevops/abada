@@ -42,6 +42,7 @@ A change that weakens one of these is not a feature; it needs an ADR (§6).
 | `abada-build` | `build.rs` API in the style of `tonic-build` | `abada-codegen` |
 | `protoc-gen-abada` | protoc/buf plugin: `CodeGeneratorRequest` on stdin, response on stdout | `abada-codegen` |
 | `abada-json-bench` | `benches/json-transcode`, evidence for ADR 0001; `publish = false` | anything it measures |
+| `abada-parity-gateway` | `benches/parity-gateway`, the abada side of the performance gate (`scripts/parity/run.sh`); `publish = false` | anything it measures |
 
 The arrow never points back: `abada` does not know code generation exists.
 The "May depend on" column is the dependency allow-list: a normal dependency
