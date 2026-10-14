@@ -27,7 +27,8 @@ cp -r "$ROOT"/conformance/oracle/abadapb "$WORK/internal/abadaoracle/"
 # committed; --check fails if the .proto and the .binpb disagree.
 PROTOC="${PROTOC:-protoc}"
 PROTOC_INCLUDE="${PROTOC_INCLUDE:-$(dirname "$(command -v "$PROTOC")")/../include}"
-for pdir in "$ROOT"/conformance/protos/abada/conformance/request/v1; do
+for pdir in "$ROOT"/conformance/protos/abada/conformance/request/v1 \
+            "$ROOT"/conformance/protos/abada/conformance/response/v1; do
   [ -d "$pdir" ] || continue
   rel="${pdir#"$ROOT"/conformance/protos/}"
   pname="$(echo "$rel" | tr '/' '-')"
@@ -212,6 +213,32 @@ for rcases in "$ROOT"/conformance/cases/request-*.json; do
   else
     mv "$rtmp" "$rout"
     echo "wrote $rout"
+  fi
+done
+
+# End to end: the WHOLE HTTP response the same generated handlers write when
+# the backend answers a fixed message or a fixed error
+# (conformance/oracle/e2e/http.go). Same binary as the request vectors above,
+# so the two halves are measured against one gateway, not two.
+for ecases in "$ROOT"/conformance/cases/e2e-*.json; do
+  [ -e "$ecases" ] || continue
+  name="$(basename "$ecases" .json)"
+  name="${name#e2e-}"
+  etmp="$(mktemp "$ROOT/conformance/vectors/.e2e-$name.XXXXXX")"
+  (cd "$WORK" && ABADA_GENERATOR="grpc-gateway $GATEWAY_TAG, protoc-gen-go-grpc $PROTOC_GEN_GO_GRPC_VERSION, $(go version | cut -d' ' -f3)" \
+    go run ./internal/abadaoracle/e2e -http "$ROOT/conformance/contracts/$name.binpb" "$(cat "$ROOT/conformance/contracts/$name.source")") \
+    < "$ecases" > "$etmp"
+  eout="$ROOT/conformance/vectors/e2e-$name.json"
+  if [ "${1:-}" = "--check" ]; then
+    if ! diff <(grep -v '"generator"' "$eout") <(grep -v '"generator"' "$etmp") > /dev/null; then
+      rm -f "$etmp"
+      echo "$eout is stale: run scripts/regen-vectors.sh" >&2
+      exit 1
+    fi
+    rm -f "$etmp"
+  else
+    mv "$etmp" "$eout"
+    echo "wrote $eout"
   fi
 done
 

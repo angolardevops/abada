@@ -1,0 +1,7 @@
+googleapis/google/api/httpbody.proto, Apache-2.0, copied byte for byte from
+github.com/google/gnostic@v0.7.1/third_party/google/api/httpbody.proto in the
+Go module cache. Vendored because the delonix-node-v1 descriptor set (where
+google/api/annotations.proto comes from) does not include it, and
+`google.api.HttpBody` is the one message the default outbound marshaler
+(`runtime.HTTPBodyMarshaler`, runtime/marshal_httpbodyproto.go) treats
+specially. Not edited here; replace, never patch.

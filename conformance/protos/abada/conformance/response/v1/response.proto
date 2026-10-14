@@ -1,0 +1,251 @@
+// What a successful unary call writes as its HTTP response, for every shape
+// `response_body` can select. Its own contract, separate from
+// abada/conformance/request/v1, so that adding a response binding never
+// reroutes — and never regenerates — the request vectors.
+//
+// Every binding here is a GET with one path parameter, so the request side is
+// the same for all of them and the only thing that varies between cases is
+// what the backend answers. Not a real API.
+syntax = "proto3";
+
+package abada.conformance.response.v1;
+
+import "google/api/annotations.proto";
+import "google/api/httpbody.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option go_package = "github.com/angolardevops/abada/conformance/gen/conformanceresponsev1;conformanceresponsev1";
+
+enum Shade {
+  SHADE_UNSPECIFIED = 0;
+  PALE = 1;
+  SEVEN = 7;
+}
+
+message Leaf {
+  string name = 1;
+  double ratio = 2;
+}
+
+message Inner {
+  string text = 1;
+  int64 count = 2;
+  Leaf leaf = 3;
+  repeated string tags = 4;
+  bytes blob = 5;
+  Shade shade = 6;
+}
+
+message Reply {
+  string text = 1;
+  int64 number = 2;
+  bool flag = 3;
+  bytes blob = 4;
+  Shade shade = 5;
+  double ratio = 6;
+
+  repeated string tags = 10;
+  repeated Inner items = 11;
+  repeated Shade shades = 12;
+
+  map<string, string> labels = 20;
+  map<string, Inner> objects = 21;
+
+  Inner inner = 30;
+  google.protobuf.Timestamp when = 31;
+  google.protobuf.StringValue wrapped = 32;
+  google.protobuf.Struct structured = 33;
+  google.api.HttpBody raw = 34;
+
+  optional string maybe = 40;
+}
+
+message Ask {
+  string name = 1;
+}
+
+// One RPC per response_body shape. The method name says what the binding
+// selects; the path repeats it so a failure names the shape it came from.
+service ResponseService {
+  // No response_body: the whole message, the row DESIGN.md's "Response"
+  // section already had.
+  rpc Whole(Ask) returns (Reply) {
+    option (google.api.http) = {get: "/v1/whole/{name}"};
+  }
+
+  // response_body: "*" is the same as absent (newResponse in
+  // internal/descriptor/services.go returns nil for both).
+  rpc Star(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/star/{name}"
+      response_body: "*"
+    };
+  }
+
+  rpc Text(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/text/{name}"
+      response_body: "text"
+    };
+  }
+
+  rpc Number(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/number/{name}"
+      response_body: "number"
+    };
+  }
+
+  rpc Flag(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/flag/{name}"
+      response_body: "flag"
+    };
+  }
+
+  rpc Blob(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/blob/{name}"
+      response_body: "blob"
+    };
+  }
+
+  rpc Shaded(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/shade/{name}"
+      response_body: "shade"
+    };
+  }
+
+  rpc Ratio(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/ratio/{name}"
+      response_body: "ratio"
+    };
+  }
+
+  rpc Tags(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/tags/{name}"
+      response_body: "tags"
+    };
+  }
+
+  rpc Items(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/items/{name}"
+      response_body: "items"
+    };
+  }
+
+  rpc Shades(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/shades/{name}"
+      response_body: "shades"
+    };
+  }
+
+  rpc Labels(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/labels/{name}"
+      response_body: "labels"
+    };
+  }
+
+  rpc Objects(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/objects/{name}"
+      response_body: "objects"
+    };
+  }
+
+  rpc InnerMessage(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/inner/{name}"
+      response_body: "inner"
+    };
+  }
+
+  rpc When(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/when/{name}"
+      response_body: "when"
+    };
+  }
+
+  rpc Wrapped(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/wrapped/{name}"
+      response_body: "wrapped"
+    };
+  }
+
+  rpc Structured(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/structured/{name}"
+      response_body: "structured"
+    };
+  }
+
+  rpc Maybe(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/maybe/{name}"
+      response_body: "maybe"
+    };
+  }
+
+  // A google.api.HttpBody FIELD. The wrapper the generator emits is what
+  // ContentType sees, so it is not the HttpBody — but Marshal is handed the
+  // field, which is. Measured, not assumed.
+  rpc Raw(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/raw/{name}"
+      response_body: "raw"
+    };
+  }
+
+  // The whole response message IS an HttpBody: the case
+  // runtime.HTTPBodyMarshaler was written for.
+  rpc RawWhole(Ask) returns (google.api.HttpBody) {
+    option (google.api.http) = {get: "/v1/rawwhole/{name}"};
+  }
+
+  // A nested path: `response.Inner.Text` in the generated Go, with no nil
+  // check on `Inner` — the reason this proto exists.
+  rpc NestedText(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/nested/text/{name}"
+      response_body: "inner.text"
+    };
+  }
+
+  rpc NestedLeaf(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/nested/leaf/{name}"
+      response_body: "inner.leaf"
+    };
+  }
+
+  // Two levels of intermediate message.
+  rpc DeepName(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/nested/deep/{name}"
+      response_body: "inner.leaf.name"
+    };
+  }
+
+  rpc NestedTags(Ask) returns (Reply) {
+    option (google.api.http) = {
+      get: "/v1/nested/tags/{name}"
+      response_body: "inner.tags"
+    };
+  }
+
+  // An empty response message, with and without a selection.
+  rpc Nothing(Ask) returns (google.protobuf.Empty) {
+    option (google.api.http) = {get: "/v1/nothing/{name}"};
+  }
+}
