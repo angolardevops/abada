@@ -282,6 +282,11 @@ fn is_reserved(key: &str) -> bool {
     }
     matches!(
         key,
-        "grpc-message-type" | "grpc-encoding" | "grpc-message" | "grpc-status" | "grpc-timeout" | "te"
+        "grpc-message-type"
+            | "grpc-encoding"
+            | "grpc-message"
+            | "grpc-status"
+            | "grpc-timeout"
+            | "te"
     )
 }
