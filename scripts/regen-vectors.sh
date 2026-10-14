@@ -50,6 +50,31 @@ for pdir in "$ROOT"/conformance/protos/abada/conformance/request/v1 \
   fi
 done
 
+# The hostile corpus of the `abada-security` skill (S1, S3, S4). The cases are
+# conformance/cases/security-<class>.json and each class is answered by the
+# oracle that owns that surface — the routing/request one for paths and
+# headers, AnnotateContext for metadata, ForwardResponseMessage for what the
+# gateway writes back, protojson for bodies. Nothing here is a new oracle: a
+# hostile input is only interesting because the SAME code answers it.
+#
+# security_vectors <out name> <tmp file>: the commit-or-compare half, the same
+# as every block above.
+security_vectors() {
+  local name="$1" tmp="$2" out="$ROOT/conformance/vectors/$1.json"
+  if [ "${REGEN_CHECK:-}" = "--check" ]; then
+    if ! diff <(grep -v '"generator"' "$out") <(grep -v '"generator"' "$tmp") > /dev/null; then
+      rm -f "$tmp"
+      echo "$out is stale: run scripts/regen-vectors.sh" >&2
+      exit 1
+    fi
+    rm -f "$tmp"
+  else
+    mv "$tmp" "$out"
+    echo "wrote $out"
+  fi
+}
+REGEN_CHECK="${1:-}"
+
 out="$ROOT/conformance/vectors/path.json"
 tmp="$(mktemp "$ROOT/conformance/vectors/.path.XXXXXX")"
 trap 'rm -f "$tmp"' EXIT
@@ -165,6 +190,31 @@ for jcases in "$ROOT"/conformance/cases/json-*.json; do
   fi
 done
 
+# security-metadata: AnnotateContext over hostile headers — control bytes, CRLF,
+# 1 000 headers, 64 KiB values, bad -bin base64, Grpc-Timeout grammar. These go
+# through http.Header directly, so they can hold bytes an HTTP/1.1 wire cannot.
+stmp="$(mktemp "$ROOT/conformance/vectors/.security-metadata.XXXXXX")"
+(cd "$WORK" && ABADA_GENERATOR="grpc-gateway $GATEWAY_TAG, $(go version | cut -d' ' -f3)" \
+  go run ./internal/abadaoracle metadata) < "$ROOT/conformance/cases/security-metadata.json" > "$stmp"
+security_vectors security-metadata "$stmp"
+
+# security-response: the OTHER direction — what ForwardResponseMessage writes on
+# the wire when the service's own metadata carries a name or value that would
+# split the response.
+stmp="$(mktemp "$ROOT/conformance/vectors/.security-response.XXXXXX")"
+(cd "$WORK" && ABADA_GENERATOR="grpc-gateway $GATEWAY_TAG, $(go version | cut -d' ' -f3)" \
+  go run ./internal/abadaoracle response) < "$ROOT/conformance/cases/security-response.json" > "$stmp"
+security_vectors security-response "$stmp"
+
+# security-json: hostile JSON shapes through the same default marshaler as the
+# json-* families, against the conformance protos.
+stmp="$(mktemp "$ROOT/conformance/vectors/.security-json.XXXXXX")"
+(cd "$WORK" && ABADA_GENERATOR="grpc-gateway $GATEWAY_TAG, $(go version | cut -d' ' -f3)" \
+  go run ./internal/abadaoracle json "$ROOT/conformance/protos/abada-conformance-v1.binpb" \
+  "conformance/protos (conformance/protos/generate.sh)") \
+  < "$ROOT/conformance/cases/security-json.json" > "$stmp"
+security_vectors security-json "$stmp"
+
 # Requests: what the code protoc-gen-grpc-gateway generates puts in the gRPC
 # request for an HTTP request. The generated Go code is not committed: it is
 # produced here, in the cache, from each contract with the plugins at pinned
@@ -240,6 +290,22 @@ for ecases in "$ROOT"/conformance/cases/e2e-*.json; do
     mv "$etmp" "$eout"
     echo "wrote $eout"
   fi
+done
+
+# security-path and security-headers: the hostile corpus for routing and for
+# headers, through the SAME generated handlers as the request-* families. The
+# oracle builds the request from raw HTTP/1.1 bytes, so it reaches inputs the
+# Rust `http` crate refuses to construct (a 64 KiB target, a header the builder
+# rejects); the replay records those as refusals, never as agreement.
+for scases in "$ROOT"/conformance/cases/security-path.json "$ROOT"/conformance/cases/security-headers.json; do
+  [ -e "$scases" ] || continue
+  sname="$(basename "$scases" .json)"
+  stmp="$(mktemp "$ROOT/conformance/vectors/.$sname.XXXXXX")"
+  (cd "$WORK" && ABADA_GENERATOR="grpc-gateway $GATEWAY_TAG, protoc-gen-go-grpc $PROTOC_GEN_GO_GRPC_VERSION, $(go version | cut -d' ' -f3)" \
+    go run ./internal/abadaoracle/e2e "$ROOT/conformance/contracts/abada-conformance-request-v1.binpb" \
+    "$(cat "$ROOT/conformance/contracts/abada-conformance-request-v1.source")") \
+    < "$scases" > "$stmp"
+  security_vectors "$sname" "$stmp"
 done
 
 if [ "${1:-}" = "--check" ]; then

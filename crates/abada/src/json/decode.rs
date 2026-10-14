@@ -136,12 +136,19 @@ impl<'a> Decoder<'a, '_> {
                 continue;
             }
             if field.is_list() {
-                let mut items = Vec::new();
-                self.list(&mut items, &kind, limit)?;
-                value_mut(m, &field)
-                    .as_list_mut()
-                    .expect("list")
-                    .extend(items);
+                // Straight into the field's own list. A local `Vec` extended
+                // into it afterwards holds a second copy of every element at
+                // the moment of the extend, and that doubling was the whole
+                // peak of a large repeated field (`abada-security` S5,
+                // located by `examples/decode_mem.rs`). `mem::take` is the
+                // shape the map branch below already used, and it leaves the
+                // same partially-populated field on error as protojson's
+                // `unmarshalList`, which appends into the list as it reads.
+                let list = value_mut(m, &field).as_list_mut().expect("list");
+                let mut local = std::mem::take(list);
+                let result = self.list(&mut local, &kind, limit);
+                *value_mut(m, &field).as_list_mut().expect("list") = local;
+                result?;
             } else if field.is_map() {
                 let Kind::Message(entry) = &kind else {
                     unreachable!("map entry")
@@ -548,12 +555,12 @@ impl<'a> Decoder<'a, '_> {
     /// `unmarshalListValue`.
     fn list_value(&mut self, m: &mut DynamicMessage, limit: i64) -> Result<(), JsonError> {
         let fd = m.descriptor().get_field(1).expect("ListValue.values");
-        let mut items = Vec::new();
-        let result = self.list(&mut items, &fd.kind(), limit);
-        m.get_field_mut(&fd)
-            .as_list_mut()
-            .expect("list")
-            .extend(items);
+        // Same reason as the list branch of `message`: no second copy of the
+        // elements at the moment of an extend. What was already there is kept
+        // and what was read before an error stays, exactly as before.
+        let mut local = std::mem::take(m.get_field_mut(&fd).as_list_mut().expect("list"));
+        let result = self.list(&mut local, &fd.kind(), limit);
+        *m.get_field_mut(&fd).as_list_mut().expect("list") = local;
         result
     }
 

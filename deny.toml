@@ -1,0 +1,63 @@
+# `cargo deny check` — the supply-chain half of the security gate
+# (`.claude/skills/abada-security/SKILL.md`, S6). CI runs it; `scripts/check.sh`
+# does not, because it needs the advisory database from the network.
+#
+# abada ships under Apache-2.0. The allow-list below is every licence a crate
+# in `Cargo.lock` actually carries today, and nothing else: a dependency that
+# arrives under a licence not named here fails the check, which is the point —
+# the decision is made when the dependency enters, not when someone notices.
+# Adding a licence here is a reviewable change, and a copyleft one would need
+# an ADR (AGENTS.md §6), not an edit.
+
+[graph]
+# The workspace builds and is tested on Linux; the Windows and wasi crates in
+# the lock file arrive as platform-gated dependencies of tokio and tempfile and
+# are checked all the same.
+all-features = true
+
+[advisories]
+# RustSec. `unmaintained = "workspace"` only reports crates this workspace
+# depends on directly or transitively — which is all of them — and yanked
+# versions are an error, not a warning: `Cargo.lock` is committed.
+db-urls = ["https://github.com/rustsec/advisory-db"]
+yanked = "deny"
+unmaintained = "all"
+ignore = []
+
+[licenses]
+# Measured on 2026-09-23 against the committed `Cargo.lock` with
+# `cargo deny list`: 71 crates under Apache-2.0, 88 under MIT (most are dual
+# MIT OR Apache-2.0), plus the five single-crate cases named below. All are
+# permissive and all may be redistributed inside an Apache-2.0 crate.
+allow = [
+    "Apache-2.0",
+    # rustix, linux-raw-sys, wasi: Apache-2.0 with the LLVM exception, the
+    # licence the Rust project itself uses for its runtime crates.
+    "Apache-2.0 WITH LLVM-exception",
+    "MIT",
+    # unicode-ident, for the Unicode character tables it embeds.
+    "Unicode-3.0",
+    # memchr offers "Unlicense OR MIT"; both halves are listed so the crate is
+    # accepted whichever way the expression is resolved.
+    "Unlicense",
+    # foldhash, pulled in by hashbrown.
+    "Zlib",
+]
+# A crate whose licence cargo-deny cannot read at all must be named here with
+# the hash of the licence file that was read by hand. None is needed today.
+exceptions = []
+confidence-threshold = 0.9
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+# `abada`'s own dependency allow-list lives in AGENTS.md §2 and is enforced by
+# scripts/check-harness.py, which knows about crate boundaries; this section
+# only refuses a dependency shape (a wildcard version) that no crate should
+# have.
+deny = []
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

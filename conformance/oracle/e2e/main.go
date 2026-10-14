@@ -64,7 +64,9 @@ type statusBody struct {
 
 type outcome struct {
 	// Outcome is "request" when the gRPC server received a request, "error"
-	// when the gateway answered without calling it.
+	// when the gateway answered without calling it, and "unbuildable" when
+	// net/http would not parse the case into a request at all (RawBody holds
+	// its reason) — that case has no grpc-gateway answer to compare against.
 	Outcome string `json:"outcome"`
 	// RPC is the full method the server was called with.
 	RPC string `json:"rpc,omitempty"`
@@ -272,7 +274,13 @@ func run(mux *runtime.ServeMux, rec *recorder, rc requestCase) outcome {
 	fmt.Fprintf(&raw, "Content-Length: %d\r\n\r\n%s", len(rc.Body), rc.Body)
 	req, err := http.ReadRequest(bufio.NewReader(&raw))
 	if err != nil {
-		fail("case %s: net/http refuses the request: %v", rc.Name, err)
+		// A case net/http will not parse is recorded as a refusal, not fatal
+		// and not silently dropped: the hostile corpus of `abada-security`
+		// deliberately contains targets that no HTTP/1.1 client could send,
+		// and "the transport refused it before grpc-gateway saw anything" is
+		// the honest answer for them. The Rust replay asserts abada is not
+		// compared against a vector that has no answer.
+		return outcome{Outcome: "unbuildable", RawBody: err.Error()}
 	}
 	w := httptest.NewRecorder()
 	rec.take()

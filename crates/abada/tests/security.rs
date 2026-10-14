@@ -420,21 +420,34 @@ fn corpus() -> Vec<Case> {
 }
 
 /// Findings kept visible instead of failing CI: the ceiling is what abada
-/// measures today (peak allocation over input bytes). It only goes down. The
-/// second number is grpc-gateway's, measured on the same body through
-/// `runtime.JSONPb` into a `dynamicpb` message (peak sampled every 200 µs, max
-/// of 3 runs, host load ~17/32): the target the ceiling must reach.
+/// measures today (peak allocation over input bytes). It only goes down.
+///
+/// The second number is grpc-gateway's on the same body, and it is now
+/// reproducible: `abadaoracle mem <contract>` (conformance/oracle/mem.go)
+/// prints it, and what is quoted here is its `+encode` stage — decode into a
+/// `dynamicpb` message through the mux's own `runtime.JSONPb`, then the
+/// `proto.Marshal` the generated handler does before the gRPC call, which is
+/// the pair of stages this test's `Gateway` also runs. Measured 2026-09-23,
+/// go1.26.2, host load ~30/32; its GC-off and GC-on-sampled figures agreed to
+/// within 0.1%, so neither is a sampling artefact.
+///
+/// The figures of the first S5 table (39.1 and 11.9) came from a program that
+/// was never committed and could not be reproduced; they are not used here.
 /// See docs/readiness/grpc-gateway-parity.md, S5.
 const RATCHET: &[(&str, f64, f64)] = &[
-    // Go's figure is not measured (NaN): it has no depth limit, so its cost per
-    // level is the open question. abada measured ~93x here, release.
+    // Go's figure is measured for the query walk too — `abadaoracle mem` with
+    // `-query` — but not for THESE keys; see the report. abada is ~93x here.
     ("query: 94 divergent 100-deep keys", 150.0, f64::NAN),
     // One key of 4 000 or 9 000 components builds 99 levels before it is
     // refused: ~12.5x, over the 10x rule. Go's figure is not measured.
     ("query: 4000-deep field path", 15.0, f64::NAN),
     ("query: 9000-deep field path (54 KB)", 15.0, f64::NAN),
-    ("body: 10^6 element array", 60.0, 39.1),
-    ("body: 10^5 map entries", 18.0, 11.9),
+    // Was 57x (ceiling 60) until the list branch of `json::decode` stopped
+    // building every repeated field twice: 30.9x measured, below Go's 69.7x.
+    ("body: 10^6 element array", 33.0, 69.7),
+    // Unchanged by that fix — the map branch already decoded in place — and
+    // already below Go's 24.7x.
+    ("body: 10^5 map entries", 18.0, 24.7),
 ];
 
 fn build(c: &Case) -> Option<http::Request<Full<Bytes>>> {
